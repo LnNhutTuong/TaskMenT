@@ -26,6 +26,7 @@ jobs:
       DATABASE_URL: postgresql://postgres:password@localhost:5432/task-progress
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       JWT_ACCESS_TOKEN_EXPIRES_IN: ${{ secrets.JWT_ACCESS_TOKEN_EXPIRES_IN }}
+      FE_URL: ${{ secrets.FE_URL }}
 
     defaults:
       run:
@@ -53,6 +54,33 @@ jobs:
 
       - name: Run test
         run: npm test
+
+      - name: Run build
+        run: npm run build
+
+  frontend:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: tm-frontend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: tm-frontend/package-lock.json
+
+      - name: install dependencies
+        run: npm ci
+
+      - name: Run Lint
+        run: npm run lint
 
       - name: Run build
         run: npm run build
