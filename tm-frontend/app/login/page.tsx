@@ -1,5 +1,11 @@
 "use client";
 import { apiFetch } from "@/lib/api";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { ArrowRight, Eye, EyeOff, GitBranch, GitFork } from "lucide-react";
+import { toast } from "react-toastify";
 import { useState } from "react";
 import type { LoginResponse } from "../types/auth";
 import type { SubmitEvent } from "react";
@@ -7,9 +13,15 @@ import type { SubmitEvent } from "react";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (!email.trim() || !password.trim()) {
+      toast.error("Please enter your email and password.");
+      return;
+    }
 
     try {
       const response = await apiFetch<LoginResponse>(
@@ -26,14 +38,20 @@ export default function LoginPage() {
         },
       );
       localStorage.setItem("accessToken", response.data.accessToken);
+      toast.success("Signed in successfully.");
     } catch (error) {
-      console.error(error);
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Email or password is incorrect.",
+      );
     }
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-black px-4 py-10 font-sans text-white sm:px-6">
-      <section className="w-full max-w-[480px] rounded-3xl border border-white/10 bg-[#080808] p-7 shadow-[0_24px_80px_rgb(0_0_0_/_60%)] sm:p-10">
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black px-4 py-10 font-sans text-white sm:px-6">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.07),transparent_34%)]" />
+      <Card className="relative w-full max-w-[480px] rounded-3xl bg-[#080808] p-7 shadow-[0_24px_80px_rgb(0_0_0_/_60%)] sm:p-10">
         <header className="mb-9 flex items-start gap-4">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/80 font-mono text-lg font-bold transition hover:bg-white hover:text-black">
             &lt;/&gt;
@@ -66,8 +84,7 @@ export default function LoginPage() {
             >
               Email / Tech ID
             </label>
-            <input
-              className="h-12 w-full rounded-lg border border-[#262626] bg-[#0a0a0a] px-4 text-sm text-white outline-none transition duration-200 placeholder:text-white/30 focus:border-white focus:bg-[#0d0d0d]"
+            <Input
               id="email"
               type="email"
               value={email}
@@ -75,6 +92,7 @@ export default function LoginPage() {
                 setEmail(e.target.value);
               }}
               placeholder="engineer@company.com"
+              className="h-12 border-[#262626] bg-[#0a0a0a] px-4 focus:border-white focus:bg-[#0d0d0d]"
             />
           </div>
 
@@ -86,29 +104,36 @@ export default function LoginPage() {
               >
                 Password
               </label>
-              <button
-                type="button"
-                className="text-[11px] text-white/55 underline underline-offset-4 transition hover:text-white"
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-auto px-0 text-[11px] font-normal underline underline-offset-4"
               >
                 Forgot password?
-              </button>
+              </Button>
             </div>
             <div className="relative">
-              <input
-                className="h-12 w-full rounded-lg border border-[#262626] bg-[#0a0a0a] px-4 pr-16 text-sm text-white outline-none transition duration-200 placeholder:text-white/30 focus:border-white focus:bg-[#0d0d0d]"
+              <Input
                 id="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
                 }}
                 placeholder="Enter your password"
+                className="h-12 border-[#262626] bg-[#0a0a0a] px-4 pr-16 focus:border-white focus:bg-[#0d0d0d]"
               />
               <button
                 type="button"
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-medium tracking-[0.08em] text-white/45 transition hover:text-white"
+                onClick={() => setShowPassword((visible) => !visible)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-white/45 transition hover:text-white"
+                aria-label={showPassword ? "Hide password" : "Show password"}
               >
-                SHOW
+                {showPassword ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )}
               </button>
             </div>
           </div>
@@ -121,13 +146,13 @@ export default function LoginPage() {
             Remember me
           </label>
 
-          <button
+          <Button
             type="submit"
-            className="flex h-12 w-full items-center justify-between rounded-xl bg-white px-4 text-sm font-semibold text-black transition duration-200 hover:bg-white/80 hover:shadow-[0_8px_24px_rgb(255_255_255_/_10%)]"
+            className="h-12 w-full justify-between rounded-xl px-4 text-sm font-semibold hover:shadow-[0_8px_24px_rgb(255_255_255_/_10%)]"
           >
             <span>Sign In</span>
-            <span aria-hidden="true">-&gt;</span>
-          </button>
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Button>
         </form>
 
         <div className="my-8 flex items-center gap-3 text-[10px] tracking-[0.12em] text-white/35">
@@ -137,27 +162,24 @@ export default function LoginPage() {
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          <button
-            type="button"
-            className="flex h-11 items-center justify-center gap-2 rounded-xl border border-white/10 text-xs text-white transition duration-200 hover:border-white/60 hover:bg-white/[0.04]"
-          >
-            <span aria-hidden="true">GH</span>
+          <Button variant="outline" className="h-11 rounded-xl">
+            <GitFork className="h-4 w-4" aria-hidden="true" />
             GitHub
-          </button>
-          <button
-            type="button"
-            className="flex h-11 items-center justify-center gap-2 rounded-xl border border-white/10 text-xs text-white transition duration-200 hover:border-white/60 hover:bg-white/[0.04]"
-          >
-            <span aria-hidden="true">GL</span>
+          </Button>
+          <Button variant="outline" className="h-11 rounded-xl">
+            <GitBranch className="h-4 w-4" aria-hidden="true" />
             GitLab
-          </button>
+          </Button>
         </div>
 
         <footer className="mt-9 border-t border-white/10 pt-5 font-mono text-[10px] tracking-[0.08em] text-white/40">
-          <span className="text-white">●</span> System Status:{" "}
-          <span className="text-white font-bold">Dungwf dungwf laij</span>
+          <Badge className="border-white/10 bg-transparent px-0 py-0 font-mono text-[10px] font-normal text-white/40">
+            <span className="mr-2 text-white">●</span>
+            System Status:{" "}
+            <span className="ml-1 font-bold text-white">Online</span>
+          </Badge>
         </footer>
-      </section>
+      </Card>
     </main>
   );
 }
