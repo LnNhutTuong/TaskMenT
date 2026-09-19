@@ -3,10 +3,19 @@
 import Link from "next/link";
 import { ChevronDown, LogOut } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { toast } from "react-toastify";
 
 export function SiteHeader() {
   const { isAuthenticated, isAuthLoading, logout, user } = useAuth();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    logout();
+    router.push("/");
+    toast.success("Logout successfully");
+  };
 
   return (
     <header className="flex items-center justify-between border-b border-white/15 pb-6">
@@ -19,11 +28,11 @@ export function SiteHeader() {
         </span>
       </Link>
 
-      <div className="flex items-center gap-5 text-sm text-white/55">
+      <div className="flex w-[220px] shrink-0 justify-end text-sm text-white/55 sm:w-[280px]">
         {!isAuthLoading ? (
           user && isAuthenticated ? (
             <details className="group relative">
-              <summary className="flex cursor-pointer list-none items-center gap-3 rounded-xl border border-white/15 bg-white/[0.03] px-3 py-2 transition hover:border-white/35 hover:bg-white/[0.07] [&::-webkit-details-marker]:hidden">
+              <summary className="flex h-12 cursor-pointer list-none items-center justify-end gap-3 rounded-xl border border-white/15 bg-white/[0.03] px-3 transition hover:border-white/35 hover:bg-white/[0.07] [&::-webkit-details-marker]:hidden">
                 <Avatar className="size-10 border border-white/20">
                   <AvatarImage
                     src="https://i.pravatar.cc/160?img=12"
@@ -31,11 +40,11 @@ export function SiteHeader() {
                   />
                   <AvatarFallback>AM</AvatarFallback>
                 </Avatar>
-                <span className="hidden text-left sm:block">
-                  <span className="block text-sm font-medium text-white/90">
+                <span className="hidden min-w-0 max-w-[150px] text-left sm:block">
+                  <span className="block truncate text-sm font-medium text-white/90">
                     {user?.name}
                   </span>
-                  <span className="block text-xs text-white/45">
+                  <span className="block truncate text-xs text-white/45">
                     {user?.email}
                   </span>
                 </span>
@@ -51,7 +60,7 @@ export function SiteHeader() {
                 </div>
                 <button
                   type="button"
-                  onClick={logout}
+                  onClick={handleLogout}
                   className="mt-2 flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-sm text-white/65 transition hover:bg-white/10 hover:text-white"
                 >
                   <LogOut className="size-4" />
@@ -60,7 +69,7 @@ export function SiteHeader() {
               </div>
             </details>
           ) : (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center justify-end gap-3">
               <Link
                 href="/login"
                 className="rounded-lg border border-white/20 px-4 py-2.5 transition hover:border-white/50 hover:bg-white/10 hover:text-white"

@@ -7,7 +7,7 @@ import type {
 } from "../app/types/task";
 
 export const getAllTasks = () => {
-  return api.get<TaskList["data"]>("/task/all", {
+  return api.get<TaskList>("/task/all", {
     params: {
       page: 1,
       limit: 10,

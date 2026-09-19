@@ -41,11 +41,7 @@ export default function LoginPage() {
       toast.success("Signed in successfully.");
       handleBackToHome();
     } catch (error) {
-      toast.error(
-        error instanceof Error
-          ? error.message
-          : "Email or password is incorrect.",
-      );
+      toast.error("Email or password is incorrect.");
     }
   };
 
@@ -138,7 +134,7 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={() => setShowPassword((visible) => !visible)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-white/45 transition hover:text-white"
+                className="absolute color-transparent right-4 top-1/2 -translate-y-1/2 cursor-pointer text-white/45 transition hover:text-white"
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? (
