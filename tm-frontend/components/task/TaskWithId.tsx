@@ -11,14 +11,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import type { PriorityLevel, TaskItem, TaskStatus } from "@/app/types/task";
-import {
-  CalendarDays,
-  Check,
-  Clock3,
-  CircleDot,
-  Flag,
-  UserRound,
-} from "lucide-react";
 
 const statusLabel: Record<TaskStatus, string> = {
   TODO: "To do",

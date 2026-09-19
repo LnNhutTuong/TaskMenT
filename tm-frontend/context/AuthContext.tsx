@@ -1,5 +1,5 @@
 "use client";
-
+/* eslint-disable react-hooks/set-state-in-effect */
 import { createContext, useContext, useEffect, useState } from "react";
 import { AuthUser } from "@/app/types/auth";
 import { getMe } from "@/service/auth.service";
@@ -19,23 +19,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [user, setUser] = useState<AuthUser | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
-  useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (!token) {
-      setIsAuthLoading(false);
-      return;
-    }
-
-    setAccessToken(token);
-    handleGetMe();
-  }, []);
-
-  const login = (token: string, user: AuthUser) => {
-    localStorage.setItem("accessToken", token);
-
-    setAccessToken(token);
-    setUser(user);
-  };
 
   const handleGetMe = async () => {
     try {
@@ -48,6 +31,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } finally {
       setIsAuthLoading(false);
     }
+  };
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+
+    if (!token) {
+      setIsAuthLoading(false);
+      return;
+    }
+
+    setAccessToken(token);
+    handleGetMe();
+  }, []);
+  const login = (token: string, user: AuthUser) => {
+    localStorage.setItem("accessToken", token);
+
+    setAccessToken(token);
+    setUser(user);
   };
 
   const logout = () => {

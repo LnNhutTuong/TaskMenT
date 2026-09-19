@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { ArrowRight, Eye, EyeOff, GitBranch, GitFork } from "lucide-react";
 import { toast } from "react-toastify";
 import { useState } from "react";
-import type { LoginFromData, LoginResponse } from "../types/auth";
+import type { LoginFromData } from "../types/auth";
 import type { SubmitEvent } from "react";
 import { login } from "@/service/auth.service";
 import { useRouter } from "next/navigation";

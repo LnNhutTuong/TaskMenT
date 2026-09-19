@@ -3,7 +3,6 @@ import type {
   TaskList,
   CreateTaskPayload,
   CreateTaskResponse,
-  TaskItem,
   TaskWithId,
 } from "../app/types/task";
 
