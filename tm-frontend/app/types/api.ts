@@ -1,8 +1,7 @@
-export type TestResponse = {
+export type ApiResponse<T> = {
   message: string;
-  number: number;
+  data: T;
 };
-
 export type ApiErrorResponse = {
   message: string;
   statusCode: number;
