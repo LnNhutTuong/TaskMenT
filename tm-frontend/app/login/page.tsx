@@ -1,5 +1,5 @@
 "use client";
-import { apiFetch } from "@/lib/api";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -7,10 +7,17 @@ import { Input } from "@/components/ui/input";
 import { ArrowRight, Eye, EyeOff, GitBranch, GitFork } from "lucide-react";
 import { toast } from "react-toastify";
 import { useState } from "react";
-import type { LoginResponse } from "../types/auth";
+import type { LoginFromData, LoginResponse } from "../types/auth";
 import type { SubmitEvent } from "react";
-
+import { login } from "@/service/auth.service";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 export default function LoginPage() {
+  const router = useRouter();
+
+  //{conKhi: XimenT} = con khi co ten la XimenT
+  const { login: saveLogin } = useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -23,22 +30,16 @@ export default function LoginPage() {
       return;
     }
 
+    const payload: LoginFromData = {
+      email,
+      password,
+    };
+
     try {
-      const response = await apiFetch<LoginResponse>(
-        "http://localhost:2202/auth/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email,
-            password,
-          }),
-        },
-      );
-      localStorage.setItem("accessToken", response.data.accessToken);
+      const response = await login(payload);
+      saveLogin(response.data.accessToken, response.data.user);
       toast.success("Signed in successfully.");
+      handleBackToHome();
     } catch (error) {
       toast.error(
         error instanceof Error
@@ -48,9 +49,20 @@ export default function LoginPage() {
     }
   };
 
+  const handleBackToHome = () => {
+    router.push("/");
+  };
+
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black px-4 py-10 font-sans text-white sm:px-6">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.07),transparent_34%)]" />
+    <main className="relative flex flex-col min-h-screen items-center justify-center overflow-hidden bg-transparent px-4 py-7 font-sans text-white sm:px-6">
+      <div className="mb-2">
+        <button
+          onClick={handleBackToHome}
+          className="cursor-pointer rounded-xl border border-white/20 hover:font-bold hover:bg-white/20 px-2 hover:shadow-[0_8px_24px_rgb(255_255_255_/_10%)]"
+        >
+          Back to home ?
+        </button>
+      </div>
       <Card className="relative w-full max-w-[480px] rounded-3xl bg-[#080808] p-7 shadow-[0_24px_80px_rgb(0_0_0_/_60%)] sm:p-10">
         <header className="mb-9 flex items-start gap-4">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/80 font-mono text-lg font-bold transition hover:bg-white hover:text-black">
@@ -126,7 +138,7 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={() => setShowPassword((visible) => !visible)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-white/45 transition hover:text-white"
+                className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-white/45 transition hover:text-white"
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? (
@@ -141,7 +153,7 @@ export default function LoginPage() {
           <label className="flex items-center gap-3 text-xs text-white/65">
             <input
               type="checkbox"
-              className="h-4 w-4 rounded border-white/30 bg-black accent-white"
+              className="h-4 w-4 cursor-pointer rounded border-white/30 bg-black accent-white"
             />
             Remember me
           </label>

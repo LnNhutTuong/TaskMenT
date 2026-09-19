@@ -70,13 +70,34 @@ export class AuthService {
     const payload: JwtPayload = {
       sub: user.id,
       email: user.email,
+      name: user.name,
       role: user.role,
     };
 
     const accessToken = this.jwtService.sign(payload);
     return {
       accessToken,
-      email: dto.email,
+      user: {
+        email: dto.email,
+        name: user.name,
+      },
     };
   }
+
+  // async getProfile(dto: ProfileDTO) {
+  //   const user = this.prisma.user.findUnique({
+  //     where: {
+  //       email: dto.email,
+  //     },
+  //   });
+
+  //   if (!user) {
+  //     throw new UnauthorizedException('Invalid email or password');
+  //   }
+
+  //   return {
+  //     email: dto.email,
+  //     name: dto.name,
+  //   };
+  // }
 }

@@ -1,9 +1,11 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Get, Req } from '@nestjs/common';
 import { AuthService } from './auth.service.js';
 import { RegisterDTO } from './dto/register.dto.js';
 import { LoginDTO } from './dto/login.dto.js';
+import type { Request } from 'express';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiBody,
   ApiConflictResponse,
   ApiOperation,
@@ -11,6 +13,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
 
 @ApiTags('AUTH')
 @Controller('auth')
@@ -76,5 +79,12 @@ export class AuthController {
       message: 'Login successfully',
       data: user,
     };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('me')
+  @ApiBearerAuth()
+  async me(@Req() req: Request) {
+    return req.user;
   }
 }
