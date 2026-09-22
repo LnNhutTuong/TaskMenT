@@ -1,52 +1,104 @@
-datasource db {
-  provider = "postgresql"
-}
+  datasource db {
+    provider = "postgresql"
+  }
 
-generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
-}
+  generator client {
+    provider = "prisma-client"
+    output   = "../src/generated/prisma"
+  }
 
-enum TaskStatus {
-  TODO
-  IN_PROGRESS
-  DONE
-}
+  enum RoleName {
+    ADMIN
+    USER
+  }
 
-enum RoleName {
-  ADMIN
-  USER
-}
+  enum PriorityLevel {
+    LOW
+    MEDIUM
+    HIGH
+  }
 
-enum PriorityLevel {
-  LOW
-  MEDIUM
-  HIGH
-}
+  model User {
+    id        String   @id @default(uuid())
+    email     String   @unique
+    password  String
+    name      String?
+    role      RoleName @default(USER)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
-model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  password  String
-  name      String?
-  role      RoleName @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    assignedTasks AssignedTask[]
+    ownedProjects Project[]
+    memberships   ProjectMember[]
+  }
 
-  //quan he
-  tasks Task[]
-}
+  model Project {
+    id          String   @id @default(uuid())
+    name        String
+    description String
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
 
-model Task {
-  id          String        @id @default(uuid())
-  title       String
-  description String?
-  status      TaskStatus    @default(TODO)
-  deadline    DateTime?
-  priority    PriorityLevel @default(MEDIUM)
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+    ownerId String
+    owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
+    members      ProjectMember[]
+    taskStatuses TaskStatus[]
+    tasks Task[]
+  }
+
+  model ProjectMember {
+    memberId  String
+    projectId String
+
+    member  User    @relation(fields: [memberId], references: [id])
+    project Project @relation(fields: [projectId], references: [id])
+
+    @@id([memberId, projectId])
+  }
+
+  model Task {
+    id          String        @id @default(uuid())
+    title       String
+    description String?
+    deadline    DateTime?
+    priority    PriorityLevel @default(MEDIUM)
+    createdAt   DateTime      @default(now())
+    updatedAt   DateTime      @updatedAt
+
+    statusId String
+    //relations fields
+    status   TaskStatus @relation(fields: [projectId, statusId ], references: [projectId,id ])
+
+    projectId String
+    project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+    assigned  AssignedTask[]
+  }
+
+  model AssignedTask{
+    assignId String
+    taskId String
+
+    assigned  User    @relation(fields: [assignId], references: [id])
+    task Task @relation(fields: [taskId], references: [id])
+
+    @@id([assignId, taskId])
+  }
+
+  model TaskStatus {
+    id        String   @id @default(uuid())
+    key       String
+    name      String
+    isDefault Boolean  @default(false)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    projectId String
+    project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+    tasks Task[]
+
+    @@unique ([projectId, id])
+    @@unique([projectId, key])
+  }

@@ -1,12 +1,11 @@
 import { IsDate, IsEnum, IsOptional, IsString } from 'class-validator';
-import { TaskStatus } from '../../generated/prisma/enums.js';
 import { PriorityLevel } from '../../generated/prisma/enums.js';
 import { Transform } from 'class-transformer';
 
 export class TaskFilterDTO {
   @IsOptional()
-  @IsEnum(TaskStatus)
-  status?: TaskStatus;
+  @IsString()
+  status?: string;
 
   @IsOptional()
   @IsEnum(PriorityLevel)

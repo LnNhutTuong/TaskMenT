@@ -4,10 +4,9 @@ import {
   IsOptional,
   IsEnum,
   IsDate,
-  Matches,
+  IsArray,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { TaskStatus } from '../../generated/prisma/enums.js';
 import { PriorityLevel } from '../../generated/prisma/enums.js';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
@@ -30,15 +29,12 @@ export class CreateTaskDto {
   })
   description?: string;
 
-  @IsOptional()
-  @IsEnum(TaskStatus)
+  @IsString()
   @ApiProperty({
     description: 'Task status',
-    enum: TaskStatus,
-    enumName: 'TaskStatus',
     example: 'TODO',
   })
-  status: TaskStatus;
+  status: string;
 
   @IsOptional()
   @IsDate()
@@ -57,5 +53,13 @@ export class CreateTaskDto {
     enumName: 'PriorityLevel',
     example: 'HIGH',
   })
-  priority: PriorityLevel;
+  priority?: PriorityLevel;
+
+  @IsString()
+  projectId: string;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  assigneeIds?: string[];
 }

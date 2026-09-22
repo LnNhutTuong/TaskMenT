@@ -52,7 +52,11 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
-  Task: 'Task'
+  Project: 'Project',
+  ProjectMember: 'ProjectMember',
+  Task: 'Task',
+  AssignedTask: 'AssignedTask',
+  TaskStatus: 'TaskStatus'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -84,19 +88,60 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const ProjectScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  ownerId: 'ownerId'
+} as const
+
+export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum]
+
+
+export const ProjectMemberScalarFieldEnum = {
+  memberId: 'memberId',
+  projectId: 'projectId'
+} as const
+
+export type ProjectMemberScalarFieldEnum = (typeof ProjectMemberScalarFieldEnum)[keyof typeof ProjectMemberScalarFieldEnum]
+
+
 export const TaskScalarFieldEnum = {
   id: 'id',
   title: 'title',
   description: 'description',
-  status: 'status',
   deadline: 'deadline',
   priority: 'priority',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  userId: 'userId'
+  statusId: 'statusId',
+  projectId: 'projectId'
 } as const
 
 export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]
+
+
+export const AssignedTaskScalarFieldEnum = {
+  assignId: 'assignId',
+  taskId: 'taskId'
+} as const
+
+export type AssignedTaskScalarFieldEnum = (typeof AssignedTaskScalarFieldEnum)[keyof typeof AssignedTaskScalarFieldEnum]
+
+
+export const TaskStatusScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  name: 'name',
+  isDefault: 'isDefault',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  projectId: 'projectId'
+} as const
+
+export type TaskStatusScalarFieldEnum = (typeof TaskStatusScalarFieldEnum)[keyof typeof TaskStatusScalarFieldEnum]
 
 
 export const SortOrder = {

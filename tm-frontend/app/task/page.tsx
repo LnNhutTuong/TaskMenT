@@ -82,9 +82,7 @@ export default function TaskPage() {
       console.log(">>check res: ", response);
       return response;
     } catch (error) {
-      setErrorMessage(
-        error instanceof Error ? error.message : "Unable to load tasks.",
-      );
+      setErrorMessage("Unable to load tasks.");
     } finally {
       setIsLoading(false);
     }
@@ -97,13 +95,9 @@ export default function TaskPage() {
       setSelectedTask(response.data);
       setIsTaskDialogOpen(true);
     } catch (error) {
-      setErrorMessage(
-        error instanceof Error ? error.message : "Unable to load tasks.",
-      );
+      setErrorMessage("Unable to load tasks.");
     }
   };
-
-  console.log(">>>check task: ", selectedTask);
 
   useEffect(() => {
     getAllTasks()
@@ -111,10 +105,8 @@ export default function TaskPage() {
         setErrorMessage("");
         setTasks(response.data.tasks);
       })
-      .catch((error: unknown) => {
-        setErrorMessage(
-          error instanceof Error ? error.message : "Unable to load tasks.",
-        );
+      .catch(() => {
+        setErrorMessage("Unable to load tasks.");
       })
       .finally(() => setIsLoading(false));
   }, []);
