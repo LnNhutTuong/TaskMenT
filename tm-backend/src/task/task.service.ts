@@ -100,32 +100,42 @@ export class TaskService {
   }
 
   async findOne(id: string, user: AuthUser) {
-    const where: Prisma.TaskWhereInput = {};
-
-    if (user.role === RoleName.USER) {
-      where.project = {
-        OR: [
-          { ownerId: user.id },
-          {
-            members: {
-              some: {
-                memberId: user.id,
-              },
-            },
-          },
-        ],
-      };
-    }
-
     const task = await this.prisma.task.findFirst({
       where: {
         id,
-        ...where,
       },
     });
 
     if (!task) {
       throw new NotFoundException('Task not found');
+    }
+
+    const project = await this.prisma.project.findFirst({
+      where: {
+        id: task.projectId,
+      },
+    });
+
+    if (!project) {
+      throw new NotFoundException('Project not found');
+    }
+
+    // Admin la cha
+    if (user.role === RoleName.ADMIN) {
+      return task;
+    }
+
+    const isOwner = project.ownerId === user.id;
+
+    const isMember = await this.prisma.projectMember.findFirst({
+      where: {
+        projectId: project.id,
+        memberId: user.id,
+      },
+    });
+
+    if (!isOwner && !isMember) {
+      throw new ForbiddenException('You cannot view this task');
     }
 
     return task;
@@ -197,6 +207,7 @@ export class TaskService {
   }
 
   async updateTask(id: string, dto: UpdateTaskDto, user: AuthUser) {
+    //find task to update
     const task = await this.prisma.task.findFirst({
       where: {
         id,
@@ -207,6 +218,13 @@ export class TaskService {
       throw new NotFoundException('Task not found');
     }
 
+    if (task.isClosed) {
+      throw new BadRequestException(
+        'Cannot update this task because is closed',
+      );
+    }
+
+    //find project which task on in
     const project = await this.prisma.project.findFirst({
       where: {
         id: task.projectId,
@@ -217,6 +235,7 @@ export class TaskService {
       throw new NotFoundException('Project not found');
     }
 
+    //tim nhung thanh vien cua project
     const members = await this.prisma.projectMember.findMany({
       where: {
         projectId: task.projectId,
@@ -226,6 +245,7 @@ export class TaskService {
       },
     });
 
+    //check cai thang thuc hien cai action
     const isAssignee = await this.prisma.assignedTask.findFirst({
       where: {
         taskId: task.id,
@@ -233,19 +253,20 @@ export class TaskService {
       },
     });
 
-    if (user.role === RoleName.ADMIN) {
-      throw new ForbiddenException('Admin cannot update tasks');
-    }
-
     const isOwner = project.ownerId === user.id;
 
     if (!isOwner && !isAssignee) {
       throw new ForbiddenException('You cannot update this task');
     }
 
+    //status
+
+    //bien tam
     let statusId: string | undefined;
 
+    //neu co truyen thang status thi moi vao case
     if (dto.status) {
+      //find status in project
       const status = await this.prisma.taskStatus.findFirst({
         where: {
           projectId: task.projectId,
@@ -259,6 +280,7 @@ export class TaskService {
       }
     }
 
+    //kiem tra cac thang se duoc assign vao,
     const allowedUserIds = [
       project.ownerId,
       ...members.map((member) => member.memberId),
@@ -299,19 +321,58 @@ export class TaskService {
         })),
       });
     }
+
+    //task after update
+    return this.prisma.task.findUnique({
+      where: {
+        id: task.id,
+      },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        deadline: true,
+        priority: true,
+        isClosed: true,
+        createdAt: true,
+        updatedAt: true,
+
+        status: {
+          select: {
+            id: true,
+            key: true,
+            name: true,
+          },
+        },
+
+        assigned: {
+          select: {
+            assigned: {
+              select: {
+                id: true,
+                email: true,
+                name: true,
+                role: true,
+              },
+            },
+          },
+        },
+
+        project: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
   }
 
-  async deleteTask(id: string, user: AuthUser) {
-    const where: Prisma.TaskWhereInput = {};
-
-    if (user.role === RoleName.USER) {
-      where.userId = user.id;
-    }
-
+  async closeTask(id: string, user: AuthUser) {
+    //find task to update
     const task = await this.prisma.task.findFirst({
       where: {
         id,
-        ...where,
       },
     });
 
@@ -319,9 +380,154 @@ export class TaskService {
       throw new NotFoundException('Task not found');
     }
 
-    return this.prisma.task.delete({
+    if (task.isClosed) {
+      throw new BadRequestException('Task is already closed');
+    }
+
+    //find project which task on in
+    const project = await this.prisma.project.findFirst({
+      where: {
+        id: task.projectId,
+      },
+    });
+
+    if (!project) {
+      throw new NotFoundException('Project not found');
+    }
+
+    const taskStatus = await this.prisma.taskStatus.findFirst({
+      where: {
+        projectId: project.id,
+        key: 'DONE',
+      },
+    });
+
+    if (!taskStatus) {
+      throw new NotFoundException('Status task not found');
+    }
+
+    const isOwner = project.ownerId === user.id;
+
+    //check member is assignee or not
+    const isAssignee = await this.prisma.assignedTask.findFirst({
+      where: {
+        taskId: task.id,
+        assignId: user.id,
+      },
+    });
+
+    if (!isOwner && !isAssignee) {
+      throw new ForbiddenException('You cannot close this task');
+    }
+
+    return this.prisma.task.update({
+      where: {
+        id: task.id,
+      },
+      data: {
+        isClosed: true,
+        statusId: taskStatus.id,
+        previousStatusId: task.statusId,
+      },
+    });
+  }
+
+  async reOpenTask(id: string, user: AuthUser) {
+    //find task to update
+    const task = await this.prisma.task.findFirst({
       where: {
         id,
+      },
+    });
+
+    if (!task) {
+      throw new NotFoundException('Task not found');
+    }
+
+    if (!task.isClosed) {
+      throw new BadRequestException('Task is already open');
+    }
+
+    //find project which task on in
+    const project = await this.prisma.project.findFirst({
+      where: {
+        id: task.projectId,
+      },
+    });
+
+    if (!project) {
+      throw new NotFoundException('Project not found');
+    }
+
+    if (!task.previousStatusId) {
+      throw new BadRequestException('Task has no previous task');
+    }
+
+    const isOwner = project.ownerId === user.id;
+
+    //check member is assignee or not
+    const isAssignee = await this.prisma.assignedTask.findFirst({
+      where: {
+        taskId: task.id,
+        assignId: user.id,
+      },
+    });
+
+    if (!isOwner && !isAssignee) {
+      throw new ForbiddenException('You cannot reopen this task');
+    }
+
+    return this.prisma.task.update({
+      where: {
+        id: task.id,
+      },
+      data: {
+        isClosed: false,
+        statusId: task.previousStatusId,
+      },
+    });
+  }
+
+  async deleteTask(id: string, user: AuthUser) {
+    //find task to update
+    const task = await this.prisma.task.findFirst({
+      where: {
+        id,
+      },
+    });
+
+    if (!task) {
+      throw new NotFoundException('Task not found');
+    }
+
+    //find project which task on in
+    const project = await this.prisma.project.findFirst({
+      where: {
+        id: task.projectId,
+      },
+    });
+
+    if (!project) {
+      throw new NotFoundException('Project not found');
+    }
+
+    const isOwner = project.ownerId === user.id;
+
+    //check member is assignee or not
+    const isAssignee = await this.prisma.assignedTask.findFirst({
+      where: {
+        taskId: task.id,
+        assignId: user.id,
+      },
+    });
+
+    if (!isOwner && !isAssignee) {
+      throw new ForbiddenException('You cannot delete this task');
+    }
+
+    return this.prisma.task.delete({
+      where: {
+        id: task.id,
       },
     });
   }

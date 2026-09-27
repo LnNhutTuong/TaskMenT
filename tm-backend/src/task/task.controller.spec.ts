@@ -3,11 +3,7 @@ import { TaskController } from './task.controller.js';
 import { TaskService } from './task.service.js';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
 import { AuthModuleOptions } from '@nestjs/passport';
-import {
-  PriorityLevel,
-  RoleName,
-  TaskStatus,
-} from '../generated/prisma/enums.js';
+import { PriorityLevel, RoleName } from '../generated/prisma/enums.js';
 
 describe('TaskController', () => {
   let controller: TaskController;

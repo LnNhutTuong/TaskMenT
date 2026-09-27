@@ -441,10 +441,6 @@ export type TaskStatusUpdateOneRequiredWithoutTasksNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TaskStatusUpdateToOneWithWhereWithoutTasksInput, Prisma.TaskStatusUpdateWithoutTasksInput>, Prisma.TaskStatusUncheckedUpdateWithoutTasksInput>
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
 export type TaskStatusCreateWithoutProjectInput = {
   id?: string
   key: string

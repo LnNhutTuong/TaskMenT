@@ -77,9 +77,9 @@ export default function TaskPage() {
     setIsLoading(true);
     try {
       const response = await getAllTasks();
+      console.log(">>check res: ", response.data.tasks);
       setErrorMessage("");
       setTasks(response.data.tasks);
-      console.log(">>check res: ", response);
       return response;
     } catch (error) {
       setErrorMessage("Unable to load tasks.");
@@ -100,15 +100,7 @@ export default function TaskPage() {
   };
 
   useEffect(() => {
-    getAllTasks()
-      .then((response) => {
-        setErrorMessage("");
-        setTasks(response.data.tasks);
-      })
-      .catch(() => {
-        setErrorMessage("Unable to load tasks.");
-      })
-      .finally(() => setIsLoading(false));
+    handleGetAllTasks();
   }, []);
 
   const visibleTasks = tasks?.filter((task) => {

@@ -25,7 +25,7 @@ import {
   ApiParam,
   ApiBody,
 } from '@nestjs/swagger';
-import { PriorityLevel, TaskStatus } from '../generated/prisma/enums.js';
+import { PriorityLevel } from '../generated/prisma/enums.js';
 import { SortField } from './dto/sorting.dto.js';
 import { SortOrder } from '../generated/prisma/internal/prismaNamespace.js';
 import {
@@ -84,7 +84,6 @@ export class TaskController {
     name: 'status',
     description: 'Status of task',
     required: false,
-    enum: TaskStatus,
   })
   @ApiQuery({
     name: 'priority',
@@ -200,10 +199,28 @@ export class TaskController {
     @Body() dto: UpdateTaskDto,
     @CurrentUser() user: AuthUser,
   ) {
-    let task = await this.taskService.updateTask(id, dto, user);
+    const task = await this.taskService.updateTask(id, dto, user);
 
     return {
       message: 'Update task successfully',
+      data: task,
+    };
+  }
+
+  @Patch(':id/close')
+  async closeTask(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+    const task = await this.taskService.closeTask(id, user);
+    return {
+      message: 'Close task successfully',
+      data: task,
+    };
+  }
+
+  @Patch(':id/reopen')
+  async reOpenTask(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+    const task = await this.taskService.reOpenTask(id, user);
+    return {
+      message: 'ReOpen task successfully',
       data: task,
     };
   }
