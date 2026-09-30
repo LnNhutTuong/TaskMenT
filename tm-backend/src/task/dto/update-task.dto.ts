@@ -1,22 +1,5 @@
-import { IsString, IsOptional, IsEnum, IsDate, IsArray } from 'class-validator';
-import { Transform } from 'class-transformer';
-import { PriorityLevel } from '../../generated/prisma/enums.js';
-export class UpdateTaskDto {
-  @IsOptional()
-  @IsString()
-  status?: string;
+import { OmitType, PartialType } from "@nestjs/swagger";
+import { CreateTaskDto } from "./create-task.dto.js";
 
-  @IsOptional()
-  @IsDate()
-  @Transform(({ value }) => new Date(value))
-  deadline?: Date;
-
-  @IsOptional()
-  @IsEnum(PriorityLevel)
-  priority?: PriorityLevel;
-
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  assigneeIds?: string[];
+export class UpdateTaskDto extends PartialType(OmitType(CreateTaskDto, ['projectId'] as const)) {
 }

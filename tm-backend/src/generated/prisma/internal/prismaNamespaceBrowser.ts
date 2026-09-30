@@ -52,11 +52,31 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  Permission: 'Permission',
+  Role: 'Role',
+  RolePermission: 'RolePermission',
+  UserRole: 'UserRole',
+  Workspace: 'Workspace',
+  WorkspaceMember: 'WorkspaceMember',
+  WorkspaceRole: 'WorkspaceRole',
   Project: 'Project',
   ProjectMember: 'ProjectMember',
   Task: 'Task',
-  AssignedTask: 'AssignedTask',
-  TaskStatus: 'TaskStatus'
+  TaskAssignee: 'TaskAssignee',
+  Objective: 'Objective',
+  KeyResult: 'KeyResult',
+  TaskKeyResult: 'TaskKeyResult',
+  TaskOutput: 'TaskOutput',
+  Evidence: 'Evidence',
+  Metric: 'Metric',
+  Formula: 'Formula',
+  TaskMetricValue: 'TaskMetricValue',
+  KPISnapshot: 'KPISnapshot',
+  EvaluationPeriod: 'EvaluationPeriod',
+  EvaluationCriteria: 'EvaluationCriteria',
+  Evaluation: 'Evaluation',
+  EvaluationCriteriaResult: 'EvaluationCriteriaResult',
+  ClassificationRule: 'ClassificationRule'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -80,7 +100,7 @@ export const UserScalarFieldEnum = {
   email: 'email',
   password: 'password',
   name: 'name',
-  role: 'role',
+  avatar: 'avatar',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -88,21 +108,90 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const PermissionScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  description: 'description',
+  createdAt: 'createdAt'
+} as const
+
+export type PermissionScalarFieldEnum = (typeof PermissionScalarFieldEnum)[keyof typeof PermissionScalarFieldEnum]
+
+
+export const RoleScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  scope: 'scope',
+  workspaceId: 'workspaceId',
+  isSystem: 'isSystem',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RoleScalarFieldEnum = (typeof RoleScalarFieldEnum)[keyof typeof RoleScalarFieldEnum]
+
+
+export const RolePermissionScalarFieldEnum = {
+  roleId: 'roleId',
+  permissionId: 'permissionId'
+} as const
+
+export type RolePermissionScalarFieldEnum = (typeof RolePermissionScalarFieldEnum)[keyof typeof RolePermissionScalarFieldEnum]
+
+
+export const UserRoleScalarFieldEnum = {
+  userId: 'userId',
+  roleId: 'roleId'
+} as const
+
+export type UserRoleScalarFieldEnum = (typeof UserRoleScalarFieldEnum)[keyof typeof UserRoleScalarFieldEnum]
+
+
+export const WorkspaceScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WorkspaceScalarFieldEnum = (typeof WorkspaceScalarFieldEnum)[keyof typeof WorkspaceScalarFieldEnum]
+
+
+export const WorkspaceMemberScalarFieldEnum = {
+  userId: 'userId',
+  workspaceId: 'workspaceId',
+  roleId: 'roleId',
+  joinedAt: 'joinedAt'
+} as const
+
+export type WorkspaceMemberScalarFieldEnum = (typeof WorkspaceMemberScalarFieldEnum)[keyof typeof WorkspaceMemberScalarFieldEnum]
+
+
+export const WorkspaceRoleScalarFieldEnum = {
+  workspaceId: 'workspaceId',
+  roleId: 'roleId'
+} as const
+
+export type WorkspaceRoleScalarFieldEnum = (typeof WorkspaceRoleScalarFieldEnum)[keyof typeof WorkspaceRoleScalarFieldEnum]
+
+
 export const ProjectScalarFieldEnum = {
   id: 'id',
+  workspaceId: 'workspaceId',
+  createdById: 'createdById',
   name: 'name',
   description: 'description',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  ownerId: 'ownerId'
+  updatedAt: 'updatedAt'
 } as const
 
 export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum]
 
 
 export const ProjectMemberScalarFieldEnum = {
-  memberId: 'memberId',
-  projectId: 'projectId'
+  projectId: 'projectId',
+  userId: 'userId',
+  joinedAt: 'joinedAt'
 } as const
 
 export type ProjectMemberScalarFieldEnum = (typeof ProjectMemberScalarFieldEnum)[keyof typeof ProjectMemberScalarFieldEnum]
@@ -112,38 +201,222 @@ export const TaskScalarFieldEnum = {
   id: 'id',
   title: 'title',
   description: 'description',
-  deadline: 'deadline',
   priority: 'priority',
-  isClosed: 'isClosed',
+  status: 'status',
+  dueDate: 'dueDate',
+  customFields: 'customFields',
+  projectId: 'projectId',
+  createdById: 'createdById',
+  parentId: 'parentId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  statusId: 'statusId',
-  previousStatusId: 'previousStatusId',
-  projectId: 'projectId'
+  formulaId: 'formulaId'
 } as const
 
 export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]
 
 
-export const AssignedTaskScalarFieldEnum = {
-  assignId: 'assignId',
+export const TaskAssigneeScalarFieldEnum = {
+  taskId: 'taskId',
+  userId: 'userId',
+  assignedAt: 'assignedAt'
+} as const
+
+export type TaskAssigneeScalarFieldEnum = (typeof TaskAssigneeScalarFieldEnum)[keyof typeof TaskAssigneeScalarFieldEnum]
+
+
+export const ObjectiveScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  projectId: 'projectId',
+  workspaceId: 'workspaceId'
+} as const
+
+export type ObjectiveScalarFieldEnum = (typeof ObjectiveScalarFieldEnum)[keyof typeof ObjectiveScalarFieldEnum]
+
+
+export const KeyResultScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  startValue: 'startValue',
+  currentValue: 'currentValue',
+  targetValue: 'targetValue',
+  unit: 'unit',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  objectiveId: 'objectiveId'
+} as const
+
+export type KeyResultScalarFieldEnum = (typeof KeyResultScalarFieldEnum)[keyof typeof KeyResultScalarFieldEnum]
+
+
+export const TaskKeyResultScalarFieldEnum = {
+  taskId: 'taskId',
+  keyResultId: 'keyResultId'
+} as const
+
+export type TaskKeyResultScalarFieldEnum = (typeof TaskKeyResultScalarFieldEnum)[keyof typeof TaskKeyResultScalarFieldEnum]
+
+
+export const TaskOutputScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  expectedType: 'expectedType',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
   taskId: 'taskId'
 } as const
 
-export type AssignedTaskScalarFieldEnum = (typeof AssignedTaskScalarFieldEnum)[keyof typeof AssignedTaskScalarFieldEnum]
+export type TaskOutputScalarFieldEnum = (typeof TaskOutputScalarFieldEnum)[keyof typeof TaskOutputScalarFieldEnum]
 
 
-export const TaskStatusScalarFieldEnum = {
+export const EvidenceScalarFieldEnum = {
+  id: 'id',
+  fileUrl: 'fileUrl',
+  fileName: 'fileName',
+  mimeType: 'mimeType',
+  status: 'status',
+  reviewNote: 'reviewNote',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  taskOutputId: 'taskOutputId',
+  uploadedById: 'uploadedById',
+  uploadedAt: 'uploadedAt',
+  reviewedById: 'reviewedById',
+  reviewedAt: 'reviewedAt'
+} as const
+
+export type EvidenceScalarFieldEnum = (typeof EvidenceScalarFieldEnum)[keyof typeof EvidenceScalarFieldEnum]
+
+
+export const MetricScalarFieldEnum = {
   id: 'id',
   key: 'key',
   name: 'name',
-  isDefault: 'isDefault',
+  description: 'description',
+  unit: 'unit',
+  workspaceId: 'workspaceId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  projectId: 'projectId'
+  updatedAt: 'updatedAt'
 } as const
 
-export type TaskStatusScalarFieldEnum = (typeof TaskStatusScalarFieldEnum)[keyof typeof TaskStatusScalarFieldEnum]
+export type MetricScalarFieldEnum = (typeof MetricScalarFieldEnum)[keyof typeof MetricScalarFieldEnum]
+
+
+export const FormulaScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  expression: 'expression',
+  description: 'description',
+  version: 'version',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  workspaceId: 'workspaceId'
+} as const
+
+export type FormulaScalarFieldEnum = (typeof FormulaScalarFieldEnum)[keyof typeof FormulaScalarFieldEnum]
+
+
+export const TaskMetricValueScalarFieldEnum = {
+  id: 'id',
+  taskId: 'taskId',
+  metricId: 'metricId',
+  value: 'value'
+} as const
+
+export type TaskMetricValueScalarFieldEnum = (typeof TaskMetricValueScalarFieldEnum)[keyof typeof TaskMetricValueScalarFieldEnum]
+
+
+export const KPISnapshotScalarFieldEnum = {
+  id: 'id',
+  taskId: 'taskId',
+  finalScore: 'finalScore',
+  expression: 'expression',
+  version: 'version',
+  metricValues: 'metricValues',
+  calculatedAt: 'calculatedAt'
+} as const
+
+export type KPISnapshotScalarFieldEnum = (typeof KPISnapshotScalarFieldEnum)[keyof typeof KPISnapshotScalarFieldEnum]
+
+
+export const EvaluationPeriodScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  kpiWeight: 'kpiWeight',
+  criteriaWeight: 'criteriaWeight',
+  workspaceId: 'workspaceId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EvaluationPeriodScalarFieldEnum = (typeof EvaluationPeriodScalarFieldEnum)[keyof typeof EvaluationPeriodScalarFieldEnum]
+
+
+export const EvaluationCriteriaScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  maxScore: 'maxScore',
+  periodId: 'periodId'
+} as const
+
+export type EvaluationCriteriaScalarFieldEnum = (typeof EvaluationCriteriaScalarFieldEnum)[keyof typeof EvaluationCriteriaScalarFieldEnum]
+
+
+export const EvaluationScalarFieldEnum = {
+  id: 'id',
+  periodId: 'periodId',
+  userId: 'userId',
+  reviewerId: 'reviewerId',
+  status: 'status',
+  kpiScore: 'kpiScore',
+  criteriaScore: 'criteriaScore',
+  finalScore: 'finalScore',
+  classification: 'classification',
+  selfComment: 'selfComment',
+  reviewerComment: 'reviewerComment',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EvaluationScalarFieldEnum = (typeof EvaluationScalarFieldEnum)[keyof typeof EvaluationScalarFieldEnum]
+
+
+export const EvaluationCriteriaResultScalarFieldEnum = {
+  id: 'id',
+  evaluationId: 'evaluationId',
+  evaluationCriteriaId: 'evaluationCriteriaId',
+  selfScore: 'selfScore',
+  reviewerScore: 'reviewerScore',
+  comment: 'comment'
+} as const
+
+export type EvaluationCriteriaResultScalarFieldEnum = (typeof EvaluationCriteriaResultScalarFieldEnum)[keyof typeof EvaluationCriteriaResultScalarFieldEnum]
+
+
+export const ClassificationRuleScalarFieldEnum = {
+  id: 'id',
+  grade: 'grade',
+  label: 'label',
+  minScore: 'minScore',
+  maxScore: 'maxScore',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  workspaceId: 'workspaceId'
+} as const
+
+export type ClassificationRuleScalarFieldEnum = (typeof ClassificationRuleScalarFieldEnum)[keyof typeof ClassificationRuleScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -152,6 +425,21 @@ export const SortOrder = {
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {
@@ -168,4 +456,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

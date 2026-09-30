@@ -25,35 +25,41 @@ export type AggregateProjectMember = {
 }
 
 export type ProjectMemberMinAggregateOutputType = {
-  memberId: string | null
   projectId: string | null
+  userId: string | null
+  joinedAt: Date | null
 }
 
 export type ProjectMemberMaxAggregateOutputType = {
-  memberId: string | null
   projectId: string | null
+  userId: string | null
+  joinedAt: Date | null
 }
 
 export type ProjectMemberCountAggregateOutputType = {
-  memberId: number
   projectId: number
+  userId: number
+  joinedAt: number
   _all: number
 }
 
 
 export type ProjectMemberMinAggregateInputType = {
-  memberId?: true
   projectId?: true
+  userId?: true
+  joinedAt?: true
 }
 
 export type ProjectMemberMaxAggregateInputType = {
-  memberId?: true
   projectId?: true
+  userId?: true
+  joinedAt?: true
 }
 
 export type ProjectMemberCountAggregateInputType = {
-  memberId?: true
   projectId?: true
+  userId?: true
+  joinedAt?: true
   _all?: true
 }
 
@@ -130,8 +136,9 @@ export type ProjectMemberGroupByArgs<ExtArgs extends runtime.Types.Extensions.In
 }
 
 export type ProjectMemberGroupByOutputType = {
-  memberId: string
   projectId: string
+  userId: string
+  joinedAt: Date
   _count: ProjectMemberCountAggregateOutputType | null
   _min: ProjectMemberMinAggregateOutputType | null
   _max: ProjectMemberMaxAggregateOutputType | null
@@ -156,33 +163,37 @@ export type ProjectMemberWhereInput = {
   AND?: Prisma.ProjectMemberWhereInput | Prisma.ProjectMemberWhereInput[]
   OR?: Prisma.ProjectMemberWhereInput[]
   NOT?: Prisma.ProjectMemberWhereInput | Prisma.ProjectMemberWhereInput[]
-  memberId?: Prisma.StringFilter<"ProjectMember"> | string
   projectId?: Prisma.StringFilter<"ProjectMember"> | string
-  member?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  userId?: Prisma.StringFilter<"ProjectMember"> | string
+  joinedAt?: Prisma.DateTimeFilter<"ProjectMember"> | Date | string
   project?: Prisma.XOR<Prisma.ProjectScalarRelationFilter, Prisma.ProjectWhereInput>
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
 export type ProjectMemberOrderByWithRelationInput = {
-  memberId?: Prisma.SortOrder
   projectId?: Prisma.SortOrder
-  member?: Prisma.UserOrderByWithRelationInput
+  userId?: Prisma.SortOrder
+  joinedAt?: Prisma.SortOrder
   project?: Prisma.ProjectOrderByWithRelationInput
+  user?: Prisma.UserOrderByWithRelationInput
 }
 
 export type ProjectMemberWhereUniqueInput = Prisma.AtLeast<{
-  memberId_projectId?: Prisma.ProjectMemberMemberIdProjectIdCompoundUniqueInput
+  projectId_userId?: Prisma.ProjectMemberProjectIdUserIdCompoundUniqueInput
   AND?: Prisma.ProjectMemberWhereInput | Prisma.ProjectMemberWhereInput[]
   OR?: Prisma.ProjectMemberWhereInput[]
   NOT?: Prisma.ProjectMemberWhereInput | Prisma.ProjectMemberWhereInput[]
-  memberId?: Prisma.StringFilter<"ProjectMember"> | string
   projectId?: Prisma.StringFilter<"ProjectMember"> | string
-  member?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  userId?: Prisma.StringFilter<"ProjectMember"> | string
+  joinedAt?: Prisma.DateTimeFilter<"ProjectMember"> | Date | string
   project?: Prisma.XOR<Prisma.ProjectScalarRelationFilter, Prisma.ProjectWhereInput>
-}, "memberId_projectId">
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+}, "projectId_userId">
 
 export type ProjectMemberOrderByWithAggregationInput = {
-  memberId?: Prisma.SortOrder
   projectId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
+  joinedAt?: Prisma.SortOrder
   _count?: Prisma.ProjectMemberCountOrderByAggregateInput
   _max?: Prisma.ProjectMemberMaxOrderByAggregateInput
   _min?: Prisma.ProjectMemberMinOrderByAggregateInput
@@ -192,42 +203,49 @@ export type ProjectMemberScalarWhereWithAggregatesInput = {
   AND?: Prisma.ProjectMemberScalarWhereWithAggregatesInput | Prisma.ProjectMemberScalarWhereWithAggregatesInput[]
   OR?: Prisma.ProjectMemberScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ProjectMemberScalarWhereWithAggregatesInput | Prisma.ProjectMemberScalarWhereWithAggregatesInput[]
-  memberId?: Prisma.StringWithAggregatesFilter<"ProjectMember"> | string
   projectId?: Prisma.StringWithAggregatesFilter<"ProjectMember"> | string
+  userId?: Prisma.StringWithAggregatesFilter<"ProjectMember"> | string
+  joinedAt?: Prisma.DateTimeWithAggregatesFilter<"ProjectMember"> | Date | string
 }
 
 export type ProjectMemberCreateInput = {
-  member: Prisma.UserCreateNestedOneWithoutMembershipsInput
+  joinedAt?: Date | string
   project: Prisma.ProjectCreateNestedOneWithoutMembersInput
+  user: Prisma.UserCreateNestedOneWithoutProjectMembershipsInput
 }
 
 export type ProjectMemberUncheckedCreateInput = {
-  memberId: string
   projectId: string
+  userId: string
+  joinedAt?: Date | string
 }
 
 export type ProjectMemberUpdateInput = {
-  member?: Prisma.UserUpdateOneRequiredWithoutMembershipsNestedInput
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   project?: Prisma.ProjectUpdateOneRequiredWithoutMembersNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutProjectMembershipsNestedInput
 }
 
 export type ProjectMemberUncheckedUpdateInput = {
-  memberId?: Prisma.StringFieldUpdateOperationsInput | string
   projectId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ProjectMemberCreateManyInput = {
-  memberId: string
   projectId: string
+  userId: string
+  joinedAt?: Date | string
 }
 
 export type ProjectMemberUpdateManyMutationInput = {
-
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ProjectMemberUncheckedUpdateManyInput = {
-  memberId?: Prisma.StringFieldUpdateOperationsInput | string
   projectId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ProjectMemberListRelationFilter = {
@@ -240,65 +258,68 @@ export type ProjectMemberOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type ProjectMemberMemberIdProjectIdCompoundUniqueInput = {
-  memberId: string
+export type ProjectMemberProjectIdUserIdCompoundUniqueInput = {
   projectId: string
+  userId: string
 }
 
 export type ProjectMemberCountOrderByAggregateInput = {
-  memberId?: Prisma.SortOrder
   projectId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
+  joinedAt?: Prisma.SortOrder
 }
 
 export type ProjectMemberMaxOrderByAggregateInput = {
-  memberId?: Prisma.SortOrder
   projectId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
+  joinedAt?: Prisma.SortOrder
 }
 
 export type ProjectMemberMinOrderByAggregateInput = {
-  memberId?: Prisma.SortOrder
   projectId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
+  joinedAt?: Prisma.SortOrder
 }
 
-export type ProjectMemberCreateNestedManyWithoutMemberInput = {
-  create?: Prisma.XOR<Prisma.ProjectMemberCreateWithoutMemberInput, Prisma.ProjectMemberUncheckedCreateWithoutMemberInput> | Prisma.ProjectMemberCreateWithoutMemberInput[] | Prisma.ProjectMemberUncheckedCreateWithoutMemberInput[]
-  connectOrCreate?: Prisma.ProjectMemberCreateOrConnectWithoutMemberInput | Prisma.ProjectMemberCreateOrConnectWithoutMemberInput[]
-  createMany?: Prisma.ProjectMemberCreateManyMemberInputEnvelope
+export type ProjectMemberCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.ProjectMemberCreateWithoutUserInput, Prisma.ProjectMemberUncheckedCreateWithoutUserInput> | Prisma.ProjectMemberCreateWithoutUserInput[] | Prisma.ProjectMemberUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.ProjectMemberCreateOrConnectWithoutUserInput | Prisma.ProjectMemberCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.ProjectMemberCreateManyUserInputEnvelope
   connect?: Prisma.ProjectMemberWhereUniqueInput | Prisma.ProjectMemberWhereUniqueInput[]
 }
 
-export type ProjectMemberUncheckedCreateNestedManyWithoutMemberInput = {
-  create?: Prisma.XOR<Prisma.ProjectMemberCreateWithoutMemberInput, Prisma.ProjectMemberUncheckedCreateWithoutMemberInput> | Prisma.ProjectMemberCreateWithoutMemberInput[] | Prisma.ProjectMemberUncheckedCreateWithoutMemberInput[]
-  connectOrCreate?: Prisma.ProjectMemberCreateOrConnectWithoutMemberInput | Prisma.ProjectMemberCreateOrConnectWithoutMemberInput[]
-  createMany?: Prisma.ProjectMemberCreateManyMemberInputEnvelope
+export type ProjectMemberUncheckedCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.ProjectMemberCreateWithoutUserInput, Prisma.ProjectMemberUncheckedCreateWithoutUserInput> | Prisma.ProjectMemberCreateWithoutUserInput[] | Prisma.ProjectMemberUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.ProjectMemberCreateOrConnectWithoutUserInput | Prisma.ProjectMemberCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.ProjectMemberCreateManyUserInputEnvelope
   connect?: Prisma.ProjectMemberWhereUniqueInput | Prisma.ProjectMemberWhereUniqueInput[]
 }
 
-export type ProjectMemberUpdateManyWithoutMemberNestedInput = {
-  create?: Prisma.XOR<Prisma.ProjectMemberCreateWithoutMemberInput, Prisma.ProjectMemberUncheckedCreateWithoutMemberInput> | Prisma.ProjectMemberCreateWithoutMemberInput[] | Prisma.ProjectMemberUncheckedCreateWithoutMemberInput[]
-  connectOrCreate?: Prisma.ProjectMemberCreateOrConnectWithoutMemberInput | Prisma.ProjectMemberCreateOrConnectWithoutMemberInput[]
-  upsert?: Prisma.ProjectMemberUpsertWithWhereUniqueWithoutMemberInput | Prisma.ProjectMemberUpsertWithWhereUniqueWithoutMemberInput[]
-  createMany?: Prisma.ProjectMemberCreateManyMemberInputEnvelope
+export type ProjectMemberUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.ProjectMemberCreateWithoutUserInput, Prisma.ProjectMemberUncheckedCreateWithoutUserInput> | Prisma.ProjectMemberCreateWithoutUserInput[] | Prisma.ProjectMemberUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.ProjectMemberCreateOrConnectWithoutUserInput | Prisma.ProjectMemberCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.ProjectMemberUpsertWithWhereUniqueWithoutUserInput | Prisma.ProjectMemberUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.ProjectMemberCreateManyUserInputEnvelope
   set?: Prisma.ProjectMemberWhereUniqueInput | Prisma.ProjectMemberWhereUniqueInput[]
   disconnect?: Prisma.ProjectMemberWhereUniqueInput | Prisma.ProjectMemberWhereUniqueInput[]
   delete?: Prisma.ProjectMemberWhereUniqueInput | Prisma.ProjectMemberWhereUniqueInput[]
   connect?: Prisma.ProjectMemberWhereUniqueInput | Prisma.ProjectMemberWhereUniqueInput[]
-  update?: Prisma.ProjectMemberUpdateWithWhereUniqueWithoutMemberInput | Prisma.ProjectMemberUpdateWithWhereUniqueWithoutMemberInput[]
-  updateMany?: Prisma.ProjectMemberUpdateManyWithWhereWithoutMemberInput | Prisma.ProjectMemberUpdateManyWithWhereWithoutMemberInput[]
+  update?: Prisma.ProjectMemberUpdateWithWhereUniqueWithoutUserInput | Prisma.ProjectMemberUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.ProjectMemberUpdateManyWithWhereWithoutUserInput | Prisma.ProjectMemberUpdateManyWithWhereWithoutUserInput[]
   deleteMany?: Prisma.ProjectMemberScalarWhereInput | Prisma.ProjectMemberScalarWhereInput[]
 }
 
-export type ProjectMemberUncheckedUpdateManyWithoutMemberNestedInput = {
-  create?: Prisma.XOR<Prisma.ProjectMemberCreateWithoutMemberInput, Prisma.ProjectMemberUncheckedCreateWithoutMemberInput> | Prisma.ProjectMemberCreateWithoutMemberInput[] | Prisma.ProjectMemberUncheckedCreateWithoutMemberInput[]
-  connectOrCreate?: Prisma.ProjectMemberCreateOrConnectWithoutMemberInput | Prisma.ProjectMemberCreateOrConnectWithoutMemberInput[]
-  upsert?: Prisma.ProjectMemberUpsertWithWhereUniqueWithoutMemberInput | Prisma.ProjectMemberUpsertWithWhereUniqueWithoutMemberInput[]
-  createMany?: Prisma.ProjectMemberCreateManyMemberInputEnvelope
+export type ProjectMemberUncheckedUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.ProjectMemberCreateWithoutUserInput, Prisma.ProjectMemberUncheckedCreateWithoutUserInput> | Prisma.ProjectMemberCreateWithoutUserInput[] | Prisma.ProjectMemberUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.ProjectMemberCreateOrConnectWithoutUserInput | Prisma.ProjectMemberCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.ProjectMemberUpsertWithWhereUniqueWithoutUserInput | Prisma.ProjectMemberUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.ProjectMemberCreateManyUserInputEnvelope
   set?: Prisma.ProjectMemberWhereUniqueInput | Prisma.ProjectMemberWhereUniqueInput[]
   disconnect?: Prisma.ProjectMemberWhereUniqueInput | Prisma.ProjectMemberWhereUniqueInput[]
   delete?: Prisma.ProjectMemberWhereUniqueInput | Prisma.ProjectMemberWhereUniqueInput[]
   connect?: Prisma.ProjectMemberWhereUniqueInput | Prisma.ProjectMemberWhereUniqueInput[]
-  update?: Prisma.ProjectMemberUpdateWithWhereUniqueWithoutMemberInput | Prisma.ProjectMemberUpdateWithWhereUniqueWithoutMemberInput[]
-  updateMany?: Prisma.ProjectMemberUpdateManyWithWhereWithoutMemberInput | Prisma.ProjectMemberUpdateManyWithWhereWithoutMemberInput[]
+  update?: Prisma.ProjectMemberUpdateWithWhereUniqueWithoutUserInput | Prisma.ProjectMemberUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.ProjectMemberUpdateManyWithWhereWithoutUserInput | Prisma.ProjectMemberUpdateManyWithWhereWithoutUserInput[]
   deleteMany?: Prisma.ProjectMemberScalarWhereInput | Prisma.ProjectMemberScalarWhereInput[]
 }
 
@@ -344,54 +365,59 @@ export type ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput = {
   deleteMany?: Prisma.ProjectMemberScalarWhereInput | Prisma.ProjectMemberScalarWhereInput[]
 }
 
-export type ProjectMemberCreateWithoutMemberInput = {
+export type ProjectMemberCreateWithoutUserInput = {
+  joinedAt?: Date | string
   project: Prisma.ProjectCreateNestedOneWithoutMembersInput
 }
 
-export type ProjectMemberUncheckedCreateWithoutMemberInput = {
+export type ProjectMemberUncheckedCreateWithoutUserInput = {
   projectId: string
+  joinedAt?: Date | string
 }
 
-export type ProjectMemberCreateOrConnectWithoutMemberInput = {
+export type ProjectMemberCreateOrConnectWithoutUserInput = {
   where: Prisma.ProjectMemberWhereUniqueInput
-  create: Prisma.XOR<Prisma.ProjectMemberCreateWithoutMemberInput, Prisma.ProjectMemberUncheckedCreateWithoutMemberInput>
+  create: Prisma.XOR<Prisma.ProjectMemberCreateWithoutUserInput, Prisma.ProjectMemberUncheckedCreateWithoutUserInput>
 }
 
-export type ProjectMemberCreateManyMemberInputEnvelope = {
-  data: Prisma.ProjectMemberCreateManyMemberInput | Prisma.ProjectMemberCreateManyMemberInput[]
+export type ProjectMemberCreateManyUserInputEnvelope = {
+  data: Prisma.ProjectMemberCreateManyUserInput | Prisma.ProjectMemberCreateManyUserInput[]
   skipDuplicates?: boolean
 }
 
-export type ProjectMemberUpsertWithWhereUniqueWithoutMemberInput = {
+export type ProjectMemberUpsertWithWhereUniqueWithoutUserInput = {
   where: Prisma.ProjectMemberWhereUniqueInput
-  update: Prisma.XOR<Prisma.ProjectMemberUpdateWithoutMemberInput, Prisma.ProjectMemberUncheckedUpdateWithoutMemberInput>
-  create: Prisma.XOR<Prisma.ProjectMemberCreateWithoutMemberInput, Prisma.ProjectMemberUncheckedCreateWithoutMemberInput>
+  update: Prisma.XOR<Prisma.ProjectMemberUpdateWithoutUserInput, Prisma.ProjectMemberUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.ProjectMemberCreateWithoutUserInput, Prisma.ProjectMemberUncheckedCreateWithoutUserInput>
 }
 
-export type ProjectMemberUpdateWithWhereUniqueWithoutMemberInput = {
+export type ProjectMemberUpdateWithWhereUniqueWithoutUserInput = {
   where: Prisma.ProjectMemberWhereUniqueInput
-  data: Prisma.XOR<Prisma.ProjectMemberUpdateWithoutMemberInput, Prisma.ProjectMemberUncheckedUpdateWithoutMemberInput>
+  data: Prisma.XOR<Prisma.ProjectMemberUpdateWithoutUserInput, Prisma.ProjectMemberUncheckedUpdateWithoutUserInput>
 }
 
-export type ProjectMemberUpdateManyWithWhereWithoutMemberInput = {
+export type ProjectMemberUpdateManyWithWhereWithoutUserInput = {
   where: Prisma.ProjectMemberScalarWhereInput
-  data: Prisma.XOR<Prisma.ProjectMemberUpdateManyMutationInput, Prisma.ProjectMemberUncheckedUpdateManyWithoutMemberInput>
+  data: Prisma.XOR<Prisma.ProjectMemberUpdateManyMutationInput, Prisma.ProjectMemberUncheckedUpdateManyWithoutUserInput>
 }
 
 export type ProjectMemberScalarWhereInput = {
   AND?: Prisma.ProjectMemberScalarWhereInput | Prisma.ProjectMemberScalarWhereInput[]
   OR?: Prisma.ProjectMemberScalarWhereInput[]
   NOT?: Prisma.ProjectMemberScalarWhereInput | Prisma.ProjectMemberScalarWhereInput[]
-  memberId?: Prisma.StringFilter<"ProjectMember"> | string
   projectId?: Prisma.StringFilter<"ProjectMember"> | string
+  userId?: Prisma.StringFilter<"ProjectMember"> | string
+  joinedAt?: Prisma.DateTimeFilter<"ProjectMember"> | Date | string
 }
 
 export type ProjectMemberCreateWithoutProjectInput = {
-  member: Prisma.UserCreateNestedOneWithoutMembershipsInput
+  joinedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutProjectMembershipsInput
 }
 
 export type ProjectMemberUncheckedCreateWithoutProjectInput = {
-  memberId: string
+  userId: string
+  joinedAt?: Date | string
 }
 
 export type ProjectMemberCreateOrConnectWithoutProjectInput = {
@@ -420,89 +446,102 @@ export type ProjectMemberUpdateManyWithWhereWithoutProjectInput = {
   data: Prisma.XOR<Prisma.ProjectMemberUpdateManyMutationInput, Prisma.ProjectMemberUncheckedUpdateManyWithoutProjectInput>
 }
 
-export type ProjectMemberCreateManyMemberInput = {
+export type ProjectMemberCreateManyUserInput = {
   projectId: string
+  joinedAt?: Date | string
 }
 
-export type ProjectMemberUpdateWithoutMemberInput = {
+export type ProjectMemberUpdateWithoutUserInput = {
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   project?: Prisma.ProjectUpdateOneRequiredWithoutMembersNestedInput
 }
 
-export type ProjectMemberUncheckedUpdateWithoutMemberInput = {
+export type ProjectMemberUncheckedUpdateWithoutUserInput = {
   projectId?: Prisma.StringFieldUpdateOperationsInput | string
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type ProjectMemberUncheckedUpdateManyWithoutMemberInput = {
+export type ProjectMemberUncheckedUpdateManyWithoutUserInput = {
   projectId?: Prisma.StringFieldUpdateOperationsInput | string
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ProjectMemberCreateManyProjectInput = {
-  memberId: string
+  userId: string
+  joinedAt?: Date | string
 }
 
 export type ProjectMemberUpdateWithoutProjectInput = {
-  member?: Prisma.UserUpdateOneRequiredWithoutMembershipsNestedInput
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutProjectMembershipsNestedInput
 }
 
 export type ProjectMemberUncheckedUpdateWithoutProjectInput = {
-  memberId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ProjectMemberUncheckedUpdateManyWithoutProjectInput = {
-  memberId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
 
 export type ProjectMemberSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  memberId?: boolean
   projectId?: boolean
-  member?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  userId?: boolean
+  joinedAt?: boolean
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["projectMember"]>
 
 export type ProjectMemberSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  memberId?: boolean
   projectId?: boolean
-  member?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  userId?: boolean
+  joinedAt?: boolean
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["projectMember"]>
 
 export type ProjectMemberSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  memberId?: boolean
   projectId?: boolean
-  member?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  userId?: boolean
+  joinedAt?: boolean
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["projectMember"]>
 
 export type ProjectMemberSelectScalar = {
-  memberId?: boolean
   projectId?: boolean
+  userId?: boolean
+  joinedAt?: boolean
 }
 
-export type ProjectMemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"memberId" | "projectId", ExtArgs["result"]["projectMember"]>
+export type ProjectMemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"projectId" | "userId" | "joinedAt", ExtArgs["result"]["projectMember"]>
 export type ProjectMemberInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  member?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type ProjectMemberIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  member?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type ProjectMemberIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  member?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $ProjectMemberPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ProjectMember"
   objects: {
-    member: Prisma.$UserPayload<ExtArgs>
     project: Prisma.$ProjectPayload<ExtArgs>
+    user: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    memberId: string
     projectId: string
+    userId: string
+    joinedAt: Date
   }, ExtArgs["result"]["projectMember"]>
   composites: {}
 }
@@ -586,8 +625,8 @@ export interface ProjectMemberDelegate<ExtArgs extends runtime.Types.Extensions.
    * // Get first 10 ProjectMembers
    * const projectMembers = await prisma.projectMember.findMany({ take: 10 })
    * 
-   * // Only select the `memberId`
-   * const projectMemberWithMemberIdOnly = await prisma.projectMember.findMany({ select: { memberId: true } })
+   * // Only select the `projectId`
+   * const projectMemberWithProjectIdOnly = await prisma.projectMember.findMany({ select: { projectId: true } })
    * 
    */
   findMany<T extends ProjectMemberFindManyArgs>(args?: Prisma.SelectSubset<T, ProjectMemberFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProjectMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -631,9 +670,9 @@ export interface ProjectMemberDelegate<ExtArgs extends runtime.Types.Extensions.
    *   ]
    * })
    * 
-   * // Create many ProjectMembers and only return the `memberId`
-   * const projectMemberWithMemberIdOnly = await prisma.projectMember.createManyAndReturn({
-   *   select: { memberId: true },
+   * // Create many ProjectMembers and only return the `projectId`
+   * const projectMemberWithProjectIdOnly = await prisma.projectMember.createManyAndReturn({
+   *   select: { projectId: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -722,9 +761,9 @@ export interface ProjectMemberDelegate<ExtArgs extends runtime.Types.Extensions.
    *   ]
    * })
    * 
-   * // Update zero or more ProjectMembers and only return the `memberId`
-   * const projectMemberWithMemberIdOnly = await prisma.projectMember.updateManyAndReturn({
-   *   select: { memberId: true },
+   * // Update zero or more ProjectMembers and only return the `projectId`
+   * const projectMemberWithProjectIdOnly = await prisma.projectMember.updateManyAndReturn({
+   *   select: { projectId: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -897,8 +936,8 @@ readonly fields: ProjectMemberFieldRefs;
  */
 export interface Prisma__ProjectMemberClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  member<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   project<T extends Prisma.ProjectDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProjectDefaultArgs<ExtArgs>>): Prisma.Prisma__ProjectClient<runtime.Types.Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -928,8 +967,9 @@ export interface Prisma__ProjectMemberClient<T, Null = never, ExtArgs extends ru
  * Fields of the ProjectMember model
  */
 export interface ProjectMemberFieldRefs {
-  readonly memberId: Prisma.FieldRef<"ProjectMember", 'String'>
   readonly projectId: Prisma.FieldRef<"ProjectMember", 'String'>
+  readonly userId: Prisma.FieldRef<"ProjectMember", 'String'>
+  readonly joinedAt: Prisma.FieldRef<"ProjectMember", 'DateTime'>
 }
     
 

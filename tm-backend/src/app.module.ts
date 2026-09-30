@@ -7,6 +7,8 @@ import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module.js';
 import { AuthModule } from './auth/auth.module.js';
 import { PasswordModule } from './common/password/password.module.js';
+import { ProjectModule } from './project/project.module.js';
+import { TaskStatusModule } from './task-status/task-status.module.js';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { PasswordModule } from './common/password/password.module.js';
     UserModule,
     AuthModule,
     PasswordModule,
+    ProjectModule,
+    TaskStatusModule,
   ],
 
   controllers: [AppController],

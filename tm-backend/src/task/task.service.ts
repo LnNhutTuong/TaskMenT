@@ -7,7 +7,7 @@ import {
 import { PrismaService } from '../prisma/prisma.service.js';
 import { CreateTaskDto } from './dto/create-task.dto.js';
 import { UpdateTaskDto } from './dto/update-task.dto.js';
-import { RoleName } from '../generated/prisma/enums.js';
+
 import { AuthUser } from '../auth/types/jwt-payload.type.js';
 import { Prisma } from '../generated/prisma/client.js';
 import { TaskQueryDTO } from './dto/task-query.dto.js';
@@ -460,7 +460,7 @@ export class TaskService {
     }
 
     if (!task.previousStatusId) {
-      throw new BadRequestException('Task has no previous task');
+      throw new BadRequestException('Task has no previous status');
     }
 
     const isOwner = project.ownerId === user.id;

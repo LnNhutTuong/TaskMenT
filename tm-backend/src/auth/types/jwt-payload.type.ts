@@ -1,10 +1,9 @@
-import { RoleName } from '../../generated/prisma/enums.js';
+import {RoleScope } from '../../generated/prisma/enums.js';
 
 export type JwtPayload = {
   sub: string;
   email: string;
   name: string | null;
-  role: RoleName;
 };
 
 export type LoginResponse = {
@@ -19,5 +18,4 @@ export type AuthUser = {
   id: string;
   email: string;
   name: string | null;
-  role: RoleName;
 };

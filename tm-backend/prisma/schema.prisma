@@ -7,100 +7,494 @@ generator client {
   output   = "../src/generated/prisma"
 }
 
-enum RoleName {
-  ADMIN
-  USER
+enum RoleScope {
+  SYSTEM
+  WORKSPACE
 }
 
 enum PriorityLevel {
   LOW
   MEDIUM
   HIGH
+  URGENT
+}
+
+enum OutputType {
+  DOCUMENT
+  LINK
+  OTHER
+}
+
+enum EvidenceStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum EvaluationStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
 }
 
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
   password  String
-  name      String?
-  role      RoleName @default(USER)
+  name      String
+  avatar    String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  assignedTasks AssignedTask[]
-  ownedProjects Project[]
-  memberships   ProjectMember[]
+  systemRoles          UserRole[]
+  workspaceMemberships WorkspaceMember[]
+  createdProjects      Project[]         @relation("ProjectCreator")
+  projectMemberships   ProjectMember[]
+  createdTasks         Task[]            @relation("TaskCreator")
+  taskAssignees        TaskAssignee[]
+  submittedEvidence    Evidence[]        @relation("EvidenceSubmitter")
+  reviewedEvidence     Evidence[]        @relation("EvidenceReviewer")
+  userEvaluation       Evaluation[]      @relation("EvaluatedUser")
+  reviewerEvaluation   Evaluation[]      @relation("EvaluationReviewer")
+}
+
+// Permission la quyen nho nhat trong he thong.
+// Permission duoc gan cho Role, khong gan truc tiep cho User.
+model Permission {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+
+  roles RolePermission[]
+}
+
+// SUPER_ADMIN quan ly dinh nghia Role va Permission tren toan he thong.
+// Workspace Owner chi duoc gan cac Workspace Role da duoc phep su dung
+// cho thanh vien trong Workspace cua minh.
+model Role {
+  id          String    @id @default(uuid())
+  name        String
+  scope       RoleScope
+  workspaceId String?
+  isSystem    Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  workspace      Workspace?        @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  permissions    RolePermission[]
+  systemUsers    UserRole[]
+  workspaceUsers WorkspaceMember[]
+  enabledIn      WorkspaceRole[]
+
+  @@unique([workspaceId, name])
+}
+
+model RolePermission {
+  roleId       String
+  permissionId String
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+}
+
+// Chi dung de gan Role cap he thong cho User, vi du SUPER_ADMIN.
+model UserRole {
+  userId String
+  roleId String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId])
+}
+
+model Workspace {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  members            WorkspaceMember[]
+  projects           Project[]
+  roles              Role[]
+  enabledRoles       WorkspaceRole[]
+  objectives         Objective[]
+  metrics            Metric[]
+  formulas           Formula[]
+  evaluationPeriods  EvaluationPeriod[]
+  classificationRule ClassificationRule[]
+}
+
+// User thuoc Workspace thong qua bang nay.
+// roleId phai tro den Role co pham vi WORKSPACE.
+// Moi User chi co mot Role trong mot Workspace o thiet ke hien tai.
+model WorkspaceMember {
+  userId      String
+  workspaceId String
+  roleId      String
+  joinedAt    DateTime @default(now())
+
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  role      Role      @relation(fields: [roleId], references: [id])
+
+  @@id([userId, workspaceId])
+}
+
+// Role phai duoc bat trong Workspace truoc khi Owner co the gan Role do
+// cho thanh vien.
+// Viec kiem tra Role co dung scope va dung Workspace phai xu ly o service.
+model WorkspaceRole {
+  workspaceId String
+  roleId      String
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  role      Role      @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([workspaceId, roleId])
 }
 
 model Project {
   id          String   @id @default(uuid())
+  workspaceId String
+  createdById String
   name        String
-  description String
+  description String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  ownerId String
-  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdBy User      @relation("ProjectCreator", fields: [createdById], references: [id])
 
-  members      ProjectMember[]
-  taskStatuses TaskStatus[]
-  tasks        Task[]
+  members    ProjectMember[]
+  tasks      Task[]
+  objectives Objective[]
 }
 
+// Danh sach thanh vien rieng cua Project.
+// Workspace Owner khong bat buoc phai xuat hien trong bang nay.
+// Workspace Member khong phai ProjectMember van co the xem Project,
+// nhung khong duoc thao tac neu khong co Permission va pham vi phu hop.
 model ProjectMember {
-  memberId  String
   projectId String
+  userId    String
+  joinedAt  DateTime @default(now())
 
-  member  User    @relation(fields: [memberId], references: [id])
-  project Project @relation(fields: [projectId], references: [id])
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@id([memberId, projectId])
+  @@id([projectId, userId])
 }
 
 model Task {
-  id          String        @id @default(uuid())
-  title       String
-  description String?
-  deadline    DateTime?
-  priority    PriorityLevel @default(MEDIUM)
-  isClosed    Boolean       @default(false)
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  id           String        @id @default(uuid())
+  title        String
+  description  String?
+  priority     PriorityLevel @default(MEDIUM)
+  status       String        @default("TODO")
+  dueDate      DateTime?
+  customFields Json?
 
-  statusId         String
-  previousStatusId String?
-  //relations fields
-  status           TaskStatus @relation(fields: [projectId, statusId], references: [projectId, id])
+  projectId   String
+  createdById String
+  // De co the tao SubTask -> Task 
+  parentId    String?
 
-  projectId String
-  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
-
-  assigned AssignedTask[]
-}
-
-model AssignedTask {
-  assignId String
-  taskId   String
-
-  assigned User @relation(fields: [assignId], references: [id], onDelete: Cascade)
-  task     Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
-
-  @@id([assignId, taskId])
-}
-
-model TaskStatus {
-  id        String   @id @default(uuid())
-  key       String
-  name      String
-  isDefault Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  projectId String
-  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project          Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdBy        User              @relation("TaskCreator", fields: [createdById], references: [id])
+  // De co the quan he cha con voi subtask
+  parentTask       Task?             @relation("TaskHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
+  subTasks         Task[]            @relation("TaskHierarchy")
+  taskAssignees    TaskAssignee[]
+  taskKeyResults   TaskKeyResult[]
+  taskOutputs      TaskOutput[]
+  formula          Formula?          @relation(fields: [formulaId], references: [id], onDelete: SetNull)
+  formulaId        String?
+  taskMetricValues TaskMetricValue[]
+  kpiSnapshot      KPISnapshot?
+}
 
-  tasks Task[]
+model TaskAssignee {
+  taskId     String
+  userId     String
+  assignedAt DateTime @default(now())
 
-  @@unique([projectId, id])
-  @@unique([projectId, key])
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([taskId, userId])
+}
+
+model Objective {
+  id          String  @id @default(uuid())
+  title       String
+  description String?
+
+  startDate DateTime?
+  endDate   DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  keyResults KeyResult[]
+}
+
+model KeyResult {
+  id          String  @id @default(uuid())
+  title       String
+  description String?
+
+  startValue   Float @default(0)
+  currentValue Float @default(0)
+  targetValue  Float
+
+  unit String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  objectiveId String
+  objective   Objective @relation(fields: [objectiveId], references: [id], onDelete: Cascade)
+
+  taskLinks TaskKeyResult[]
+}
+
+model TaskKeyResult {
+  taskId String
+  task   Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  keyResultId String
+  keyResult   KeyResult @relation(fields: [keyResultId], references: [id], onDelete: Cascade)
+
+  @@id([taskId, keyResultId])
+}
+
+//Dau ra san pham cua Task
+model TaskOutput {
+  id           String     @id @default(uuid())
+  title        String
+  description  String?
+  expectedType OutputType @default(DOCUMENT)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  taskId String
+  task   Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  evidences Evidence[]
+}
+
+//Minh chung cho viec hoan thanh Task
+model Evidence {
+  id         String         @id @default(uuid())
+  fileUrl    String
+  fileName   String?
+  mimeType   String?
+  status     EvidenceStatus @default(PENDING)
+  reviewNote String?
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+
+  taskOutputId String
+  taskOutput   TaskOutput @relation(fields: [taskOutputId], references: [id], onDelete: Cascade)
+
+  uploadedById String
+  uploadedBy   User     @relation("EvidenceSubmitter", fields: [uploadedById], references: [id], onDelete: Cascade)
+  uploadedAt   DateTime @default(now())
+
+  reviewedById String?
+  reviewedBy   User?     @relation("EvidenceReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
+  reviewedAt   DateTime?
+}
+
+// Metric duoc tao ra trong 1 Workspace, duoc su dung trong cac Task thuoc Workspace do
+// Khi tao Task chi can chon Metric nao su dung ma khong can khai bao lai
+// Metric dung cho viec tinh diem, duoc su dung trong Formula de tinh diem
+// Metric khong the xoa neu dang duoc su dung trong Task
+model Metric {
+  id          String  @id @default(uuid())
+  key         String
+  name        String
+  description String?
+  unit        String?
+
+  workspaceId      String
+  workspace        Workspace         @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  taskMetricValues TaskMetricValue[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Tùng key được gán 1 lần duy nhất trong 1 workspace
+  @@unique([workspaceId, key])
+}
+
+model Formula {
+  id          String  @id @default(uuid())
+  name        String
+  //Chuoi cong thuc
+  expression  String
+  description String?
+  version     Int     @default(1)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  tasks       Task[]
+}
+
+//cac gia tri metric duoc nhap trong tung task thuoc Workspace dung cho viec tinh diem
+model TaskMetricValue {
+  id String @id @default(uuid())
+
+  taskId String
+  task   Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  metricId String
+  metric   Metric @relation(fields: [metricId], references: [id], onDelete: Restrict)
+
+  value Float @default(0)
+
+  @@unique([taskId, metricId])
+}
+
+model KPISnapshot {
+  id String @id @default(uuid())
+
+  taskId String @unique
+  task   Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  //diem cuoi cung
+  finalScore   Float
+  //cong thuc tinh ra cai diem do
+  expression   String
+  //phien ban cong thuc nao
+  version      Int
+  //cac gia tri metric duoc nhap de tinh ra diem
+  metricValues Json
+  calculatedAt DateTime @default(now())
+}
+
+//Ky danh gia
+model EvaluationPeriod {
+  id        String   @id @default(uuid())
+  name      String
+  //khoang thoi gian danh gia
+  startDate DateTime
+  endDate   DateTime
+
+  //ty trong cu cac tieu chi danh gia
+  kpiWeight      Float @default(0.6)
+  criteriaWeight Float @default(0.4)
+
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  evaluations Evaluation[]
+  criteria    EvaluationCriteria[]
+}
+
+//tieu chi phu
+model EvaluationCriteria {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+  maxScore    Float   @default(10)
+
+  periodId String
+  period   EvaluationPeriod @relation(fields: [periodId], references: [id], onDelete: Cascade)
+
+  results EvaluationCriteriaResult[]
+}
+
+//Bang danh gia
+model Evaluation {
+  id String @id @default(uuid())
+
+  periodId String
+  period   EvaluationPeriod @relation(fields: [periodId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation("EvaluatedUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  reviewerId String?
+  reviewer   User?   @relation("EvaluationReviewer", fields: [reviewerId], references: [id], onDelete: SetNull)
+
+  status EvaluationStatus @default(DRAFT)
+
+  //3 cot diem
+  kpiScore      Float @default(0)
+  criteriaScore Float @default(0)
+  finalScore    Float @default(0)
+
+  //danh hieu / xep loai
+  classification String?
+
+  //tu danh gia ban than
+  selfComment String?
+
+  //danh gai tu reviewer
+  reviewerComment String?
+
+  criteriaResults EvaluationCriteriaResult[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  //moi 1 phieu danh gia chi duoc xuat hien 1 lan trong 1 ky danh gia, thuoc 1 user
+  @@unique([periodId, userId])
+}
+
+//Ket qua chi tiet cua tieu chi phu trong danh gia
+model EvaluationCriteriaResult {
+  id String @id @default(uuid())
+
+  evaluationId String
+  evaluation   Evaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
+
+  evaluationCriteriaId String
+  evaluationCriteria   EvaluationCriteria @relation(fields: [evaluationCriteriaId], references: [id], onDelete: Cascade)
+
+  selfScore     Float   @default(0) // Điểm tự chấm
+  reviewerScore Float   @default(0) // Điểm quản lý chấm
+  comment       String? // Nhận xét chi tiết cho tiêu chí này
+
+  @@unique([evaluationId, evaluationCriteriaId])
+}
+
+//Rule cua thang danh gia
+model ClassificationRule {
+  id String @id @default(uuid())
+
+  //A, B, C, D,.. A++,A+,B-
+  grade String
+  //Excellent, Good, Average, Bad
+  label String
+
+  minScore Float
+  maxScore Float
+
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
 }
