@@ -23,7 +23,127 @@ export * from './enums.js';
  */
 export type User = Prisma.UserModel
 /**
+ * Model Permission
+ * 
+ */
+export type Permission = Prisma.PermissionModel
+/**
+ * Model Role
+ * 
+ */
+export type Role = Prisma.RoleModel
+/**
+ * Model RolePermission
+ * 
+ */
+export type RolePermission = Prisma.RolePermissionModel
+/**
+ * Model UserRole
+ * 
+ */
+export type UserRole = Prisma.UserRoleModel
+/**
+ * Model Workspace
+ * 
+ */
+export type Workspace = Prisma.WorkspaceModel
+/**
+ * Model WorkspaceMember
+ * 
+ */
+export type WorkspaceMember = Prisma.WorkspaceMemberModel
+/**
+ * Model WorkspaceRole
+ * 
+ */
+export type WorkspaceRole = Prisma.WorkspaceRoleModel
+/**
+ * Model Project
+ * 
+ */
+export type Project = Prisma.ProjectModel
+/**
+ * Model ProjectMember
+ * 
+ */
+export type ProjectMember = Prisma.ProjectMemberModel
+/**
  * Model Task
  * 
  */
 export type Task = Prisma.TaskModel
+/**
+ * Model TaskAssignee
+ * 
+ */
+export type TaskAssignee = Prisma.TaskAssigneeModel
+/**
+ * Model Objective
+ * 
+ */
+export type Objective = Prisma.ObjectiveModel
+/**
+ * Model KeyResult
+ * 
+ */
+export type KeyResult = Prisma.KeyResultModel
+/**
+ * Model TaskKeyResult
+ * 
+ */
+export type TaskKeyResult = Prisma.TaskKeyResultModel
+/**
+ * Model TaskOutput
+ * 
+ */
+export type TaskOutput = Prisma.TaskOutputModel
+/**
+ * Model Evidence
+ * 
+ */
+export type Evidence = Prisma.EvidenceModel
+/**
+ * Model Metric
+ * 
+ */
+export type Metric = Prisma.MetricModel
+/**
+ * Model Formula
+ * 
+ */
+export type Formula = Prisma.FormulaModel
+/**
+ * Model TaskMetricValue
+ * 
+ */
+export type TaskMetricValue = Prisma.TaskMetricValueModel
+/**
+ * Model KPISnapshot
+ * 
+ */
+export type KPISnapshot = Prisma.KPISnapshotModel
+/**
+ * Model EvaluationPeriod
+ * 
+ */
+export type EvaluationPeriod = Prisma.EvaluationPeriodModel
+/**
+ * Model EvaluationCriteria
+ * 
+ */
+export type EvaluationCriteria = Prisma.EvaluationCriteriaModel
+/**
+ * Model Evaluation
+ * 
+ */
+export type Evaluation = Prisma.EvaluationModel
+/**
+ * Model EvaluationCriteriaResult
+ * 
+ */
+export type EvaluationCriteriaResult = Prisma.EvaluationCriteriaResultModel
+/**
+ * Model ClassificationRule
+ * 
+ */
+export type ClassificationRule = Prisma.ClassificationRuleModel

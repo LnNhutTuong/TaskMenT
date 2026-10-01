@@ -18,5 +18,5 @@ export class RegisterDTO {
   @Transform(({ value }) => value.trim())
   @IsOptional()
   @ApiPropertyOptional({ example: 'Nguyen Van A' })
-  name?: string;
+  name: string;
 }

@@ -2,11 +2,7 @@ import 'dotenv/config';
 import bcrypt from 'bcrypt';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '../src/generated/prisma/client.js';
-import {
-  PriorityLevel,
-  RoleName,
-  TaskStatus,
-} from '../src/generated/prisma/enums.js';
+import { RoleScope } from '../src/generated/prisma/enums.js';
 
 const connectionString = process.env.DATABASE_URL;
 
@@ -17,98 +13,144 @@ if (!connectionString) {
 const adapter = new PrismaPg({ connectionString });
 const prisma = new PrismaClient({ adapter });
 
-const seedUsers = [
-  {
-    email: 'admin@taskmanager.local',
-    password: '123456',
-    name: 'Task Manager Admin',
-    role: RoleName.ADMIN,
-  },
-  {
-    email: 'user@taskmanager.local',
-    password: '123456',
-    name: 'Task Manager User',
-    role: RoleName.USER,
-  },
-] as const;
-
 async function main() {
-  const users = new Map<string, { id: string }>();
+  console.log('🌱 Starting database seeding...');
 
-  for (const seedUser of seedUsers) {
-    const user = await prisma.user.upsert({
-      where: { email: seedUser.email },
-      update: {
-        name: seedUser.name,
-        role: seedUser.role,
-        password: await bcrypt.hash(seedUser.password, 10),
-      },
-      create: {
-        email: seedUser.email,
-        name: seedUser.name,
-        role: seedUser.role,
-        password: await bcrypt.hash(seedUser.password, 10),
-      },
-      select: { id: true },
-    });
-
-    users.set(seedUser.email, user);
-  }
-
-  const admin = users.get('admin@taskmanager.local');
-  const user = users.get('user@taskmanager.local');
-
-  if (!admin || !user) {
-    throw new Error('Seed users were not created');
-  }
-
-  const taskTitles = [
-    'Review project requirements',
-    'Implement authentication flow',
-    'Write API tests',
-  ];
-
-  await prisma.task.deleteMany({
+  // 1. Tạo System Role: SUPER_ADMIN
+  let superAdminRole = await prisma.role.findFirst({
     where: {
-      title: { in: taskTitles },
+      name: 'SUPER_ADMIN',
+      scope: RoleScope.SYSTEM,
     },
   });
 
-  await prisma.task.createMany({
-    data: [
-      {
-        title: taskTitles[0],
-        description:
-          'Review the task manager requirements and plan the next steps.',
-        status: TaskStatus.IN_PROGRESS,
-        priority: PriorityLevel.HIGH,
-        userId: admin.id,
+  if (!superAdminRole) {
+    superAdminRole = await prisma.role.create({
+      data: {
+        name: 'SUPER_ADMIN',
+        scope: RoleScope.SYSTEM,
+        isSystem: true,
       },
-      {
-        title: taskTitles[1],
-        description:
-          'Implement register and login flow with JWT authentication.',
-        status: TaskStatus.TODO,
-        priority: PriorityLevel.HIGH,
-        userId: user.id,
-      },
-      {
-        title: taskTitles[2],
-        description: 'Add unit tests for the main controllers and services.',
-        status: TaskStatus.TODO,
-        priority: PriorityLevel.MEDIUM,
-        userId: user.id,
-      },
-    ],
+    });
+  }
+
+  // 2. Tạo tài khoản Super Admin
+  const adminPassword = await bcrypt.hash('mengo123', 10);
+  const superAdmin = await prisma.user.upsert({
+    where: { email: 'admin@taskmanager.local' },
+    update: {
+      password: adminPassword,
+      name: 'Super Administrator',
+    },
+    create: {
+      email: 'admin@taskmanager.local',
+      password: adminPassword,
+      name: 'Super Administrator',
+    },
   });
 
-  console.log('Seed completed successfully');
-  console.log('Admin: admin@taskmanager.local / Admin123!');
-  console.log('User: user@taskmanager.local / User123!');
+  // Gán role SUPER_ADMIN cho user này
+  await prisma.userRole.upsert({
+    where: {
+      userId_roleId: {
+        userId: superAdmin.id,
+        roleId: superAdminRole.id,
+      },
+    },
+    update: {},
+    create: {
+      userId: superAdmin.id,
+      roleId: superAdminRole.id,
+    },
+  });
+
+  // 3. Tạo tài khoản Regular User (để test add member / assign task)
+  const userPassword = await bcrypt.hash('mengo123', 10);
+  const regularUser = await prisma.user.upsert({
+    where: { email: 'user@taskmanager.local' },
+    update: {
+      password: userPassword,
+      name: 'Nguyen Van Test',
+    },
+    create: {
+      email: 'user@taskmanager.local',
+      password: userPassword,
+      name: 'Nguyen Van Test',
+    },
+  });
+
+  // 4. Tạo một Workspace mẫu (Vì Project bắt buộc thuộc về 1 Workspace)
+  const workspace = await prisma.workspace.upsert({
+    where: { id: '00000000-0000-0000-0000-000000000001' },
+    update: {},
+    create: {
+      id: '00000000-0000-0000-0000-000000000001',
+      name: 'Main Workspace',
+    },
+  });
+
+  // Role cấp Workspace
+  let workspaceMemberRole = await prisma.role.findFirst({
+    where: {
+      workspaceId: workspace.id,
+      name: 'WORKSPACE_MEMBER',
+    },
+  });
+
+  if (!workspaceMemberRole) {
+    workspaceMemberRole = await prisma.role.create({
+      data: {
+        workspaceId: workspace.id,
+        name: 'WORKSPACE_MEMBER',
+        scope: RoleScope.WORKSPACE,
+      },
+    });
+  }
+
+  // Add cả 2 user vào Workspace
+  await prisma.workspaceMember.upsert({
+    where: {
+      userId_workspaceId: {
+        userId: superAdmin.id,
+        workspaceId: workspace.id,
+      },
+    },
+    update: {},
+    create: {
+      userId: superAdmin.id,
+      workspaceId: workspace.id,
+      roleId: workspaceMemberRole.id,
+    },
+  });
+
+  await prisma.workspaceMember.upsert({
+    where: {
+      userId_workspaceId: {
+        userId: regularUser.id,
+        workspaceId: workspace.id,
+      },
+    },
+    update: {},
+    create: {
+      userId: regularUser.id,
+      workspaceId: workspace.id,
+      roleId: workspaceMemberRole.id,
+    },
+  });
+
+  console.log('✅ Seeding completed successfully!');
+  console.log('--------------------------------------------------');
+  console.log('👑 Super Admin: admin@taskmanager.local / mengo123');
+  console.log('👤 Member User: user@taskmanager.local  / mengo123');
+  console.log(`🏢 Workspace ID: ${workspace.id}`);
+  console.log('--------------------------------------------------');
 }
 
 try {
   await main();
+} catch (e) {
+  console.error('❌ Seeding failed:', e);
+  process.exit(1);
 } finally {
   await prisma.$disconnect();
 }

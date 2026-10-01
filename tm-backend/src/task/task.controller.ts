@@ -25,8 +25,7 @@ import {
   ApiParam,
   ApiBody,
 } from '@nestjs/swagger';
-import { PriorityLevel, TaskStatus } from '../generated/prisma/enums.js';
-import { SortField } from './dto/sorting.dto.js';
+import { PriorityLevel } from '../generated/prisma/enums.js';
 import { SortOrder } from '../generated/prisma/internal/prismaNamespace.js';
 import {
   DeleteTaskResponseDto,
@@ -40,15 +39,11 @@ import {
 export class TaskController {
   constructor(private taskService: TaskService) {}
 
-  @Get('all')
-
-  // SWG operation
+  @Get()
   @ApiOperation({
     summary: 'Get all tasks',
     description: 'Get tasks with filtering, pagination and sorting',
   })
-
-  // SWG query
   @ApiQuery({
     name: 'page',
     description: 'Page is page',
@@ -67,13 +62,6 @@ export class TaskController {
     example: 1,
   })
   @ApiQuery({
-    name: 'sortBy',
-    description: 'Sort task by ',
-    required: true,
-    enum: SortField,
-    example: 'title',
-  })
-  @ApiQuery({
     name: 'sortOrder',
     description: 'Sort task order ',
     required: true,
@@ -84,7 +72,6 @@ export class TaskController {
     name: 'status',
     description: 'Status of task',
     required: false,
-    enum: TaskStatus,
   })
   @ApiQuery({
     name: 'priority',
@@ -200,7 +187,7 @@ export class TaskController {
     @Body() dto: UpdateTaskDto,
     @CurrentUser() user: AuthUser,
   ) {
-    let task = await this.taskService.updateTask(id, dto, user);
+    const task = await this.taskService.updateTask(id, dto, user);
 
     return {
       message: 'Update task successfully',

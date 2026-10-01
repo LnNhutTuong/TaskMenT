@@ -36,7 +36,7 @@ export class AuthService {
       data: {
         email: dto.email,
         password: hashedPassword,
-        name: dto.name,
+        name: dto.name.trim(),
       },
     });
 
@@ -71,7 +71,6 @@ export class AuthService {
       sub: user.id,
       email: user.email,
       name: user.name,
-      role: user.role,
     };
 
     const accessToken = this.jwtService.sign(payload);

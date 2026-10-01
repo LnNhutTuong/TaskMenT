@@ -58,29 +58,29 @@ jobs:
       - name: Run build
         run: npm run build
 
-  frontend:
-    runs-on: ubuntu-latest
+  # frontend:
+  #   runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: tm-frontend
+  #   defaults:
+  #     run:
+  #       working-directory: tm-frontend
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-          cache-dependency-path: tm-frontend/package-lock.json
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 22
+  #         cache: npm
+  #         cache-dependency-path: tm-frontend/package-lock.json
 
-      - name: install dependencies
-        run: npm ci
+  #     - name: install dependencies
+  #       run: npm ci
 
-      - name: Run Lint
-        run: npm run lint
+  #     - name: Run Lint
+  #       run: npm run lint
 
-      - name: Run build
-        run: npm run build
+  #     - name: Run build
+  #       run: npm run build

@@ -9,27 +9,47 @@
 * 🟢 You can import this file directly.
 */
 
-export const TaskStatus = {
-  TODO: 'TODO',
-  IN_PROGRESS: 'IN_PROGRESS',
-  DONE: 'DONE'
+export const RoleScope = {
+  SYSTEM: 'SYSTEM',
+  WORKSPACE: 'WORKSPACE'
 } as const
 
-export type TaskStatus = (typeof TaskStatus)[keyof typeof TaskStatus]
-
-
-export const RoleName = {
-  ADMIN: 'ADMIN',
-  USER: 'USER'
-} as const
-
-export type RoleName = (typeof RoleName)[keyof typeof RoleName]
+export type RoleScope = (typeof RoleScope)[keyof typeof RoleScope]
 
 
 export const PriorityLevel = {
   LOW: 'LOW',
   MEDIUM: 'MEDIUM',
-  HIGH: 'HIGH'
+  HIGH: 'HIGH',
+  URGENT: 'URGENT'
 } as const
 
 export type PriorityLevel = (typeof PriorityLevel)[keyof typeof PriorityLevel]
+
+
+export const OutputType = {
+  DOCUMENT: 'DOCUMENT',
+  LINK: 'LINK',
+  OTHER: 'OTHER'
+} as const
+
+export type OutputType = (typeof OutputType)[keyof typeof OutputType]
+
+
+export const EvidenceStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type EvidenceStatus = (typeof EvidenceStatus)[keyof typeof EvidenceStatus]
+
+
+export const EvaluationStatus = {
+  DRAFT: 'DRAFT',
+  SUBMITTED: 'SUBMITTED',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type EvaluationStatus = (typeof EvaluationStatus)[keyof typeof EvaluationStatus]

@@ -1,8 +1,11 @@
-import { PriorityLevel, TaskStatus } from '../../generated/prisma/enums.js';
+import { PriorityLevel } from '../../generated/prisma/enums.js';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class TaskItemResponseDto {
-  @ApiProperty()
+  @ApiProperty({
+    format: 'uuid',
+    example: '550e8400-e29b-41d4-a716-446655440000',
+  })
   id: string;
 
   @ApiProperty()
@@ -11,11 +14,8 @@ export class TaskItemResponseDto {
   @ApiProperty({ nullable: true })
   description: string | null;
 
-  @ApiProperty({
-    enum: TaskStatus,
-    enumName: 'TaskStatus',
-  })
-  status: TaskStatus;
+  @ApiProperty()
+  status: string;
 
   @ApiProperty({
     nullable: true,
