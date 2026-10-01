@@ -2,8 +2,8 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
-import { RoleScope } from '../generated/prisma/enums.js';
 import { Prisma } from '../generated/prisma/client.js';
 import type { AuthUser } from '../auth/types/jwt-payload.type.js';
 import { PrismaService } from '../prisma/prisma.service.js';
@@ -79,7 +79,7 @@ export class ProjectService {
     })
 
     if(!project){
-      throw new BadRequestException('Can not find this project')
+      throw new NotFoundException('Can not find this project')
     }
 
     const canView = 
@@ -94,7 +94,7 @@ export class ProjectService {
   }
 
   async createProject(dto: CreateProjectDto, user: AuthUser) {
-    const workspace = await this.prisma.workspace.findFirst({
+    const workspace = await this.prisma.workspace.findUnique({
       where:{
         id: dto.workspaceId
       },
@@ -104,7 +104,7 @@ export class ProjectService {
     })
 
     if(!workspace){
-      throw new BadRequestException('Cannot find this workspace')
+      throw new BadRequestException('Can not find this workspace')
     }
 
     const isWorkspaceMember = workspace.members.some(member => member.userId === user.id)
@@ -116,8 +116,8 @@ export class ProjectService {
       data:{          
         workspaceId: workspace.id,
         createdById: user.id,
-        name: dto.name,
-        description: dto.description 
+        name: dto.name.trim(),
+        description: dto.description
       }
     })
 
@@ -139,17 +139,25 @@ export class ProjectService {
       throw new ForbiddenException('You are not owner project')
     }
 
+    const data: Prisma.ProjectUpdateInput = {
+      updatedAt: new Date()
+    }
+
+    if(dto.name){
+      data.name = dto.name.trim()
+    }
+
+    if(dto.description){
+      data.description = dto.description
+    }
+
     return this.prisma.project.update({
       where:{
         id: project.id
       },
-      data:{
-        name: dto.name,
-        description: dto.description,
-        updatedAt: new Date()
-      }
+      data
     })
-  }
+1  }
 
   async deleteProject(id: string, user: AuthUser) {
     const project = await this.prisma.project.findFirst({

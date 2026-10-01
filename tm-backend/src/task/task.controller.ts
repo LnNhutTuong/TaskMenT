@@ -26,7 +26,6 @@ import {
   ApiBody,
 } from '@nestjs/swagger';
 import { PriorityLevel } from '../generated/prisma/enums.js';
-import { SortField } from './dto/sorting.dto.js';
 import { SortOrder } from '../generated/prisma/internal/prismaNamespace.js';
 import {
   DeleteTaskResponseDto,
@@ -40,15 +39,11 @@ import {
 export class TaskController {
   constructor(private taskService: TaskService) {}
 
-  @Get('all')
-
-  // SWG operation
+  @Get()
   @ApiOperation({
     summary: 'Get all tasks',
     description: 'Get tasks with filtering, pagination and sorting',
   })
-
-  // SWG query
   @ApiQuery({
     name: 'page',
     description: 'Page is page',
@@ -65,13 +60,6 @@ export class TaskController {
     minimum: 1,
     maximum: 10,
     example: 1,
-  })
-  @ApiQuery({
-    name: 'sortBy',
-    description: 'Sort task by ',
-    required: true,
-    enum: SortField,
-    example: 'title',
   })
   @ApiQuery({
     name: 'sortOrder',
@@ -203,24 +191,6 @@ export class TaskController {
 
     return {
       message: 'Update task successfully',
-      data: task,
-    };
-  }
-
-  @Patch(':id/close')
-  async closeTask(@Param('id') id: string, @CurrentUser() user: AuthUser) {
-    const task = await this.taskService.closeTask(id, user);
-    return {
-      message: 'Close task successfully',
-      data: task,
-    };
-  }
-
-  @Patch(':id/reopen')
-  async reOpenTask(@Param('id') id: string, @CurrentUser() user: AuthUser) {
-    const task = await this.taskService.reOpenTask(id, user);
-    return {
-      message: 'ReOpen task successfully',
       data: task,
     };
   }

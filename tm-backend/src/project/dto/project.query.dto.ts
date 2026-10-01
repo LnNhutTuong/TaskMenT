@@ -19,7 +19,7 @@ export class ProjectQueryDto {
   limit: number = 10;
 
   // 2. Tìm kiếm (Search)
-  @ApiPropertyOptional({ description: 'Tìm theo tên hoặc mô tả project' })
+  @ApiPropertyOptional({ description: 'Tìm theo tên project' })
   @IsOptional()
   @IsString()
   search?: string;

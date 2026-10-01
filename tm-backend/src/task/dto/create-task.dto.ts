@@ -38,15 +38,15 @@ export class CreateTaskDto {
   dueDate?: Date
 
   @IsOptional()
-  @IsArray()
-  @IsString({ each: true }) 
+  @IsString()
   parentId?: string
   
   @IsOptional()
-  @IsString()
+  @IsArray()
+  @IsString({ each: true }) 
   assigneeIds?: string[]
 
   @IsOptional()
   @IsObject()
-  customFields?: Record<string, unknown> 
+  customFields?: Record<string, any> 
 }

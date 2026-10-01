@@ -7,7 +7,6 @@ import {
 import { PrismaService } from '../prisma/prisma.service.js';
 import { CreateTaskDto } from './dto/create-task.dto.js';
 import { UpdateTaskDto } from './dto/update-task.dto.js';
-
 import { AuthUser } from '../auth/types/jwt-payload.type.js';
 import { Prisma } from '../generated/prisma/client.js';
 import { TaskQueryDTO } from './dto/task-query.dto.js';
@@ -17,518 +16,409 @@ export class TaskService {
   constructor(private prisma: PrismaService) {}
 
   async findAll(user: AuthUser, query: TaskQueryDTO) {
-    // where
-    const where: Prisma.TaskWhereInput = {};
+      const page = query.page  ?? 1;
+      const limit = query.limit ?? 10;
+      const skip = (page - 1 ) * limit;
 
-    if (user.role === RoleName.USER) {
-      where.project = {
+      const where: Prisma.TaskWhereInput = {
         OR: [
-          { ownerId: user.id },
           {
-            members: {
-              some: {
-                memberId: user.id,
-              },
+            project: {
+              OR: [
+                { createdById: user.id },
+                { members: { some: { userId: user.id } } },
+              ],
             },
           },
+          { taskAssignees: { some: { userId: user.id } } },
+          { createdBy: { id: user.id } },
         ],
       };
-    }
 
-    if (query.status) {
-      where.status = {
-        key: query.status,
-      };
-    }
+      if(query.parentId !== undefined){
+        where.parentId = query.parentId
+      }else{
+        where.parentId = null
+      }
 
-    if (query.priority) {
-      where.priority = query.priority;
-    }
+      if(query.projectId){
+        where.projectId = query.projectId;
+      }
 
-    if (query.deadline) {
-      const start = new Date(query.deadline);
-      const nextDay = new Date(query.deadline);
+      if(query.status){
+        where.status = query.status
+      }
 
-      start.setHours(0, 0, 0, 0);
+      if(query.priority){
+        where.priority = query.priority
+      }
 
-      nextDay.setDate(nextDay.getDate() + 1);
-      nextDay.setHours(0, 0, 0, 0);
+      if(query.dueDate){
+        const start = new Date(query.dueDate);
+        const nextDay = new Date(query.dueDate)
 
-      where.deadline = {
-        gte: start,
-        lt: nextDay,
-      };
-    }
+        start.setHours(0,0,0,0);
+        nextDay.setDate(nextDay.getDate()+1)
+        nextDay.setHours(0,0,0,0)
 
-    if (query.search) {
-      where.title = {
-        contains: query.search,
-        mode: 'insensitive',
-      };
-    }
+        where.dueDate ={
+          gte: start,
+          lt: nextDay
+        }
+      }
 
-    // paginate
-    const skip = (query.page - 1) * query.limit;
-    const take = query.limit;
+      if(query.search){
+        where.title ={
+          contains: query.search,
+          mode: 'insensitive'
+        }
+      }
 
-    // sort
-    let sort: object;
+      const [tasks, total] = await Promise.all([
+        this.prisma.task.findMany({
+          where, skip, take: limit, orderBy:{
+            [query.sortBy ?? "createdAt"]: query.sortOrder ?? "desc"
+          },
+          omit:{formulaId:true, projectId: true, createdById: true, parentId:true },
+          include: {
+            formula:{
+              select:{
+                id: true, name: true,
+              }
+            },
+            project:{
+              select:{
+                id: true, name: true
+              }
+            },
+            createdBy:{
+              select:{id: true, email: true, name:true}
+            },
+            taskAssignees:{
+              select:{
+                user:{
+                  select:{
+                    id: true, email: true, name:true
+                  }
+                }
+              }
+            },
+            parentTask:{
+              include:{
+                createdBy:{
+                  select:{
+                    id: true, email: true, name:true
+                  }
+                },
+                taskAssignees:{
+                  select:{
+                    user:{
+                      select:{
+                        id: true, email: true, name:true
+                      }
+                    }
+                  }
+                },
+              }
+            },
+            subTasks:{
+              orderBy:{
+                createdAt: 'asc'
+              },
+              include:{
+                createdBy:{
+                  select:{id: true, email: true, name:true}
+                },
+                taskAssignees:{
+                  select:{
+                    user:{
+                      select:{
+                        id: true, email: true, name:true
+                      }
+                    }
+                  }
+                },
+              }
+            }
+          }
+        }),
+        this.prisma.task.count({where})
+      ]) 
 
-    if (query.sortBy === 'deadline') {
-      sort = {
-        deadline: {
-          sort: query.sortOrder,
-          nulls: 'last',
-        },
-      };
-    } else {
-      sort = { [query.sortBy]: query.sortOrder };
-    }
-
-    const [tasks, totalTask] = await Promise.all([
-      this.prisma.task.findMany({ where, skip, take, orderBy: sort }),
-      this.prisma.task.count({ where }),
-    ]);
-
-    const totalPage = Math.ceil(totalTask / query.limit);
-    return {
-      tasks,
-      totalPage,
-      totalTask,
-      page: query.page,
-    };
+      return {
+        tasks, total, page, limit, totalPages: Math.ceil(total/limit)
+      }
   }
 
   async findOne(id: string, user: AuthUser) {
-    const task = await this.prisma.task.findFirst({
-      where: {
-        id,
+    const task = await this.prisma.task.findUnique({
+      where:{
+        id
       },
-    });
-
-    if (!task) {
+      omit:{formulaId:true, projectId: true, createdById: true, parentId:true },
+      include: {
+            formula:{
+              select:{
+                id: true, name: true,
+              }
+            },
+            project:{
+              select:{
+                id: true, name: true, createdById: true, members: true,
+              }
+            },
+            createdBy:{
+              select:{id: true, email: true, name:true}
+            },
+            taskAssignees:{
+              select:{
+                user:{
+                  select:{
+                    id: true, email: true, name:true
+                  }
+                }
+              }
+            },
+            parentTask:{
+              select:{
+                id: true, title:true,
+              }
+            },
+            subTasks:{
+              select:{
+                id: true, title:true,
+              },
+              orderBy:{
+                createdAt: 'asc'
+              },
+             
+            }
+          }
+    })
+    
+    if(!task){
       throw new NotFoundException('Task not found');
     }
 
-    const project = await this.prisma.project.findFirst({
-      where: {
-        id: task.projectId,
-      },
-    });
+    //check permission to view
+    const canView = task.project.createdById === user.id ||
+        task.project.members.some(m => m.userId === user.id) ||
+        task.taskAssignees.some(member => member.user.id === user.id) ||
+        task.createdBy.id === user.id
+      
 
-    if (!project) {
-      throw new NotFoundException('Project not found');
+    if(!canView){
+      throw new ForbiddenException('You do not have permission to view this task')
     }
-
-    // Admin la cha
-    if (user.role === RoleName.ADMIN) {
-      return task;
-    }
-
-    const isOwner = project.ownerId === user.id;
-
-    const isMember = await this.prisma.projectMember.findFirst({
-      where: {
-        projectId: project.id,
-        memberId: user.id,
-      },
-    });
-
-    if (!isOwner && !isMember) {
-      throw new ForbiddenException('You cannot view this task');
-    }
-
-    return task;
+    return task
   }
 
   async createTask(dto: CreateTaskDto, user: AuthUser) {
     const project = await this.prisma.project.findFirst({
-      where: {
-        id: dto.projectId,
-        ownerId: user.id,
+      where:{
+        id: dto.projectId
       },
-    });
+      include:{
+        members:{
+          select:{
+            user:{
+              select:{
+                id: true, email: true, name: true
+              }
+            }
+          }
+        }
+      }
+    })
 
-    if (!project) {
-      throw new NotFoundException('Project not found');
+    if(!project){
+      throw new NotFoundException('Project not found')
     }
 
-    const members = await this.prisma.projectMember.findMany({
-      where: {
-        projectId: dto.projectId,
-      },
-      select: {
-        memberId: true,
-      },
-    });
+    const isProjectMember = project.createdById === user.id || project.members.some(member => member.user.id === user.id)
 
-    const allowedUserIds = [
-      project.ownerId,
-      ...members.map((member) => member.memberId),
-    ];
-
-    const isValidMember =
-      dto.assigneeIds?.every((assigneeId) =>
-        allowedUserIds.includes(assigneeId),
-      ) ?? true;
-
-    if (!isValidMember) {
-      throw new BadRequestException(
-        'Assignee is not a member or owner of this project',
-      );
+    if(!isProjectMember){
+      throw new ForbiddenException('You are not a member of this project')    
     }
 
-    const status = await this.prisma.taskStatus.findFirst({
-      where: {
-        projectId: dto.projectId,
-        key: dto.status,
-      },
-    });
+    //check parent
+    if(dto.parentId){
+      const parentTask = await this.prisma.task.findFirst({
+        where:{
+          id: dto.parentId
+        }
+      })
 
-    if (!status) {
-      throw new NotFoundException('Task status not found');
-    }
+      if(!parentTask){
+        throw new NotFoundException('Parent task not found')
+      }
 
-    return this.prisma.task.create({
-      data: {
-        title: dto.title,
-        description: dto.description,
-        statusId: status.id,
-        deadline: dto.deadline,
-        priority: dto.priority,
-        projectId: dto.projectId,
-        assigned: {
-          create: dto.assigneeIds?.map((userId) => ({
-            assignId: userId,
-          })),
-        },
-      },
-    });
-  }
+      if(parentTask.projectId !== dto.projectId){
+        throw new BadRequestException('Parent task belongs to a different project')      
+      }
 
-  async updateTask(id: string, dto: UpdateTaskDto, user: AuthUser) {
-    //find task to update
-    const task = await this.prisma.task.findFirst({
-      where: {
-        id,
-      },
-    });
-
-    if (!task) {
-      throw new NotFoundException('Task not found');
-    }
-
-    if (task.isClosed) {
-      throw new BadRequestException(
-        'Cannot update this task because is closed',
-      );
-    }
-
-    //find project which task on in
-    const project = await this.prisma.project.findFirst({
-      where: {
-        id: task.projectId,
-      },
-    });
-
-    if (!project) {
-      throw new NotFoundException('Project not found');
-    }
-
-    //tim nhung thanh vien cua project
-    const members = await this.prisma.projectMember.findMany({
-      where: {
-        projectId: task.projectId,
-      },
-      select: {
-        memberId: true,
-      },
-    });
-
-    //check cai thang thuc hien cai action
-    const isAssignee = await this.prisma.assignedTask.findFirst({
-      where: {
-        taskId: task.id,
-        assignId: user.id,
-      },
-    });
-
-    const isOwner = project.ownerId === user.id;
-
-    if (!isOwner && !isAssignee) {
-      throw new ForbiddenException('You cannot update this task');
-    }
-
-    //status
-
-    //bien tam
-    let statusId: string | undefined;
-
-    //neu co truyen thang status thi moi vao case
-    if (dto.status) {
-      //find status in project
-      const status = await this.prisma.taskStatus.findFirst({
-        where: {
-          projectId: task.projectId,
-          key: dto.status,
-        },
-      });
-
-      statusId = status?.id;
-      if (!status) {
-        throw new NotFoundException('Task status not found');
+      if(parentTask.parentId){
+        throw new BadRequestException('Task is already a sub task')
       }
     }
 
-    //kiem tra cac thang se duoc assign vao,
-    const allowedUserIds = [
-      project.ownerId,
-      ...members.map((member) => member.memberId),
-    ];
+    if(dto.assigneeIds){
+      const allowedUserIds = [project.createdById, ...project.members.map(m => m.user.id)];
+      const isValid = dto.assigneeIds.every(id => allowedUserIds.includes(id));
 
-    const isValidMember =
-      dto.assigneeIds?.every((assigneeId) =>
-        allowedUserIds.includes(assigneeId),
-      ) ?? true;
+      if (!isValid) {
+        throw new BadRequestException('One or more assignees are not members of this project');
+      }
+    }
 
-    if (!isValidMember) {
-      throw new BadRequestException(
-        'Assignee is not a member or owner of this project',
-      );
+    const task = await this.prisma.task.create({
+      data:{
+        projectId: dto.projectId,
+        createdById: user.id,
+        title: dto.title.trim(),
+        description: dto.description,
+        priority: dto.priority,
+        status: dto.status ?? 'TODO',
+        dueDate: dto.dueDate,
+        parentId: dto.parentId,
+        customFields: dto.customFields,
+        taskAssignees: dto.assigneeIds?.length ? {
+          create: dto.assigneeIds.map(userId => ({ userId }))
+        } : undefined
+      }
+    })
+
+    return this.findOne(task.id, user);
+  }
+
+  async updateTask(id: string, dto: UpdateTaskDto, user: AuthUser) {
+    const task = await this.prisma.task.findFirst({
+      where:{
+        id
+      },
+      include:{
+        project:{
+          select:{
+            id: true, createdById: true, members:{
+              select:{
+                user:{select:{
+                  id: true, email: true, name: true
+                }}
+              }
+            }
+          }
+        },
+                      taskAssignees:true
+
+      }
+    })
+
+    if(!task){
+      throw new NotFoundException('Task not found');
+    }
+
+    const canUpdate = task.createdById === user.id ||
+      task.project.createdById === user.id ||
+      task.taskAssignees.some(assignee => assignee.userId === user.id)
+
+    if(!canUpdate){
+      throw new ForbiddenException('You do not have permission to update this task')
+    }
+
+    if(dto.parentId !== task.parentId){
+      if(dto.parentId){
+        const parentTask = await this.prisma.task.findFirst({
+          where:{
+            id: dto.parentId
+          }
+        })
+        if(!parentTask){
+          throw new NotFoundException('Parent task not found')
+        }
+        if(parentTask.projectId !== task.projectId){
+          throw new BadRequestException('Parent task belongs to a different project')
+        }
+        if(parentTask.id === task.id){
+          throw new BadRequestException('Task cannot be its own parent')
+        }
+        if(parentTask.parentId){
+          throw new BadRequestException(`This task is already a subtask,`
+           + `you cannot change it to a parent task`)
+        } 
+      }
+    }
+
+    if(dto.assigneeIds){
+      const allowedUserIds = [task.project.createdById, ...task.project.members.map(m => m.user.id)]
+
+      const isValid = dto.assigneeIds.every(id => allowedUserIds.includes(id))
+
+      if(!isValid){
+        throw new BadRequestException('One or more assignees are not members of this project')
+      }
+
+      await this.prisma.taskAssignee.deleteMany({
+        where:{
+          taskId: task.id
+        }
+      })
+
+      if(dto.assigneeIds.length > 0){
+        await this.prisma.taskAssignee.createMany({
+          data: dto.assigneeIds.map(userId => ({
+            taskId: task.id, 
+            userId
+          }))
+        })
+      }
     }
 
     await this.prisma.task.update({
-      where: {
-        id: task.id,
-      },
+      where: { id: task.id },
       data: {
+        title: dto.title,
+        description: dto.description,
         priority: dto.priority,
-        ...(statusId ? { statusId: statusId } : {}),
-        deadline: dto.deadline,
+        status: dto.status,
+        dueDate: dto.dueDate,
+        parentId: dto.parentId,
+        customFields: dto.customFields as any,
       },
     });
 
-    if (dto.assigneeIds !== undefined) {
-      await this.prisma.assignedTask.deleteMany({
-        where: {
-          taskId: task.id,
-        },
-      });
-      await this.prisma.assignedTask.createMany({
-        data: dto.assigneeIds.map((assigneeId) => ({
-          assignId: assigneeId,
-          taskId: task.id,
-        })),
-      });
-    }
-
-    //task after update
-    return this.prisma.task.findUnique({
-      where: {
-        id: task.id,
-      },
-      select: {
-        id: true,
-        title: true,
-        description: true,
-        deadline: true,
-        priority: true,
-        isClosed: true,
-        createdAt: true,
-        updatedAt: true,
-
-        status: {
-          select: {
-            id: true,
-            key: true,
-            name: true,
-          },
-        },
-
-        assigned: {
-          select: {
-            assigned: {
-              select: {
-                id: true,
-                email: true,
-                name: true,
-                role: true,
-              },
-            },
-          },
-        },
-
-        project: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-      },
-    });
-  }
-
-  async closeTask(id: string, user: AuthUser) {
-    //find task to update
-    const task = await this.prisma.task.findFirst({
-      where: {
-        id,
-      },
-    });
-
-    if (!task) {
-      throw new NotFoundException('Task not found');
-    }
-
-    if (task.isClosed) {
-      throw new BadRequestException('Task is already closed');
-    }
-
-    //find project which task on in
-    const project = await this.prisma.project.findFirst({
-      where: {
-        id: task.projectId,
-      },
-    });
-
-    if (!project) {
-      throw new NotFoundException('Project not found');
-    }
-
-    const taskStatus = await this.prisma.taskStatus.findFirst({
-      where: {
-        projectId: project.id,
-        key: 'DONE',
-      },
-    });
-
-    if (!taskStatus) {
-      throw new NotFoundException('Status task not found');
-    }
-
-    const isOwner = project.ownerId === user.id;
-
-    //check member is assignee or not
-    const isAssignee = await this.prisma.assignedTask.findFirst({
-      where: {
-        taskId: task.id,
-        assignId: user.id,
-      },
-    });
-
-    if (!isOwner && !isAssignee) {
-      throw new ForbiddenException('You cannot close this task');
-    }
-
-    return this.prisma.task.update({
-      where: {
-        id: task.id,
-      },
-      data: {
-        isClosed: true,
-        statusId: taskStatus.id,
-        previousStatusId: task.statusId,
-      },
-    });
-  }
-
-  async reOpenTask(id: string, user: AuthUser) {
-    //find task to update
-    const task = await this.prisma.task.findFirst({
-      where: {
-        id,
-      },
-    });
-
-    if (!task) {
-      throw new NotFoundException('Task not found');
-    }
-
-    if (!task.isClosed) {
-      throw new BadRequestException('Task is already open');
-    }
-
-    //find project which task on in
-    const project = await this.prisma.project.findFirst({
-      where: {
-        id: task.projectId,
-      },
-    });
-
-    if (!project) {
-      throw new NotFoundException('Project not found');
-    }
-
-    if (!task.previousStatusId) {
-      throw new BadRequestException('Task has no previous status');
-    }
-
-    const isOwner = project.ownerId === user.id;
-
-    //check member is assignee or not
-    const isAssignee = await this.prisma.assignedTask.findFirst({
-      where: {
-        taskId: task.id,
-        assignId: user.id,
-      },
-    });
-
-    if (!isOwner && !isAssignee) {
-      throw new ForbiddenException('You cannot reopen this task');
-    }
-
-    return this.prisma.task.update({
-      where: {
-        id: task.id,
-      },
-      data: {
-        isClosed: false,
-        statusId: task.previousStatusId,
-      },
-    });
+    return this.findOne(task.id, user)
   }
 
   async deleteTask(id: string, user: AuthUser) {
-    //find task to update
     const task = await this.prisma.task.findFirst({
-      where: {
-        id,
+      where:{
+        id
       },
-    });
+      include:{
+        project:{
+          select:{
+            createdById: true
+          }
+        }
+      }
+    })
 
-    if (!task) {
-      throw new NotFoundException('Task not found');
+    if(!task){
+      throw new NotFoundException('Task not found')
     }
 
-    //find project which task on in
-    const project = await this.prisma.project.findFirst({
-      where: {
-        id: task.projectId,
-      },
-    });
+    const canDelete = task.createdById === user.id || task.project.createdById === user.id
 
-    if (!project) {
-      throw new NotFoundException('Project not found');
+    if(!canDelete){
+      throw new ForbiddenException('You do not have permission to delete this task')
     }
 
-    const isOwner = project.ownerId === user.id;
+    await this.prisma.task.delete({
+      where:{
+        id: task.id
+      }
+    })
 
-    //check member is assignee or not
-    const isAssignee = await this.prisma.assignedTask.findFirst({
-      where: {
-        taskId: task.id,
-        assignId: user.id,
-      },
-    });
-
-    if (!isOwner && !isAssignee) {
-      throw new ForbiddenException('You cannot delete this task');
-    }
-
-    return this.prisma.task.delete({
-      where: {
-        id: task.id,
-      },
-    });
+    return true;
   }
 }
