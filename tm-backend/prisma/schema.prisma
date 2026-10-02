@@ -173,6 +173,7 @@ model Project {
   members    ProjectMember[]
   tasks      Task[]
   objectives Objective[]
+  workflow   Workflow?
 }
 
 // Danh sach thanh vien rieng cua Project.
@@ -499,4 +500,55 @@ model ClassificationRule {
 
   workspaceId String
   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+}
+
+//Custom Workflow 
+model Workflow {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  projectId String  @unique
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  steps       WorkflowStep[]
+  transitions WorkflowTransition[]
+}
+
+model WorkflowStep {
+  id    String @id @default(uuid())
+  name  String //name: TODO, IN_PROGRESS, REVIEW, DONE,...
+  label String //label: chua lam, dang lam...
+
+  isInitial Boolean @default(false) // Day co phai la trang thai bat dau ko
+  isFinal   Boolean @default(false) // Day co phai la trang thai ket thuc khong
+
+  color String? //mau sac hien thi cua UI, reing biet de the hien
+  order Int     @default(0) //thu tu hien thi
+
+  workflowId String
+  workflow   Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+
+  fromTransitions WorkflowTransition[] @relation("FromStep")
+  toTransitions   WorkflowTransition[] @relation("ToStep")
+}
+
+//Rule chuyen trang thai
+model WorkflowTransition {
+  id    String  @id @default(uuid())
+  //nhan~ hien thi tren nut
+  label String? //ex: submit for review, reject, resubmit...
+
+  workflowId String?
+  workflow   Workflow? @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+
+  fromStepId String // dang o dau
+  fromStep   WorkflowStep @relation("FromStep", fields: [fromStepId], references: [id], onDelete: Cascade)
+
+  toStepId String // buoc tiep theo
+  toStep   WorkflowStep @relation("ToStep", fields: [toStepId], references: [id], onDelete: Cascade)
+
+  @@unique([workflowId, fromStepId, toStepId])
 }

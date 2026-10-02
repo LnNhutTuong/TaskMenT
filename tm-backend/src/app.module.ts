@@ -10,6 +10,7 @@ import { ProjectModule } from './project/project.module.js';
 import { ObjectiveModule } from './objective/objective.module.js';
 import { KeyResultModule } from './key-result/key-result.module.js';
 import { WorkspaceModule } from './workspace/workspace.module.js';
+import { WorkflowModule } from './workflow/workflow.module.js';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import { WorkspaceModule } from './workspace/workspace.module.js';
     ProjectModule,
     ObjectiveModule,
     KeyResultModule,
-    WorkspaceModule
+    WorkspaceModule,
+    WorkflowModule
   ],
 
   controllers: [AppController],
