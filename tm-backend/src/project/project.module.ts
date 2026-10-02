@@ -8,5 +8,6 @@ import { ProjectController } from './project.controller.js';
   imports: [PrismaModule, AuthModule],
   providers: [ProjectService],
   controllers: [ProjectController],
+  exports: [ProjectService]
 })
 export class ProjectModule {}

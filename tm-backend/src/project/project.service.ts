@@ -57,6 +57,12 @@ export class ProjectService {
                 }
               }
             }
+          },
+          tasks:{
+            select:{
+              id: true,
+              title: true
+            }
           }
         }
       }),
@@ -74,7 +80,10 @@ export class ProjectService {
         id
       },
       include:{
-        members: true
+        members: true,
+        tasks:{
+          select:{id:true, title:true}
+        }
       }
     })
 
@@ -182,4 +191,26 @@ export class ProjectService {
     })
 
   }
+
+  async assertProjectMember(projectId: string, userId: string) {
+
+      const owner = await this.prisma.project.findUnique({
+        where:{
+          id: projectId,
+          createdById: userId
+        }
+      })
+
+      const member = await this.prisma.projectMember.findUnique({
+        where: {
+          projectId_userId: { projectId, userId },
+        },
+      });
+
+      if (!member && !owner){
+        throw new ForbiddenException('You are not member of this project');
+      } 
+  }
+    
+
 }

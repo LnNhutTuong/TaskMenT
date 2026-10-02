@@ -10,10 +10,11 @@ import { UpdateTaskDto } from './dto/update-task.dto.js';
 import { AuthUser } from '../auth/types/jwt-payload.type.js';
 import { Prisma } from '../generated/prisma/client.js';
 import { TaskQueryDTO } from './dto/task-query.dto.js';
+import { WorkflowService } from '../workflow/workflow.service.js';
 
 @Injectable()
 export class TaskService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService, private readonly workflowService: WorkflowService) {}
 
   async findAll(user: AuthUser, query: TaskQueryDTO) {
       const page = query.page  ?? 1;
@@ -283,7 +284,7 @@ export class TaskService {
             }
           }
         },
-                      taskAssignees:true
+        taskAssignees:true
 
       }
     })
@@ -348,6 +349,15 @@ export class TaskService {
       }
     }
 
+    //check workflow
+    if(dto.status && dto.status !== task.status){
+      await this.workflowService.assertValidTransition(
+        task.projectId, 
+        task.status, //status hien tai
+        dto.status! //status cap nhat
+      )
+    }
+
     await this.prisma.task.update({
       where: { id: task.id },
       data: {
@@ -357,7 +367,9 @@ export class TaskService {
         status: dto.status,
         dueDate: dto.dueDate,
         parentId: dto.parentId,
-        customFields: dto.customFields as Prisma.InputJsonValue ?? Prisma.JsonNull,
+        customFields: dto.customFields !== undefined
+          ? (dto.customFields as Prisma.InputJsonValue ?? Prisma.JsonNull)
+          : undefined,
       },
     });
 

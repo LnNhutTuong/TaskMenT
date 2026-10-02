@@ -147,3 +147,18 @@ export type EvaluationCriteriaResult = Prisma.EvaluationCriteriaResultModel
  * 
  */
 export type ClassificationRule = Prisma.ClassificationRuleModel
+/**
+ * Model Workflow
+ * 
+ */
+export type Workflow = Prisma.WorkflowModel
+/**
+ * Model WorkflowStep
+ * 
+ */
+export type WorkflowStep = Prisma.WorkflowStepModel
+/**
+ * Model WorkflowTransition
+ * 
+ */
+export type WorkflowTransition = Prisma.WorkflowTransitionModel

@@ -76,7 +76,10 @@ export const ModelName = {
   EvaluationCriteria: 'EvaluationCriteria',
   Evaluation: 'Evaluation',
   EvaluationCriteriaResult: 'EvaluationCriteriaResult',
-  ClassificationRule: 'ClassificationRule'
+  ClassificationRule: 'ClassificationRule',
+  Workflow: 'Workflow',
+  WorkflowStep: 'WorkflowStep',
+  WorkflowTransition: 'WorkflowTransition'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -417,6 +420,43 @@ export const ClassificationRuleScalarFieldEnum = {
 } as const
 
 export type ClassificationRuleScalarFieldEnum = (typeof ClassificationRuleScalarFieldEnum)[keyof typeof ClassificationRuleScalarFieldEnum]
+
+
+export const WorkflowScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  projectId: 'projectId'
+} as const
+
+export type WorkflowScalarFieldEnum = (typeof WorkflowScalarFieldEnum)[keyof typeof WorkflowScalarFieldEnum]
+
+
+export const WorkflowStepScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  label: 'label',
+  isInitial: 'isInitial',
+  isFinal: 'isFinal',
+  color: 'color',
+  order: 'order',
+  workflowId: 'workflowId'
+} as const
+
+export type WorkflowStepScalarFieldEnum = (typeof WorkflowStepScalarFieldEnum)[keyof typeof WorkflowStepScalarFieldEnum]
+
+
+export const WorkflowTransitionScalarFieldEnum = {
+  id: 'id',
+  label: 'label',
+  workflowId: 'workflowId',
+  fromStepId: 'fromStepId',
+  toStepId: 'toStepId'
+} as const
+
+export type WorkflowTransitionScalarFieldEnum = (typeof WorkflowTransitionScalarFieldEnum)[keyof typeof WorkflowTransitionScalarFieldEnum]
 
 
 export const SortOrder = {
