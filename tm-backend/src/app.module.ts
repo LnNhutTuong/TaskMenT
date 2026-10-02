@@ -7,6 +7,9 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module.js';
 import { PasswordModule } from './common/password/password.module.js';
 import { ProjectModule } from './project/project.module.js';
+import { ObjectiveModule } from './objective/objective.module.js';
+import { KeyResultModule } from './key-result/key-result.module.js';
+import { WorkspaceModule } from './workspace/workspace.module.js';
 
 @Module({
   imports: [
@@ -18,6 +21,9 @@ import { ProjectModule } from './project/project.module.js';
     AuthModule,
     PasswordModule,
     ProjectModule,
+    ObjectiveModule,
+    KeyResultModule,
+    WorkspaceModule
   ],
 
   controllers: [AppController],

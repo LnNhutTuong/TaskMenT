@@ -17,4 +17,10 @@ export class PrismaService extends PrismaClient {
     await this.$connect();
     console.log('===========11 Database connected 11===========');
   }
+
+  //ham tu chay khi app ngung hoat dong
+  async onModuleDestroy() {
+    await this.$disconnect();
+    console.log('===========11 Database disconnected 11===========');
+  }
 }
