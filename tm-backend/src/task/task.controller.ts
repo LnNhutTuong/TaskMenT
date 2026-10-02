@@ -221,4 +221,100 @@ export class TaskController {
       data: id,
     };
   }
+
+  @Get(':taskId/key-results')
+  @ApiOperation({
+    summary: 'Get all key result linked to task',
+    description: 'Get all key result linked to task',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Get all key result linked to task successfully',
+    type: Get,
+  })
+  @ApiResponse({ status: 404, description: 'Task not found' })
+  async findAllKeyResultsLinkedToTask(@Param('taskId') taskId: string, @CurrentUser() user: AuthUser){
+    const keyResultsLinkedToTask = await this.taskService.findAllKeyResultsLinkedToTask(taskId, user)
+
+    return {
+      message: 'Find all key result linked to task successfully',
+      data: keyResultsLinkedToTask,
+    }
+  }
+
+  @Post(`:taskId/key-results/:keyResultId/link`)
+  @ApiParam({
+    name: 'taskId',
+    description: 'Task ID',
+    type: String,
+    example: '550e8400-e29b-41d4-a716-446655440000',
+  })
+  @ApiParam({
+    name: 'keyResultId',
+    description: 'Key Result ID',
+    type: String,
+    example: '550e8400-e29b-41d4-a716-446655440000',
+  })
+  @ApiOperation({
+    summary: 'Link task to key result',
+    description: 'Link task to key result with ownership',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Link task to key result successfully',
+    type: Patch,
+  })
+  @ApiResponse({ status: 400, description: 'Invalid task key result data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 404, description: 'Task not found' })
+  async linkTaskToKeyResult(
+    @Param('taskId') taskId: string,
+    @Param('keyResultId') keyResultId: string,
+    @CurrentUser() user: AuthUser,
+  ) {
+    const taskKeyResult = await this.taskService.LinkTaskToKeyResult(taskId, keyResultId, user)
+
+    return {
+      message: 'Link task to key result successfully',
+      data: taskKeyResult,
+    }
+  }
+
+  @Delete(`:taskId/key-results/:keyResultId/unlink`)
+  @ApiParam({
+    name: 'taskId',
+    description: 'Task ID',
+    type: String,
+    example: '550e8400-e29b-41d4-a716-446655440000',
+  })
+  @ApiParam({
+    name: 'keyResultId',
+    description: 'Key Result ID',
+    type: String,
+    example: '550e8400-e29b-41d4-a716-446655440000',
+  })
+  @ApiOperation({
+    summary: 'Unlink task to key result',
+    description: 'Unlink task to key result with ownership',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Unlink task to key result successfully',
+    type: Delete,
+  })
+  @ApiResponse({ status: 400, description: 'Invalid task key result data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 404, description: 'Task not found' })
+  async unlinkTaskToKeyResult(
+    @Param('taskId') taskId: string,
+    @Param('keyResultId') keyResultId: string,
+    @CurrentUser() user: AuthUser,
+  ) {
+    const taskKeyResult = await this.taskService.UnLinkTaskToKeyResult(taskId, keyResultId, user)
+
+    return {
+      message: 'Unlink task to key result successfully',
+      data: taskKeyResult,
+    }
+  }
 }

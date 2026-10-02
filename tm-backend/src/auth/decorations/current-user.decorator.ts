@@ -1,4 +1,4 @@
-import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import { createParamDecorator } from '@nestjs/common';
 
 export const CurrentUser = createParamDecorator((data, ctx) => {
   const request = ctx.switchToHttp().getRequest();

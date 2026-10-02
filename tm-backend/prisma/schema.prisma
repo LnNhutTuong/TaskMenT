@@ -191,12 +191,14 @@ model ProjectMember {
 }
 
 model Task {
-  id           String        @id @default(uuid())
-  title        String
-  description  String?
-  priority     PriorityLevel @default(MEDIUM)
-  status       String        @default("TODO")
-  dueDate      DateTime?
+  id          String        @id @default(uuid())
+  title       String
+  description String?
+  priority    PriorityLevel @default(MEDIUM)
+  status      String        @default("TODO")
+  dueDate     DateTime?
+
+  //Mo ta them ve ban than nhiem vu do 
   customFields Json?
 
   projectId   String

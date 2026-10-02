@@ -5,11 +5,11 @@ import {
   IsEnum,
   IsDate,
   IsArray,
-  IsObject,
+  IsIn
 } from 'class-validator';
-import { Transform, Type } from 'class-transformer';
+import {  Type } from 'class-transformer';
 import { PriorityLevel } from '../../generated/prisma/enums.js';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsValidCustomFields } from '../custom-fields/custom-fields.validator.js';
 
 export class CreateTaskDto {
   @IsString()
@@ -46,7 +46,12 @@ export class CreateTaskDto {
   @IsString({ each: true }) 
   assigneeIds?: string[]
 
+  @IsString()
   @IsOptional()
-  @IsObject()
-  customFields?: Record<string, any> 
+  @IsIn(['ACADEMIC', 'OPERATIONAL', 'GENERAL'])
+  moduleType?: string
+
+  @IsValidCustomFields()
+  @IsOptional()
+  customFields?: Record<string, unknown> 
 }

@@ -104,43 +104,18 @@ export class TaskService {
               }
             },
             parentTask:{
-              include:{
-                createdBy:{
-                  select:{
-                    id: true, email: true, name:true
-                  }
-                },
-                taskAssignees:{
-                  select:{
-                    user:{
-                      select:{
-                        id: true, email: true, name:true
-                      }
-                    }
-                  }
-                },
+              select:{
+                id: true, title:true,
               }
             },
             subTasks:{
+              select:{
+                id: true, title:true,
+              },
               orderBy:{
                 createdAt: 'asc'
               },
-              include:{
-                createdBy:{
-                  select:{id: true, email: true, name:true}
-                },
-                taskAssignees:{
-                  select:{
-                    user:{
-                      select:{
-                        id: true, email: true, name:true
-                      }
-                    }
-                  }
-                },
-              }
-            }
-          }
+          }}
         }),
         this.prisma.task.count({where})
       ]) 
@@ -281,7 +256,7 @@ export class TaskService {
         status: dto.status ?? 'TODO',
         dueDate: dto.dueDate,
         parentId: dto.parentId,
-        customFields: dto.customFields,
+        customFields: dto.customFields as Prisma.InputJsonValue ?? Prisma.JsonNull,
         taskAssignees: dto.assigneeIds?.length ? {
           create: dto.assigneeIds.map(userId => ({ userId }))
         } : undefined
@@ -382,7 +357,7 @@ export class TaskService {
         status: dto.status,
         dueDate: dto.dueDate,
         parentId: dto.parentId,
-        customFields: dto.customFields as any,
+        customFields: dto.customFields as Prisma.InputJsonValue ?? Prisma.JsonNull,
       },
     });
 
@@ -421,4 +396,198 @@ export class TaskService {
 
     return true;
   }
+
+  async findAllKeyResultsLinkedToTask(taskId: string, user: AuthUser){
+    const task = await this.prisma.task.findUnique({
+      where: {  
+        id: taskId,
+      },
+    select: {
+      id: true,
+      title: true,
+      status: true,
+      
+
+      project: {
+        select: {
+          name:true,
+          createdById: true,
+           members: {
+            select: {
+              userId: true,
+            },
+          },
+        },
+      },
+
+      taskKeyResults: {
+        select: {
+           keyResult: {
+              select: {
+                 id: true,
+                 title: true,
+                 currentValue: true,
+                 targetValue: true,
+              unit: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    
+
+    if(!task){
+      throw new NotFoundException('Task not found');
+    }
+
+    const isProjectMember = task.project.createdById === user.id || 
+                        task.project.members.some(member => member.userId === user.id);
+    if(!isProjectMember){
+      throw new ForbiddenException('You are not a member of this project');
+    }
+
+    const keyResultsLinkedToTask = await this.prisma.task.findUnique({
+      where:{
+        id: taskId
+      },
+      
+    }) 
+
+    if(!keyResultsLinkedToTask){
+      throw new NotFoundException('Task not found')
+    }
+
+    return task
+  }
+
+    async LinkTaskToKeyResult (taskId: string, keyResultId: string, user: AuthUser){
+      const task = await this.prisma.task.findUnique({
+        where:{
+          id: taskId
+        },
+        include:{
+          project:{
+            select:{
+              createdById: true, 
+              members:{
+                select:{
+                  userId: true
+                }
+              },
+              workspaceId: true
+            }
+          }
+        }
+      })
+
+      if(!task){
+        throw new NotFoundException('Task not found')
+      }
+
+      const isProjectMember = task.project.createdById === user.id || task.project.members.some(member => member.userId === user.id)
+      if(!isProjectMember){
+        throw new ForbiddenException('You are not a member in this project')
+      }
+
+      const keyResult = await this.prisma.keyResult.findUnique({
+        where:{
+          id: keyResultId
+        },
+        include:{
+          objective:{
+            select:{
+              workspaceId:true
+            }
+          }
+        }
+      })
+
+      if(!keyResult){
+        throw new NotFoundException('Key result not found')
+      }
+
+      const isSameWorkspace = keyResult.objective.workspaceId === task.project.workspaceId
+      if(!isSameWorkspace){
+        throw new ForbiddenException('You are not a member in this workspace')
+      }
+
+      return this.prisma.taskKeyResult.create({
+        data:{
+          taskId:task.id,
+          keyResultId:keyResult.id
+        }
+      })
+  }
+
+  async UnLinkTaskToKeyResult(taskId: string, keyResultId: string, user: AuthUser) {
+    const task = await this.prisma.task.findUnique({
+        where: {
+          id: taskId
+        },
+        include:{
+          project:{
+            select:{
+              createdById: true, 
+              members:{
+                select:{
+                  userId: true
+                }
+              },
+              workspaceId: true
+            }
+          }
+        }
+      })
+
+      if(!task){
+        throw new NotFoundException('Task not found')
+      }
+
+      const isProjectMember = task.project.createdById === user.id || task.project.members.some(member => member.userId === user.id)
+      if(!isProjectMember){
+        throw new ForbiddenException('You are not a member in this project')
+      }
+
+      const keyResult = await this.prisma.keyResult.findUnique({
+        where:{
+          id: keyResultId
+        },
+        include:{
+          objective:{
+            select:{
+              workspaceId:true
+            }
+          }
+        }
+      })
+
+      if(!keyResult){
+        throw new NotFoundException('Key result not found')
+      }
+
+      const isSameWorkspace = keyResult.objective.workspaceId === task.project.workspaceId
+      if(!isSameWorkspace){
+        throw new ForbiddenException('You are not a member in this workspace')
+      }
+
+    const taskKeyResult = await this.prisma.taskKeyResult.findUnique({
+      where: {
+        taskId_keyResultId: {taskId, keyResultId}
+      }
+    })
+
+    if(!taskKeyResult){
+      throw new NotFoundException('Task key result not found')
+    }
+
+    return this.prisma.taskKeyResult.delete({
+      where: {
+        taskId_keyResultId: {taskId, keyResultId}
+      }
+    })
+
+  }
+    
+  
 }
