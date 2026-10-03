@@ -601,5 +601,24 @@ export class TaskService {
 
   }
     
-  
+  async assertTaskPermission(taskId: string, userId: string) {
+  const task = await this.prisma.task.findFirst({
+    where: {
+      id: taskId,
+      OR: [
+        { createdById: userId },                       // Người tạo task
+        { project: { createdById: userId } },          // Chủ dự án
+        { taskAssignees: { some: { userId } } },       // Người được giao task
+      ],
+    },
+    select: { id: true, projectId: true },
+  });
+
+  if (!task) {
+    throw new ForbiddenException('You do not have permission on this task');
+  }
+
+  return task;
+}
+
 }

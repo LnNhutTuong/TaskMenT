@@ -204,17 +204,20 @@ model Task {
 
   projectId   String
   createdById String
+
   // De co the tao SubTask -> Task
-  parentId    String?
+  parentId String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  project          Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  createdBy        User              @relation("TaskCreator", fields: [createdById], references: [id])
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdBy User    @relation("TaskCreator", fields: [createdById], references: [id])
+
   // De co the quan he cha con voi subtask
-  parentTask       Task?             @relation("TaskHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
-  subTasks         Task[]            @relation("TaskHierarchy")
+  parentTask Task?  @relation("TaskHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
+  subTasks   Task[] @relation("TaskHierarchy")
+
   taskAssignees    TaskAssignee[]
   taskKeyResults   TaskKeyResult[]
   taskOutputs      TaskOutput[]
@@ -302,7 +305,7 @@ model TaskOutput {
 //Minh chung cho viec hoan thanh Task
 model Evidence {
   id         String         @id @default(uuid())
-  fileUrl    String
+  fileUrl    String //tai vi dung clound nen phai co thang cha nay de save cai url clound
   fileName   String?
   mimeType   String?
   status     EvidenceStatus @default(PENDING)
