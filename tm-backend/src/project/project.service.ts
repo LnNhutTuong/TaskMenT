@@ -193,24 +193,24 @@ export class ProjectService {
   }
 
   async assertProjectMember(projectId: string, userId: string) {
+  const project = await this.prisma.project.findFirst({
+    where: {
+      id: projectId,
+      OR: [
+        { createdById: userId },                       
+        { members: { some: { userId } } },             
+      ],
+    },
+    select: { id: true, createdById: true },
+  });
 
-      const owner = await this.prisma.project.findUnique({
-        where:{
-          id: projectId,
-          createdById: userId
-        }
-      })
-
-      const member = await this.prisma.projectMember.findUnique({
-        where: {
-          projectId_userId: { projectId, userId },
-        },
-      });
-
-      if (!member && !owner){
-        throw new ForbiddenException('You are not member of this project');
-      } 
+  if (!project) {
+    throw new ForbiddenException('You are not a member of this project');
   }
+
+  return project; 
+}
+
     
 
 }

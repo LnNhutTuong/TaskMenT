@@ -11,6 +11,8 @@ import { ObjectiveModule } from './objective/objective.module.js';
 import { KeyResultModule } from './key-result/key-result.module.js';
 import { WorkspaceModule } from './workspace/workspace.module.js';
 import { WorkflowModule } from './workflow/workflow.module.js';
+import { TaskOutputModule } from './task-output/task-output.module.js';
+import { EvidenceModule } from './evidence/evidence.module.js';
 
 @Module({
   imports: [
@@ -25,7 +27,9 @@ import { WorkflowModule } from './workflow/workflow.module.js';
     ObjectiveModule,
     KeyResultModule,
     WorkspaceModule,
-    WorkflowModule
+    WorkflowModule,
+    TaskOutputModule,
+    EvidenceModule
   ],
 
   controllers: [AppController],

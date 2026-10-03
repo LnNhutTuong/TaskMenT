@@ -8,5 +8,6 @@ import { WorkflowModule } from '../workflow/workflow.module.js';
   providers: [TaskService],
   controllers: [TaskController],
   imports: [PrismaModule, AuthModule, WorkflowModule],
+  exports: [TaskService]
 })
 export class TaskModule {}
