@@ -140,7 +140,7 @@ export class TaskService {
             },
             project:{
               select:{
-                id: true, name: true, createdById: true, members: true,
+                id: true, name: true, workspaceId: true, createdById: true, members: true,
               }
             },
             createdBy:{
