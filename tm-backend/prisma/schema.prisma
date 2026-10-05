@@ -348,10 +348,11 @@ model Metric {
 }
 
 model Formula {
-  id          String  @id @default(uuid())
-  name        String
+  id         String @id @default(uuid())
+  name       String
   //Chuoi cong thuc
-  expression  String
+  expression String //so_commit * 0.4 + so_bai_bao * 0.6
+
   description String?
   version     Int     @default(1)
 

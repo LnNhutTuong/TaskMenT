@@ -54,4 +54,16 @@ export class WorkspaceService {
     });
     if (!member) throw new ForbiddenException('You are not member of this workspace');
   }
+
+  async assertWorkspaceAdmin(workspaceId: string, userId: string) {
+  // Hiện tại chưa có RBAC → coi mọi WorkspaceMember là "admin" tạm thời
+  // Sau này chỉ cần sửa hàm này để check role thực sự
+  await this.assertWorkspaceMember(workspaceId, userId);
+
+  // 🔮 Sau này khi có RBAC thay bằng:
+  // const member = await this.prisma.workspaceMember.findUnique({ ... include role ... });
+  // const hasPermission = member.role.permissions.some(p => p.key === 'MANAGE_METRICS');
+  // if (!hasPermission) throw new ForbiddenException(...);
+}
+
 }

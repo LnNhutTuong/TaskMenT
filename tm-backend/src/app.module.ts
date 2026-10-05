@@ -13,6 +13,8 @@ import { WorkspaceModule } from './workspace/workspace.module.js';
 import { WorkflowModule } from './workflow/workflow.module.js';
 import { TaskOutputModule } from './task-output/task-output.module.js';
 import { EvidenceModule } from './evidence/evidence.module.js';
+import { MetricModule } from './metric/metric.module.js';
+import { TaskMetricValueModule } from './task-metric-value/task-metric-value.module.js';
 
 @Module({
   imports: [
@@ -29,7 +31,9 @@ import { EvidenceModule } from './evidence/evidence.module.js';
     WorkspaceModule,
     WorkflowModule,
     TaskOutputModule,
-    EvidenceModule
+    EvidenceModule,
+    MetricModule,
+    TaskMetricValueModule
   ],
 
   controllers: [AppController],
