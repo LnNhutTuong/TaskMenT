@@ -15,6 +15,9 @@ import { TaskOutputModule } from './task-output/task-output.module.js';
 import { EvidenceModule } from './evidence/evidence.module.js';
 import { MetricModule } from './metric/metric.module.js';
 import { TaskMetricValueModule } from './task-metric-value/task-metric-value.module.js';
+import { FormulaModule } from './formula/formula.module.js';
+import { FormulaEngineModule } from './formula-engine/formula-engine.module.js';
+import { KpiModule } from './kpi/kpi.module.js';
 
 @Module({
   imports: [
@@ -33,7 +36,10 @@ import { TaskMetricValueModule } from './task-metric-value/task-metric-value.mod
     TaskOutputModule,
     EvidenceModule,
     MetricModule,
-    TaskMetricValueModule
+    TaskMetricValueModule,
+    FormulaModule,
+    FormulaEngineModule,
+    KpiModule
   ],
 
   controllers: [AppController],

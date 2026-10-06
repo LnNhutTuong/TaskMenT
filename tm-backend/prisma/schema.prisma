@@ -393,6 +393,7 @@ model KPISnapshot {
   version      Int
   //cac gia tri metric duoc nhap de tinh ra diem
   metricValues Json
+  
   calculatedAt DateTime @default(now())
 }
 
