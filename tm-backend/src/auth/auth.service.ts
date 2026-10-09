@@ -20,7 +20,7 @@ export class AuthService {
   ) {}
 
   async register(dto: RegisterDTO) {
-    let existedEmail = await this.prisma.user.findUnique({
+    const existedEmail = await this.prisma.user.findUnique({
       where: {
         email: dto.email,
       },
@@ -52,6 +52,33 @@ export class AuthService {
       where: {
         email: dto.email,
       },
+      include: {
+        systemRoles: {
+          include: {
+            role: true,
+          },
+        },
+
+        workspaceMemberships: {
+          where:{
+            workspace:{
+              deletedAt: null
+            }
+          },
+          include: {
+            role: {select:{
+                name: true
+              }},
+            workspace: {
+              select:{
+                id: true,
+                name: true
+              }
+            },
+          },
+          
+        },
+      },
     });
 
     if (!user) {
@@ -67,6 +94,18 @@ export class AuthService {
       throw new UnauthorizedException('Invalid email or password');
     }
 
+    const systemRoles = user.systemRoles.map(
+      (ur) => ur.role.name,
+    );
+
+    const workspaceRoles = user.workspaceMemberships.map(
+      (member) => ({
+        id: member.workspace.id,
+        workspaceName: member.workspace.name,
+        role: member.role.name,
+      }),
+    );
+
     const payload: JwtPayload = {
       sub: user.id,
       email: user.email,
@@ -79,6 +118,10 @@ export class AuthService {
       user: {
         email: dto.email,
         name: user.name,
+        roles:{
+          system: systemRoles,
+          workspace: workspaceRoles
+        }
       },
     };
   }

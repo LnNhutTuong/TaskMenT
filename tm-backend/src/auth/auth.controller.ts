@@ -14,6 +14,7 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
+import { Public } from '../permission/decorations/public.decorator.js';
 
 @ApiTags('AUTH')
 @Controller('auth')
@@ -42,6 +43,7 @@ export class AuthController {
   })
   @ApiBadRequestResponse({ description: 'Invalid registration data' })
   @ApiConflictResponse({ description: 'Email already exists' })
+  @Public()
   async register(@Body() dto: RegisterDTO) {
     let user = await this.authService.register(dto);
 
@@ -72,6 +74,7 @@ export class AuthController {
   })
   @ApiBadRequestResponse({ description: 'Invalid login data' })
   @ApiUnauthorizedResponse({ description: 'Invalid email or password' })
+  @Public()
   async login(@Body() dto: LoginDTO) {
     let user = await this.authService.login(dto);
 
@@ -81,7 +84,6 @@ export class AuthController {
     };
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('me')
   @ApiBearerAuth()
   async me(@Req() req: Request) {

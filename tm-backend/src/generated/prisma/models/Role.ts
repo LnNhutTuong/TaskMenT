@@ -26,6 +26,7 @@ export type AggregateRole = {
 
 export type RoleMinAggregateOutputType = {
   id: string | null
+  key: string | null
   name: string | null
   scope: $Enums.RoleScope | null
   workspaceId: string | null
@@ -36,6 +37,7 @@ export type RoleMinAggregateOutputType = {
 
 export type RoleMaxAggregateOutputType = {
   id: string | null
+  key: string | null
   name: string | null
   scope: $Enums.RoleScope | null
   workspaceId: string | null
@@ -46,6 +48,7 @@ export type RoleMaxAggregateOutputType = {
 
 export type RoleCountAggregateOutputType = {
   id: number
+  key: number
   name: number
   scope: number
   workspaceId: number
@@ -58,6 +61,7 @@ export type RoleCountAggregateOutputType = {
 
 export type RoleMinAggregateInputType = {
   id?: true
+  key?: true
   name?: true
   scope?: true
   workspaceId?: true
@@ -68,6 +72,7 @@ export type RoleMinAggregateInputType = {
 
 export type RoleMaxAggregateInputType = {
   id?: true
+  key?: true
   name?: true
   scope?: true
   workspaceId?: true
@@ -78,6 +83,7 @@ export type RoleMaxAggregateInputType = {
 
 export type RoleCountAggregateInputType = {
   id?: true
+  key?: true
   name?: true
   scope?: true
   workspaceId?: true
@@ -161,6 +167,7 @@ export type RoleGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 
 export type RoleGroupByOutputType = {
   id: string
+  key: string | null
   name: string
   scope: $Enums.RoleScope
   workspaceId: string | null
@@ -192,6 +199,7 @@ export type RoleWhereInput = {
   OR?: Prisma.RoleWhereInput[]
   NOT?: Prisma.RoleWhereInput | Prisma.RoleWhereInput[]
   id?: Prisma.StringFilter<"Role"> | string
+  key?: Prisma.StringNullableFilter<"Role"> | string | null
   name?: Prisma.StringFilter<"Role"> | string
   scope?: Prisma.EnumRoleScopeFilter<"Role"> | $Enums.RoleScope
   workspaceId?: Prisma.StringNullableFilter<"Role"> | string | null
@@ -207,6 +215,7 @@ export type RoleWhereInput = {
 
 export type RoleOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  key?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   scope?: Prisma.SortOrder
   workspaceId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -222,6 +231,7 @@ export type RoleOrderByWithRelationInput = {
 
 export type RoleWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  key?: string
   workspaceId_name?: Prisma.RoleWorkspaceIdNameCompoundUniqueInput
   AND?: Prisma.RoleWhereInput | Prisma.RoleWhereInput[]
   OR?: Prisma.RoleWhereInput[]
@@ -237,10 +247,11 @@ export type RoleWhereUniqueInput = Prisma.AtLeast<{
   systemUsers?: Prisma.UserRoleListRelationFilter
   workspaceUsers?: Prisma.WorkspaceMemberListRelationFilter
   enabledIn?: Prisma.WorkspaceRoleListRelationFilter
-}, "id" | "workspaceId_name">
+}, "id" | "key" | "workspaceId_name">
 
 export type RoleOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  key?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   scope?: Prisma.SortOrder
   workspaceId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -257,6 +268,7 @@ export type RoleScalarWhereWithAggregatesInput = {
   OR?: Prisma.RoleScalarWhereWithAggregatesInput[]
   NOT?: Prisma.RoleScalarWhereWithAggregatesInput | Prisma.RoleScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Role"> | string
+  key?: Prisma.StringNullableWithAggregatesFilter<"Role"> | string | null
   name?: Prisma.StringWithAggregatesFilter<"Role"> | string
   scope?: Prisma.EnumRoleScopeWithAggregatesFilter<"Role"> | $Enums.RoleScope
   workspaceId?: Prisma.StringNullableWithAggregatesFilter<"Role"> | string | null
@@ -267,6 +279,7 @@ export type RoleScalarWhereWithAggregatesInput = {
 
 export type RoleCreateInput = {
   id?: string
+  key?: string | null
   name: string
   scope: $Enums.RoleScope
   isSystem?: boolean
@@ -281,6 +294,7 @@ export type RoleCreateInput = {
 
 export type RoleUncheckedCreateInput = {
   id?: string
+  key?: string | null
   name: string
   scope: $Enums.RoleScope
   workspaceId?: string | null
@@ -295,6 +309,7 @@ export type RoleUncheckedCreateInput = {
 
 export type RoleUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   scope?: Prisma.EnumRoleScopeFieldUpdateOperationsInput | $Enums.RoleScope
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -309,6 +324,7 @@ export type RoleUpdateInput = {
 
 export type RoleUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   scope?: Prisma.EnumRoleScopeFieldUpdateOperationsInput | $Enums.RoleScope
   workspaceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -323,6 +339,7 @@ export type RoleUncheckedUpdateInput = {
 
 export type RoleCreateManyInput = {
   id?: string
+  key?: string | null
   name: string
   scope: $Enums.RoleScope
   workspaceId?: string | null
@@ -333,6 +350,7 @@ export type RoleCreateManyInput = {
 
 export type RoleUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   scope?: Prisma.EnumRoleScopeFieldUpdateOperationsInput | $Enums.RoleScope
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -342,6 +360,7 @@ export type RoleUpdateManyMutationInput = {
 
 export type RoleUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   scope?: Prisma.EnumRoleScopeFieldUpdateOperationsInput | $Enums.RoleScope
   workspaceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -357,6 +376,7 @@ export type RoleWorkspaceIdNameCompoundUniqueInput = {
 
 export type RoleCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  key?: Prisma.SortOrder
   name?: Prisma.SortOrder
   scope?: Prisma.SortOrder
   workspaceId?: Prisma.SortOrder
@@ -367,6 +387,7 @@ export type RoleCountOrderByAggregateInput = {
 
 export type RoleMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  key?: Prisma.SortOrder
   name?: Prisma.SortOrder
   scope?: Prisma.SortOrder
   workspaceId?: Prisma.SortOrder
@@ -377,6 +398,7 @@ export type RoleMaxOrderByAggregateInput = {
 
 export type RoleMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  key?: Prisma.SortOrder
   name?: Prisma.SortOrder
   scope?: Prisma.SortOrder
   workspaceId?: Prisma.SortOrder
@@ -508,6 +530,7 @@ export type RoleUpdateOneRequiredWithoutEnabledInNestedInput = {
 
 export type RoleCreateWithoutPermissionsInput = {
   id?: string
+  key?: string | null
   name: string
   scope: $Enums.RoleScope
   isSystem?: boolean
@@ -521,6 +544,7 @@ export type RoleCreateWithoutPermissionsInput = {
 
 export type RoleUncheckedCreateWithoutPermissionsInput = {
   id?: string
+  key?: string | null
   name: string
   scope: $Enums.RoleScope
   workspaceId?: string | null
@@ -550,6 +574,7 @@ export type RoleUpdateToOneWithWhereWithoutPermissionsInput = {
 
 export type RoleUpdateWithoutPermissionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   scope?: Prisma.EnumRoleScopeFieldUpdateOperationsInput | $Enums.RoleScope
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -563,6 +588,7 @@ export type RoleUpdateWithoutPermissionsInput = {
 
 export type RoleUncheckedUpdateWithoutPermissionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   scope?: Prisma.EnumRoleScopeFieldUpdateOperationsInput | $Enums.RoleScope
   workspaceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -576,6 +602,7 @@ export type RoleUncheckedUpdateWithoutPermissionsInput = {
 
 export type RoleCreateWithoutSystemUsersInput = {
   id?: string
+  key?: string | null
   name: string
   scope: $Enums.RoleScope
   isSystem?: boolean
@@ -589,6 +616,7 @@ export type RoleCreateWithoutSystemUsersInput = {
 
 export type RoleUncheckedCreateWithoutSystemUsersInput = {
   id?: string
+  key?: string | null
   name: string
   scope: $Enums.RoleScope
   workspaceId?: string | null
@@ -618,6 +646,7 @@ export type RoleUpdateToOneWithWhereWithoutSystemUsersInput = {
 
 export type RoleUpdateWithoutSystemUsersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   scope?: Prisma.EnumRoleScopeFieldUpdateOperationsInput | $Enums.RoleScope
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -631,6 +660,7 @@ export type RoleUpdateWithoutSystemUsersInput = {
 
 export type RoleUncheckedUpdateWithoutSystemUsersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   scope?: Prisma.EnumRoleScopeFieldUpdateOperationsInput | $Enums.RoleScope
   workspaceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -644,6 +674,7 @@ export type RoleUncheckedUpdateWithoutSystemUsersInput = {
 
 export type RoleCreateWithoutWorkspaceInput = {
   id?: string
+  key?: string | null
   name: string
   scope: $Enums.RoleScope
   isSystem?: boolean
@@ -657,6 +688,7 @@ export type RoleCreateWithoutWorkspaceInput = {
 
 export type RoleUncheckedCreateWithoutWorkspaceInput = {
   id?: string
+  key?: string | null
   name: string
   scope: $Enums.RoleScope
   isSystem?: boolean
@@ -699,6 +731,7 @@ export type RoleScalarWhereInput = {
   OR?: Prisma.RoleScalarWhereInput[]
   NOT?: Prisma.RoleScalarWhereInput | Prisma.RoleScalarWhereInput[]
   id?: Prisma.StringFilter<"Role"> | string
+  key?: Prisma.StringNullableFilter<"Role"> | string | null
   name?: Prisma.StringFilter<"Role"> | string
   scope?: Prisma.EnumRoleScopeFilter<"Role"> | $Enums.RoleScope
   workspaceId?: Prisma.StringNullableFilter<"Role"> | string | null
@@ -709,6 +742,7 @@ export type RoleScalarWhereInput = {
 
 export type RoleCreateWithoutWorkspaceUsersInput = {
   id?: string
+  key?: string | null
   name: string
   scope: $Enums.RoleScope
   isSystem?: boolean
@@ -722,6 +756,7 @@ export type RoleCreateWithoutWorkspaceUsersInput = {
 
 export type RoleUncheckedCreateWithoutWorkspaceUsersInput = {
   id?: string
+  key?: string | null
   name: string
   scope: $Enums.RoleScope
   workspaceId?: string | null
@@ -751,6 +786,7 @@ export type RoleUpdateToOneWithWhereWithoutWorkspaceUsersInput = {
 
 export type RoleUpdateWithoutWorkspaceUsersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   scope?: Prisma.EnumRoleScopeFieldUpdateOperationsInput | $Enums.RoleScope
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -764,6 +800,7 @@ export type RoleUpdateWithoutWorkspaceUsersInput = {
 
 export type RoleUncheckedUpdateWithoutWorkspaceUsersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   scope?: Prisma.EnumRoleScopeFieldUpdateOperationsInput | $Enums.RoleScope
   workspaceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -777,6 +814,7 @@ export type RoleUncheckedUpdateWithoutWorkspaceUsersInput = {
 
 export type RoleCreateWithoutEnabledInInput = {
   id?: string
+  key?: string | null
   name: string
   scope: $Enums.RoleScope
   isSystem?: boolean
@@ -790,6 +828,7 @@ export type RoleCreateWithoutEnabledInInput = {
 
 export type RoleUncheckedCreateWithoutEnabledInInput = {
   id?: string
+  key?: string | null
   name: string
   scope: $Enums.RoleScope
   workspaceId?: string | null
@@ -819,6 +858,7 @@ export type RoleUpdateToOneWithWhereWithoutEnabledInInput = {
 
 export type RoleUpdateWithoutEnabledInInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   scope?: Prisma.EnumRoleScopeFieldUpdateOperationsInput | $Enums.RoleScope
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -832,6 +872,7 @@ export type RoleUpdateWithoutEnabledInInput = {
 
 export type RoleUncheckedUpdateWithoutEnabledInInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   scope?: Prisma.EnumRoleScopeFieldUpdateOperationsInput | $Enums.RoleScope
   workspaceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -845,6 +886,7 @@ export type RoleUncheckedUpdateWithoutEnabledInInput = {
 
 export type RoleCreateManyWorkspaceInput = {
   id?: string
+  key?: string | null
   name: string
   scope: $Enums.RoleScope
   isSystem?: boolean
@@ -854,6 +896,7 @@ export type RoleCreateManyWorkspaceInput = {
 
 export type RoleUpdateWithoutWorkspaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   scope?: Prisma.EnumRoleScopeFieldUpdateOperationsInput | $Enums.RoleScope
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -867,6 +910,7 @@ export type RoleUpdateWithoutWorkspaceInput = {
 
 export type RoleUncheckedUpdateWithoutWorkspaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   scope?: Prisma.EnumRoleScopeFieldUpdateOperationsInput | $Enums.RoleScope
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -880,6 +924,7 @@ export type RoleUncheckedUpdateWithoutWorkspaceInput = {
 
 export type RoleUncheckedUpdateManyWithoutWorkspaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   scope?: Prisma.EnumRoleScopeFieldUpdateOperationsInput | $Enums.RoleScope
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -947,6 +992,7 @@ export type RoleCountOutputTypeCountEnabledInArgs<ExtArgs extends runtime.Types.
 
 export type RoleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  key?: boolean
   name?: boolean
   scope?: boolean
   workspaceId?: boolean
@@ -963,6 +1009,7 @@ export type RoleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 
 export type RoleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  key?: boolean
   name?: boolean
   scope?: boolean
   workspaceId?: boolean
@@ -974,6 +1021,7 @@ export type RoleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 
 export type RoleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  key?: boolean
   name?: boolean
   scope?: boolean
   workspaceId?: boolean
@@ -985,6 +1033,7 @@ export type RoleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 
 export type RoleSelectScalar = {
   id?: boolean
+  key?: boolean
   name?: boolean
   scope?: boolean
   workspaceId?: boolean
@@ -993,7 +1042,7 @@ export type RoleSelectScalar = {
   updatedAt?: boolean
 }
 
-export type RoleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "scope" | "workspaceId" | "isSystem" | "createdAt" | "updatedAt", ExtArgs["result"]["role"]>
+export type RoleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "key" | "name" | "scope" | "workspaceId" | "isSystem" | "createdAt" | "updatedAt", ExtArgs["result"]["role"]>
 export type RoleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   workspace?: boolean | Prisma.Role$workspaceArgs<ExtArgs>
   permissions?: boolean | Prisma.Role$permissionsArgs<ExtArgs>
@@ -1020,6 +1069,7 @@ export type $RolePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    key: string | null
     name: string
     scope: $Enums.RoleScope
     workspaceId: string | null
@@ -1455,6 +1505,7 @@ export interface Prisma__RoleClient<T, Null = never, ExtArgs extends runtime.Typ
  */
 export interface RoleFieldRefs {
   readonly id: Prisma.FieldRef<"Role", 'String'>
+  readonly key: Prisma.FieldRef<"Role", 'String'>
   readonly name: Prisma.FieldRef<"Role", 'String'>
   readonly scope: Prisma.FieldRef<"Role", 'RoleScope'>
   readonly workspaceId: Prisma.FieldRef<"Role", 'String'>

@@ -105,6 +105,7 @@ export const UserScalarFieldEnum = {
   name: 'name',
   avatar: 'avatar',
   createdAt: 'createdAt',
+  deletedAt: 'deletedAt',
   updatedAt: 'updatedAt'
 } as const
 
@@ -123,6 +124,7 @@ export type PermissionScalarFieldEnum = (typeof PermissionScalarFieldEnum)[keyof
 
 export const RoleScalarFieldEnum = {
   id: 'id',
+  key: 'key',
   name: 'name',
   scope: 'scope',
   workspaceId: 'workspaceId',
@@ -153,7 +155,9 @@ export type UserRoleScalarFieldEnum = (typeof UserRoleScalarFieldEnum)[keyof typ
 export const WorkspaceScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  ownerId: 'ownerId',
   createdAt: 'createdAt',
+  deletedAt: 'deletedAt',
   updatedAt: 'updatedAt'
 } as const
 
@@ -164,7 +168,8 @@ export const WorkspaceMemberScalarFieldEnum = {
   userId: 'userId',
   workspaceId: 'workspaceId',
   roleId: 'roleId',
-  joinedAt: 'joinedAt'
+  joinedAt: 'joinedAt',
+  deletedAt: 'deletedAt'
 } as const
 
 export type WorkspaceMemberScalarFieldEnum = (typeof WorkspaceMemberScalarFieldEnum)[keyof typeof WorkspaceMemberScalarFieldEnum]
@@ -185,6 +190,7 @@ export const ProjectScalarFieldEnum = {
   name: 'name',
   description: 'description',
   createdAt: 'createdAt',
+  deletedAt: 'deletedAt',
   updatedAt: 'updatedAt'
 } as const
 
@@ -194,7 +200,8 @@ export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeo
 export const ProjectMemberScalarFieldEnum = {
   projectId: 'projectId',
   userId: 'userId',
-  joinedAt: 'joinedAt'
+  joinedAt: 'joinedAt',
+  deletedAt: 'deletedAt'
 } as const
 
 export type ProjectMemberScalarFieldEnum = (typeof ProjectMemberScalarFieldEnum)[keyof typeof ProjectMemberScalarFieldEnum]
@@ -212,6 +219,7 @@ export const TaskScalarFieldEnum = {
   createdById: 'createdById',
   parentId: 'parentId',
   createdAt: 'createdAt',
+  deletedAt: 'deletedAt',
   updatedAt: 'updatedAt',
   formulaId: 'formulaId'
 } as const
@@ -235,6 +243,7 @@ export const ObjectiveScalarFieldEnum = {
   startDate: 'startDate',
   endDate: 'endDate',
   createdAt: 'createdAt',
+  deletedAt: 'deletedAt',
   updatedAt: 'updatedAt',
   projectId: 'projectId',
   workspaceId: 'workspaceId'
@@ -389,6 +398,7 @@ export const EvaluationScalarFieldEnum = {
   selfComment: 'selfComment',
   reviewerComment: 'reviewerComment',
   createdAt: 'createdAt',
+  deletedAt: 'deletedAt',
   updatedAt: 'updatedAt'
 } as const
 

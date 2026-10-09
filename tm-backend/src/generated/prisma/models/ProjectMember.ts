@@ -28,18 +28,21 @@ export type ProjectMemberMinAggregateOutputType = {
   projectId: string | null
   userId: string | null
   joinedAt: Date | null
+  deletedAt: Date | null
 }
 
 export type ProjectMemberMaxAggregateOutputType = {
   projectId: string | null
   userId: string | null
   joinedAt: Date | null
+  deletedAt: Date | null
 }
 
 export type ProjectMemberCountAggregateOutputType = {
   projectId: number
   userId: number
   joinedAt: number
+  deletedAt: number
   _all: number
 }
 
@@ -48,18 +51,21 @@ export type ProjectMemberMinAggregateInputType = {
   projectId?: true
   userId?: true
   joinedAt?: true
+  deletedAt?: true
 }
 
 export type ProjectMemberMaxAggregateInputType = {
   projectId?: true
   userId?: true
   joinedAt?: true
+  deletedAt?: true
 }
 
 export type ProjectMemberCountAggregateInputType = {
   projectId?: true
   userId?: true
   joinedAt?: true
+  deletedAt?: true
   _all?: true
 }
 
@@ -139,6 +145,7 @@ export type ProjectMemberGroupByOutputType = {
   projectId: string
   userId: string
   joinedAt: Date
+  deletedAt: Date | null
   _count: ProjectMemberCountAggregateOutputType | null
   _min: ProjectMemberMinAggregateOutputType | null
   _max: ProjectMemberMaxAggregateOutputType | null
@@ -166,6 +173,7 @@ export type ProjectMemberWhereInput = {
   projectId?: Prisma.StringFilter<"ProjectMember"> | string
   userId?: Prisma.StringFilter<"ProjectMember"> | string
   joinedAt?: Prisma.DateTimeFilter<"ProjectMember"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"ProjectMember"> | Date | string | null
   project?: Prisma.XOR<Prisma.ProjectScalarRelationFilter, Prisma.ProjectWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
@@ -174,6 +182,7 @@ export type ProjectMemberOrderByWithRelationInput = {
   projectId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   project?: Prisma.ProjectOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
 }
@@ -186,6 +195,7 @@ export type ProjectMemberWhereUniqueInput = Prisma.AtLeast<{
   projectId?: Prisma.StringFilter<"ProjectMember"> | string
   userId?: Prisma.StringFilter<"ProjectMember"> | string
   joinedAt?: Prisma.DateTimeFilter<"ProjectMember"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"ProjectMember"> | Date | string | null
   project?: Prisma.XOR<Prisma.ProjectScalarRelationFilter, Prisma.ProjectWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "projectId_userId">
@@ -194,6 +204,7 @@ export type ProjectMemberOrderByWithAggregationInput = {
   projectId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ProjectMemberCountOrderByAggregateInput
   _max?: Prisma.ProjectMemberMaxOrderByAggregateInput
   _min?: Prisma.ProjectMemberMinOrderByAggregateInput
@@ -206,10 +217,12 @@ export type ProjectMemberScalarWhereWithAggregatesInput = {
   projectId?: Prisma.StringWithAggregatesFilter<"ProjectMember"> | string
   userId?: Prisma.StringWithAggregatesFilter<"ProjectMember"> | string
   joinedAt?: Prisma.DateTimeWithAggregatesFilter<"ProjectMember"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ProjectMember"> | Date | string | null
 }
 
 export type ProjectMemberCreateInput = {
   joinedAt?: Date | string
+  deletedAt?: Date | string | null
   project: Prisma.ProjectCreateNestedOneWithoutMembersInput
   user: Prisma.UserCreateNestedOneWithoutProjectMembershipsInput
 }
@@ -218,10 +231,12 @@ export type ProjectMemberUncheckedCreateInput = {
   projectId: string
   userId: string
   joinedAt?: Date | string
+  deletedAt?: Date | string | null
 }
 
 export type ProjectMemberUpdateInput = {
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   project?: Prisma.ProjectUpdateOneRequiredWithoutMembersNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutProjectMembershipsNestedInput
 }
@@ -230,22 +245,26 @@ export type ProjectMemberUncheckedUpdateInput = {
   projectId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ProjectMemberCreateManyInput = {
   projectId: string
   userId: string
   joinedAt?: Date | string
+  deletedAt?: Date | string | null
 }
 
 export type ProjectMemberUpdateManyMutationInput = {
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ProjectMemberUncheckedUpdateManyInput = {
   projectId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ProjectMemberListRelationFilter = {
@@ -267,18 +286,21 @@ export type ProjectMemberCountOrderByAggregateInput = {
   projectId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type ProjectMemberMaxOrderByAggregateInput = {
   projectId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type ProjectMemberMinOrderByAggregateInput = {
   projectId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type ProjectMemberCreateNestedManyWithoutUserInput = {
@@ -367,12 +389,14 @@ export type ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput = {
 
 export type ProjectMemberCreateWithoutUserInput = {
   joinedAt?: Date | string
+  deletedAt?: Date | string | null
   project: Prisma.ProjectCreateNestedOneWithoutMembersInput
 }
 
 export type ProjectMemberUncheckedCreateWithoutUserInput = {
   projectId: string
   joinedAt?: Date | string
+  deletedAt?: Date | string | null
 }
 
 export type ProjectMemberCreateOrConnectWithoutUserInput = {
@@ -408,16 +432,19 @@ export type ProjectMemberScalarWhereInput = {
   projectId?: Prisma.StringFilter<"ProjectMember"> | string
   userId?: Prisma.StringFilter<"ProjectMember"> | string
   joinedAt?: Prisma.DateTimeFilter<"ProjectMember"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"ProjectMember"> | Date | string | null
 }
 
 export type ProjectMemberCreateWithoutProjectInput = {
   joinedAt?: Date | string
+  deletedAt?: Date | string | null
   user: Prisma.UserCreateNestedOneWithoutProjectMembershipsInput
 }
 
 export type ProjectMemberUncheckedCreateWithoutProjectInput = {
   userId: string
   joinedAt?: Date | string
+  deletedAt?: Date | string | null
 }
 
 export type ProjectMemberCreateOrConnectWithoutProjectInput = {
@@ -449,41 +476,49 @@ export type ProjectMemberUpdateManyWithWhereWithoutProjectInput = {
 export type ProjectMemberCreateManyUserInput = {
   projectId: string
   joinedAt?: Date | string
+  deletedAt?: Date | string | null
 }
 
 export type ProjectMemberUpdateWithoutUserInput = {
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   project?: Prisma.ProjectUpdateOneRequiredWithoutMembersNestedInput
 }
 
 export type ProjectMemberUncheckedUpdateWithoutUserInput = {
   projectId?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ProjectMemberUncheckedUpdateManyWithoutUserInput = {
   projectId?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ProjectMemberCreateManyProjectInput = {
   userId: string
   joinedAt?: Date | string
+  deletedAt?: Date | string | null
 }
 
 export type ProjectMemberUpdateWithoutProjectInput = {
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutProjectMembershipsNestedInput
 }
 
 export type ProjectMemberUncheckedUpdateWithoutProjectInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ProjectMemberUncheckedUpdateManyWithoutProjectInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -492,6 +527,7 @@ export type ProjectMemberSelect<ExtArgs extends runtime.Types.Extensions.Interna
   projectId?: boolean
   userId?: boolean
   joinedAt?: boolean
+  deletedAt?: boolean
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["projectMember"]>
@@ -500,6 +536,7 @@ export type ProjectMemberSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   projectId?: boolean
   userId?: boolean
   joinedAt?: boolean
+  deletedAt?: boolean
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["projectMember"]>
@@ -508,6 +545,7 @@ export type ProjectMemberSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   projectId?: boolean
   userId?: boolean
   joinedAt?: boolean
+  deletedAt?: boolean
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["projectMember"]>
@@ -516,9 +554,10 @@ export type ProjectMemberSelectScalar = {
   projectId?: boolean
   userId?: boolean
   joinedAt?: boolean
+  deletedAt?: boolean
 }
 
-export type ProjectMemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"projectId" | "userId" | "joinedAt", ExtArgs["result"]["projectMember"]>
+export type ProjectMemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"projectId" | "userId" | "joinedAt" | "deletedAt", ExtArgs["result"]["projectMember"]>
 export type ProjectMemberInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -542,6 +581,7 @@ export type $ProjectMemberPayload<ExtArgs extends runtime.Types.Extensions.Inter
     projectId: string
     userId: string
     joinedAt: Date
+    deletedAt: Date | null
   }, ExtArgs["result"]["projectMember"]>
   composites: {}
 }
@@ -970,6 +1010,7 @@ export interface ProjectMemberFieldRefs {
   readonly projectId: Prisma.FieldRef<"ProjectMember", 'String'>
   readonly userId: Prisma.FieldRef<"ProjectMember", 'String'>
   readonly joinedAt: Prisma.FieldRef<"ProjectMember", 'DateTime'>
+  readonly deletedAt: Prisma.FieldRef<"ProjectMember", 'DateTime'>
 }
     
 

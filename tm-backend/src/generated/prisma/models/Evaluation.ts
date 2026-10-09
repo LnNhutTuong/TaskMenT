@@ -51,6 +51,7 @@ export type EvaluationMinAggregateOutputType = {
   selfComment: string | null
   reviewerComment: string | null
   createdAt: Date | null
+  deletedAt: Date | null
   updatedAt: Date | null
 }
 
@@ -67,6 +68,7 @@ export type EvaluationMaxAggregateOutputType = {
   selfComment: string | null
   reviewerComment: string | null
   createdAt: Date | null
+  deletedAt: Date | null
   updatedAt: Date | null
 }
 
@@ -83,6 +85,7 @@ export type EvaluationCountAggregateOutputType = {
   selfComment: number
   reviewerComment: number
   createdAt: number
+  deletedAt: number
   updatedAt: number
   _all: number
 }
@@ -113,6 +116,7 @@ export type EvaluationMinAggregateInputType = {
   selfComment?: true
   reviewerComment?: true
   createdAt?: true
+  deletedAt?: true
   updatedAt?: true
 }
 
@@ -129,6 +133,7 @@ export type EvaluationMaxAggregateInputType = {
   selfComment?: true
   reviewerComment?: true
   createdAt?: true
+  deletedAt?: true
   updatedAt?: true
 }
 
@@ -145,6 +150,7 @@ export type EvaluationCountAggregateInputType = {
   selfComment?: true
   reviewerComment?: true
   createdAt?: true
+  deletedAt?: true
   updatedAt?: true
   _all?: true
 }
@@ -248,6 +254,7 @@ export type EvaluationGroupByOutputType = {
   selfComment: string | null
   reviewerComment: string | null
   createdAt: Date
+  deletedAt: Date | null
   updatedAt: Date
   _count: EvaluationCountAggregateOutputType | null
   _avg: EvaluationAvgAggregateOutputType | null
@@ -287,6 +294,7 @@ export type EvaluationWhereInput = {
   selfComment?: Prisma.StringNullableFilter<"Evaluation"> | string | null
   reviewerComment?: Prisma.StringNullableFilter<"Evaluation"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Evaluation"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"Evaluation"> | Date | string | null
   updatedAt?: Prisma.DateTimeFilter<"Evaluation"> | Date | string
   period?: Prisma.XOR<Prisma.EvaluationPeriodScalarRelationFilter, Prisma.EvaluationPeriodWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -307,6 +315,7 @@ export type EvaluationOrderByWithRelationInput = {
   selfComment?: Prisma.SortOrderInput | Prisma.SortOrder
   reviewerComment?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   period?: Prisma.EvaluationPeriodOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
@@ -331,6 +340,7 @@ export type EvaluationWhereUniqueInput = Prisma.AtLeast<{
   selfComment?: Prisma.StringNullableFilter<"Evaluation"> | string | null
   reviewerComment?: Prisma.StringNullableFilter<"Evaluation"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Evaluation"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"Evaluation"> | Date | string | null
   updatedAt?: Prisma.DateTimeFilter<"Evaluation"> | Date | string
   period?: Prisma.XOR<Prisma.EvaluationPeriodScalarRelationFilter, Prisma.EvaluationPeriodWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -351,6 +361,7 @@ export type EvaluationOrderByWithAggregationInput = {
   selfComment?: Prisma.SortOrderInput | Prisma.SortOrder
   reviewerComment?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.EvaluationCountOrderByAggregateInput
   _avg?: Prisma.EvaluationAvgOrderByAggregateInput
@@ -375,6 +386,7 @@ export type EvaluationScalarWhereWithAggregatesInput = {
   selfComment?: Prisma.StringNullableWithAggregatesFilter<"Evaluation"> | string | null
   reviewerComment?: Prisma.StringNullableWithAggregatesFilter<"Evaluation"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Evaluation"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Evaluation"> | Date | string | null
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Evaluation"> | Date | string
 }
 
@@ -388,6 +400,7 @@ export type EvaluationCreateInput = {
   selfComment?: string | null
   reviewerComment?: string | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   updatedAt?: Date | string
   period: Prisma.EvaluationPeriodCreateNestedOneWithoutEvaluationsInput
   user: Prisma.UserCreateNestedOneWithoutUserEvaluationInput
@@ -408,6 +421,7 @@ export type EvaluationUncheckedCreateInput = {
   selfComment?: string | null
   reviewerComment?: string | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   updatedAt?: Date | string
   criteriaResults?: Prisma.EvaluationCriteriaResultUncheckedCreateNestedManyWithoutEvaluationInput
 }
@@ -422,6 +436,7 @@ export type EvaluationUpdateInput = {
   selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewerComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   period?: Prisma.EvaluationPeriodUpdateOneRequiredWithoutEvaluationsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutUserEvaluationNestedInput
@@ -442,6 +457,7 @@ export type EvaluationUncheckedUpdateInput = {
   selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewerComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   criteriaResults?: Prisma.EvaluationCriteriaResultUncheckedUpdateManyWithoutEvaluationNestedInput
 }
@@ -459,6 +475,7 @@ export type EvaluationCreateManyInput = {
   selfComment?: string | null
   reviewerComment?: string | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   updatedAt?: Date | string
 }
 
@@ -472,6 +489,7 @@ export type EvaluationUpdateManyMutationInput = {
   selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewerComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -488,6 +506,7 @@ export type EvaluationUncheckedUpdateManyInput = {
   selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewerComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -519,6 +538,7 @@ export type EvaluationCountOrderByAggregateInput = {
   selfComment?: Prisma.SortOrder
   reviewerComment?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -541,6 +561,7 @@ export type EvaluationMaxOrderByAggregateInput = {
   selfComment?: Prisma.SortOrder
   reviewerComment?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -557,6 +578,7 @@ export type EvaluationMinOrderByAggregateInput = {
   selfComment?: Prisma.SortOrder
   reviewerComment?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -725,6 +747,7 @@ export type EvaluationCreateWithoutUserInput = {
   selfComment?: string | null
   reviewerComment?: string | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   updatedAt?: Date | string
   period: Prisma.EvaluationPeriodCreateNestedOneWithoutEvaluationsInput
   reviewer?: Prisma.UserCreateNestedOneWithoutReviewerEvaluationInput
@@ -743,6 +766,7 @@ export type EvaluationUncheckedCreateWithoutUserInput = {
   selfComment?: string | null
   reviewerComment?: string | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   updatedAt?: Date | string
   criteriaResults?: Prisma.EvaluationCriteriaResultUncheckedCreateNestedManyWithoutEvaluationInput
 }
@@ -767,6 +791,7 @@ export type EvaluationCreateWithoutReviewerInput = {
   selfComment?: string | null
   reviewerComment?: string | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   updatedAt?: Date | string
   period: Prisma.EvaluationPeriodCreateNestedOneWithoutEvaluationsInput
   user: Prisma.UserCreateNestedOneWithoutUserEvaluationInput
@@ -785,6 +810,7 @@ export type EvaluationUncheckedCreateWithoutReviewerInput = {
   selfComment?: string | null
   reviewerComment?: string | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   updatedAt?: Date | string
   criteriaResults?: Prisma.EvaluationCriteriaResultUncheckedCreateNestedManyWithoutEvaluationInput
 }
@@ -831,6 +857,7 @@ export type EvaluationScalarWhereInput = {
   selfComment?: Prisma.StringNullableFilter<"Evaluation"> | string | null
   reviewerComment?: Prisma.StringNullableFilter<"Evaluation"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Evaluation"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"Evaluation"> | Date | string | null
   updatedAt?: Prisma.DateTimeFilter<"Evaluation"> | Date | string
 }
 
@@ -860,6 +887,7 @@ export type EvaluationCreateWithoutPeriodInput = {
   selfComment?: string | null
   reviewerComment?: string | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutUserEvaluationInput
   reviewer?: Prisma.UserCreateNestedOneWithoutReviewerEvaluationInput
@@ -878,6 +906,7 @@ export type EvaluationUncheckedCreateWithoutPeriodInput = {
   selfComment?: string | null
   reviewerComment?: string | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   updatedAt?: Date | string
   criteriaResults?: Prisma.EvaluationCriteriaResultUncheckedCreateNestedManyWithoutEvaluationInput
 }
@@ -918,6 +947,7 @@ export type EvaluationCreateWithoutCriteriaResultsInput = {
   selfComment?: string | null
   reviewerComment?: string | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   updatedAt?: Date | string
   period: Prisma.EvaluationPeriodCreateNestedOneWithoutEvaluationsInput
   user: Prisma.UserCreateNestedOneWithoutUserEvaluationInput
@@ -937,6 +967,7 @@ export type EvaluationUncheckedCreateWithoutCriteriaResultsInput = {
   selfComment?: string | null
   reviewerComment?: string | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   updatedAt?: Date | string
 }
 
@@ -966,6 +997,7 @@ export type EvaluationUpdateWithoutCriteriaResultsInput = {
   selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewerComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   period?: Prisma.EvaluationPeriodUpdateOneRequiredWithoutEvaluationsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutUserEvaluationNestedInput
@@ -985,6 +1017,7 @@ export type EvaluationUncheckedUpdateWithoutCriteriaResultsInput = {
   selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewerComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -1000,6 +1033,7 @@ export type EvaluationCreateManyUserInput = {
   selfComment?: string | null
   reviewerComment?: string | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   updatedAt?: Date | string
 }
 
@@ -1015,6 +1049,7 @@ export type EvaluationCreateManyReviewerInput = {
   selfComment?: string | null
   reviewerComment?: string | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   updatedAt?: Date | string
 }
 
@@ -1028,6 +1063,7 @@ export type EvaluationUpdateWithoutUserInput = {
   selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewerComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   period?: Prisma.EvaluationPeriodUpdateOneRequiredWithoutEvaluationsNestedInput
   reviewer?: Prisma.UserUpdateOneWithoutReviewerEvaluationNestedInput
@@ -1046,6 +1082,7 @@ export type EvaluationUncheckedUpdateWithoutUserInput = {
   selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewerComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   criteriaResults?: Prisma.EvaluationCriteriaResultUncheckedUpdateManyWithoutEvaluationNestedInput
 }
@@ -1062,6 +1099,7 @@ export type EvaluationUncheckedUpdateManyWithoutUserInput = {
   selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewerComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -1075,6 +1113,7 @@ export type EvaluationUpdateWithoutReviewerInput = {
   selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewerComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   period?: Prisma.EvaluationPeriodUpdateOneRequiredWithoutEvaluationsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutUserEvaluationNestedInput
@@ -1093,6 +1132,7 @@ export type EvaluationUncheckedUpdateWithoutReviewerInput = {
   selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewerComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   criteriaResults?: Prisma.EvaluationCriteriaResultUncheckedUpdateManyWithoutEvaluationNestedInput
 }
@@ -1109,6 +1149,7 @@ export type EvaluationUncheckedUpdateManyWithoutReviewerInput = {
   selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewerComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -1124,6 +1165,7 @@ export type EvaluationCreateManyPeriodInput = {
   selfComment?: string | null
   reviewerComment?: string | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   updatedAt?: Date | string
 }
 
@@ -1137,6 +1179,7 @@ export type EvaluationUpdateWithoutPeriodInput = {
   selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewerComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutUserEvaluationNestedInput
   reviewer?: Prisma.UserUpdateOneWithoutReviewerEvaluationNestedInput
@@ -1155,6 +1198,7 @@ export type EvaluationUncheckedUpdateWithoutPeriodInput = {
   selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewerComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   criteriaResults?: Prisma.EvaluationCriteriaResultUncheckedUpdateManyWithoutEvaluationNestedInput
 }
@@ -1171,6 +1215,7 @@ export type EvaluationUncheckedUpdateManyWithoutPeriodInput = {
   selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewerComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -1218,6 +1263,7 @@ export type EvaluationSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   selfComment?: boolean
   reviewerComment?: boolean
   createdAt?: boolean
+  deletedAt?: boolean
   updatedAt?: boolean
   period?: boolean | Prisma.EvaluationPeriodDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1239,6 +1285,7 @@ export type EvaluationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   selfComment?: boolean
   reviewerComment?: boolean
   createdAt?: boolean
+  deletedAt?: boolean
   updatedAt?: boolean
   period?: boolean | Prisma.EvaluationPeriodDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1258,6 +1305,7 @@ export type EvaluationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   selfComment?: boolean
   reviewerComment?: boolean
   createdAt?: boolean
+  deletedAt?: boolean
   updatedAt?: boolean
   period?: boolean | Prisma.EvaluationPeriodDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1277,10 +1325,11 @@ export type EvaluationSelectScalar = {
   selfComment?: boolean
   reviewerComment?: boolean
   createdAt?: boolean
+  deletedAt?: boolean
   updatedAt?: boolean
 }
 
-export type EvaluationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "periodId" | "userId" | "reviewerId" | "status" | "kpiScore" | "criteriaScore" | "finalScore" | "classification" | "selfComment" | "reviewerComment" | "createdAt" | "updatedAt", ExtArgs["result"]["evaluation"]>
+export type EvaluationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "periodId" | "userId" | "reviewerId" | "status" | "kpiScore" | "criteriaScore" | "finalScore" | "classification" | "selfComment" | "reviewerComment" | "createdAt" | "deletedAt" | "updatedAt", ExtArgs["result"]["evaluation"]>
 export type EvaluationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   period?: boolean | Prisma.EvaluationPeriodDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1320,6 +1369,7 @@ export type $EvaluationPayload<ExtArgs extends runtime.Types.Extensions.Internal
     selfComment: string | null
     reviewerComment: string | null
     createdAt: Date
+    deletedAt: Date | null
     updatedAt: Date
   }, ExtArgs["result"]["evaluation"]>
   composites: {}
@@ -1760,6 +1810,7 @@ export interface EvaluationFieldRefs {
   readonly selfComment: Prisma.FieldRef<"Evaluation", 'String'>
   readonly reviewerComment: Prisma.FieldRef<"Evaluation", 'String'>
   readonly createdAt: Prisma.FieldRef<"Evaluation", 'DateTime'>
+  readonly deletedAt: Prisma.FieldRef<"Evaluation", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Evaluation", 'DateTime'>
 }
     

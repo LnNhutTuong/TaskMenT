@@ -4,6 +4,8 @@ import { UpdateMetricDto } from './dto/update-metric.dto.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { WorkspaceService } from '../workspace/workspace.service.js';
 import { AuthUser } from '../auth/types/jwt-payload.type.js';
+import { PermissionService } from '../permission/permission.service.js';
+import { PERMISSION_KEYS } from '../permission/constants/pemission.constants.js';
 
 
 @Injectable()
@@ -11,7 +13,8 @@ export class MetricService {
 
   constructor(
     private readonly prisma: PrismaService,
-    private readonly workspaceService: WorkspaceService
+    private readonly workspaceService: WorkspaceService,
+    private readonly permissionServiec: PermissionService
   ) {}
 
   async create(dto: CreateMetricDto, user: AuthUser) {
@@ -84,14 +87,15 @@ export class MetricService {
     const metric = await this.prisma.metric.findUnique({
       where:{
         id
-      }
+      },
     })
 
     if(!metric){
       throw new NotFoundException('Metric not found')
     }
 
-    await this.workspaceService.assertWorkspaceAdmin(metric.workspaceId, user.id)
+    await this.workspaceService.assertWorkspaceMember(metric.workspaceId, user.id)
+    await this.permissionServiec.assertPermission(metric.workspaceId, user.id, PERMISSION_KEYS.METRIC_UPDATE)
 
     const metricAfterUpdate = await this.prisma.metric.update({
       where: {
@@ -129,7 +133,8 @@ export class MetricService {
       throw new NotFoundException('Metric not found')
     }
 
-    await this.workspaceService.assertWorkspaceAdmin(metric.workspaceId, user.id)
+    await this.workspaceService.assertWorkspaceMember(metric.workspaceId, user.id)
+    await this.permissionServiec.assertPermission(metric.workspaceId, user.id, PERMISSION_KEYS.METRIC_DELETE)
 
     if(metric.taskMetricValues.length > 0 ){
        throw new BadRequestException('This metric is already used in a task');

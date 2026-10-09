@@ -11,10 +11,12 @@ import { AuthUser } from '../auth/types/jwt-payload.type.js';
 import { Prisma } from '../generated/prisma/client.js';
 import { TaskQueryDTO } from './dto/task-query.dto.js';
 import { WorkflowService } from '../workflow/workflow.service.js';
+import { PermissionService } from '../permission/permission.service.js';
+import { PERMISSION_KEYS } from '../permission/constants/pemission.constants.js';
 
 @Injectable()
 export class TaskService {
-  constructor(private readonly prisma: PrismaService, private readonly workflowService: WorkflowService) {}
+  constructor(private readonly prisma: PrismaService, private readonly workflowService: WorkflowService, private readonly permissionService: PermissionService) {}
 
   async findAll(user: AuthUser, query: TaskQueryDTO) {
       const page = query.page  ?? 1;
@@ -22,6 +24,7 @@ export class TaskService {
       const skip = (page - 1 ) * limit;
 
       const where: Prisma.TaskWhereInput = {
+        deletedAt: null,
         OR: [
           {
             project: {
@@ -129,7 +132,8 @@ export class TaskService {
   async findOne(id: string, user: AuthUser) {
     const task = await this.prisma.task.findUnique({
       where:{
-        id
+        id,
+        deletedAt: null,
       },
       omit:{formulaId:true, projectId: true, createdById: true, parentId:true },
       include: {
@@ -177,22 +181,16 @@ export class TaskService {
     }
 
     //check permission to view
-    const canView = task.project.createdById === user.id ||
-        task.project.members.some(m => m.userId === user.id) ||
-        task.taskAssignees.some(member => member.user.id === user.id) ||
-        task.createdBy.id === user.id
-      
-
-    if(!canView){
-      throw new ForbiddenException('You do not have permission to view this task')
-    }
+    await this.permissionService.assertPermission(task.project.workspaceId, user.id, PERMISSION_KEYS.TASK_VIEW )
+    
     return task
   }
 
   async createTask(dto: CreateTaskDto, user: AuthUser) {
     const project = await this.prisma.project.findFirst({
       where:{
-        id: dto.projectId
+        id: dto.projectId,
+        deletedAt: null
       },
       include:{
         members:{
@@ -211,17 +209,14 @@ export class TaskService {
       throw new NotFoundException('Project not found')
     }
 
-    const isProjectMember = project.createdById === user.id || project.members.some(member => member.user.id === user.id)
+    //check permission to create task
+    await this.permissionService.assertPermission(project.workspaceId, user.id, PERMISSION_KEYS.TASK_CREATE )
 
-    if(!isProjectMember){
-      throw new ForbiddenException('You are not a member of this project')    
-    }
-
-    //check parent
     if(dto.parentId){
       const parentTask = await this.prisma.task.findFirst({
         where:{
-          id: dto.parentId
+          id: dto.parentId,
+          deletedAt: null
         }
       })
 
@@ -270,12 +265,13 @@ export class TaskService {
   async updateTask(id: string, dto: UpdateTaskDto, user: AuthUser) {
     const task = await this.prisma.task.findFirst({
       where:{
-        id
+        id,
+        deletedAt: null,
       },
       include:{
         project:{
           select:{
-            id: true, createdById: true, members:{
+            id: true, createdById: true, workspaceId: true, members:{
               select:{
                 user:{select:{
                   id: true, email: true, name: true
@@ -293,13 +289,7 @@ export class TaskService {
       throw new NotFoundException('Task not found');
     }
 
-    const canUpdate = task.createdById === user.id ||
-      task.project.createdById === user.id ||
-      task.taskAssignees.some(assignee => assignee.userId === user.id)
-
-    if(!canUpdate){
-      throw new ForbiddenException('You do not have permission to update this task')
-    }
+    await this.permissionService.assertPermission(task.project.workspaceId, user.id, PERMISSION_KEYS.TASK_UPDATE )
 
     if(dto.parentId !== task.parentId){
       if(dto.parentId){
@@ -379,12 +369,12 @@ export class TaskService {
   async deleteTask(id: string, user: AuthUser) {
     const task = await this.prisma.task.findFirst({
       where:{
-        id
+        id, deletedAt: null,
       },
       include:{
         project:{
           select:{
-            createdById: true
+            createdById: true, workspaceId: true
           }
         }
       }
@@ -394,17 +384,20 @@ export class TaskService {
       throw new NotFoundException('Task not found')
     }
 
-    const canDelete = task.createdById === user.id || task.project.createdById === user.id
+    await this.permissionService.assertPermission(task.project.workspaceId, user.id, PERMISSION_KEYS.TASK_DELETE )
 
-    if(!canDelete){
-      throw new ForbiddenException('You do not have permission to delete this task')
-    }
-
-    await this.prisma.task.delete({
-      where:{
-        id: task.id
-      }
-    })
+   await this.prisma.$transaction(async tx => {
+      await tx.task.update({ 
+        where: { id: task.id }, 
+        data: { deletedAt: new Date() } 
+      });
+      
+      // soft delete đệ quy cho subtask
+      await tx.task.updateMany({
+        where: { parentId: task.id, deletedAt: null },
+        data: { deletedAt: new Date() }
+      });
+  });
 
     return true;
   }
@@ -412,18 +405,17 @@ export class TaskService {
   async findAllKeyResultsLinkedToTask(taskId: string, user: AuthUser){
     const task = await this.prisma.task.findUnique({
       where: {  
-        id: taskId,
+        id: taskId, deletedAt: null
       },
     select: {
       id: true,
       title: true,
       status: true,
-      
-
       project: {
         select: {
           name:true,
           createdById: true,
+          workspaceId: true,
            members: {
             select: {
               userId: true,
@@ -448,16 +440,11 @@ export class TaskService {
       },
     });
     
-
     if(!task){
       throw new NotFoundException('Task not found');
     }
 
-    const isProjectMember = task.project.createdById === user.id || 
-                        task.project.members.some(member => member.userId === user.id);
-    if(!isProjectMember){
-      throw new ForbiddenException('You are not a member of this project');
-    }
+    await this.permissionService.assertPermission(task.project.workspaceId, user.id, PERMISSION_KEYS.TASK_VIEW_KEYRESULT ) 
 
     const keyResultsLinkedToTask = await this.prisma.task.findUnique({
       where:{
@@ -473,10 +460,10 @@ export class TaskService {
     return task
   }
 
-    async LinkTaskToKeyResult (taskId: string, keyResultId: string, user: AuthUser){
+  async LinkTaskToKeyResult (taskId: string, keyResultId: string, user: AuthUser){
       const task = await this.prisma.task.findUnique({
         where:{
-          id: taskId
+          id: taskId, deletedAt: null,
         },
         include:{
           project:{
@@ -497,11 +484,9 @@ export class TaskService {
         throw new NotFoundException('Task not found')
       }
 
-      const isProjectMember = task.project.createdById === user.id || task.project.members.some(member => member.userId === user.id)
-      if(!isProjectMember){
-        throw new ForbiddenException('You are not a member in this project')
-      }
-
+      //check permission to link task to key result
+      await this.permissionService.assertPermission(task.project.workspaceId, user.id, PERMISSION_KEYS.TASK_LINK_KEYRESULT )
+      
       const keyResult = await this.prisma.keyResult.findUnique({
         where:{
           id: keyResultId
@@ -521,7 +506,7 @@ export class TaskService {
 
       const isSameWorkspace = keyResult.objective.workspaceId === task.project.workspaceId
       if(!isSameWorkspace){
-        throw new ForbiddenException('You are not a member in this workspace')
+        throw new ForbiddenException('You cannot link task to key result in different workspaces')
       }
 
       return this.prisma.taskKeyResult.create({
@@ -535,7 +520,7 @@ export class TaskService {
   async UnLinkTaskToKeyResult(taskId: string, keyResultId: string, user: AuthUser) {
     const task = await this.prisma.task.findUnique({
         where: {
-          id: taskId
+          id: taskId, deletedAt: null,
         },
         include:{
           project:{
@@ -556,10 +541,7 @@ export class TaskService {
         throw new NotFoundException('Task not found')
       }
 
-      const isProjectMember = task.project.createdById === user.id || task.project.members.some(member => member.userId === user.id)
-      if(!isProjectMember){
-        throw new ForbiddenException('You are not a member in this project')
-      }
+      await this.permissionService.assertPermission(task.project.workspaceId, user.id, PERMISSION_KEYS.TASK_UNLINK_KEYRESULT )
 
       const keyResult = await this.prisma.keyResult.findUnique({
         where:{
@@ -602,19 +584,16 @@ export class TaskService {
   }
     
   async assertTaskPermission(taskId: string, userId: string) {
-  const task = await this.prisma.task.findFirst({
+  const task = await this.prisma.taskAssignee.findUnique({
     where: {
-      id: taskId,
-      OR: [
-        { createdById: userId },                       // Người tạo task
-        { project: { createdById: userId } },          // Chủ dự án
-        { taskAssignees: { some: { userId } } },       // Người được giao task
-      ],
+      taskId_userId:{taskId, userId}
     },
-    select: { id: true, projectId: true },
   });
 
-  if (!task) {
+  const isSuperAdmin = await this.permissionService.isSuperAdmin(userId);
+
+
+  if (!task && !isSuperAdmin) {
     throw new ForbiddenException('You do not have permission on this task');
   }
 

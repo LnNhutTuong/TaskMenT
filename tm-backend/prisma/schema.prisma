@@ -1,3 +1,15 @@
+// ==============================================================================
+// QUY ƯỚC QUẢN LÝ XÓA (DELETION CONVENTIONS):
+// 1. Soft Delete (deletedAt DateTime?):
+//    - Chỉ áp dụng cho 6 thực thể nghiệp vụ cốt lõi (Core Business Aggregates):
+//      User, Workspace, Project, Task, Objective, Evaluation.
+//    - Mục đích: Cho phép khôi phục (thùng rác), bảo toàn lịch sử và truy vết kiểm toán.
+// 2. Hard Delete & Cascade:
+//    - Mọi bảng phụ trợ, quan hệ N-N (join tables), sub-resources (TaskOutput, Evidence,
+//      WorkflowStep, EvaluationCriteria...) KHÔNG dùng deletedAt.
+//    - Khi bản ghi cha bị xóa, các bảng con được dọn dẹp sạch sẽ theo quan hệ Cascade/NoAction.
+// ==============================================================================
+
 datasource db {
   provider = "postgresql"
 }
@@ -39,14 +51,16 @@ enum EvaluationStatus {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
+  id        String    @id @default(uuid())
+  email     String    @unique
   password  String
   name      String
   avatar    String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  deletedAt DateTime?
+  updatedAt DateTime  @updatedAt
 
+  ownedWorkspaces      Workspace[]       @relation("WorkspaceOwner")
   systemRoles          UserRole[]
   workspaceMemberships WorkspaceMember[]
   createdProjects      Project[]         @relation("ProjectCreator")
@@ -75,6 +89,7 @@ model Permission {
 // cho thanh vien trong Workspace cua minh.
 model Role {
   id          String    @id @default(uuid())
+  key         String?   @unique // System role dung key (USER, SUPER_ADMIN) de upsert luc seed va tra role luc register. Workspace role de null.
   name        String
   scope       RoleScope
   workspaceId String?
@@ -91,6 +106,7 @@ model Role {
   @@unique([workspaceId, name])
 }
 
+// Gan Permission cho Role (khong phai gan role vao workspace)
 model RolePermission {
   roleId       String
   permissionId String
@@ -113,11 +129,16 @@ model UserRole {
 }
 
 model Workspace {
-  id        String   @id @default(uuid())
+  id        String    @id @default(uuid())
   name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  ownerId   String
+  createdAt DateTime  @default(now())
+  deletedAt DateTime?
+  updatedAt DateTime  @updatedAt
 
+  // Sau nay dem quota chi can count({ ownerId, deletedAt: null }).
+  // Khi chuyen nhuong owner phai cap nhat ca ownerId lan role OWNER trong WorkspaceMember, trong cung mot transaction.
+  owner              User                 @relation("WorkspaceOwner", fields: [ownerId], references: [id])
   members            WorkspaceMember[]
   projects           Project[]
   roles              Role[]
@@ -127,6 +148,8 @@ model Workspace {
   formulas           Formula[]
   evaluationPeriods  EvaluationPeriod[]
   classificationRule ClassificationRule[]
+
+  @@index([ownerId, deletedAt])
 }
 
 // User thuoc Workspace thong qua bang nay.
@@ -136,11 +159,12 @@ model WorkspaceMember {
   userId      String
   workspaceId String
   roleId      String
-  joinedAt    DateTime @default(now())
+  joinedAt    DateTime  @default(now())
+  deletedAt   DateTime?
 
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  role      Role      @relation(fields: [roleId], references: [id])
+  role      Role      @relation(fields: [roleId], references: [id], onDelete: NoAction)
 
   @@id([userId, workspaceId])
 }
@@ -159,13 +183,14 @@ model WorkspaceRole {
 }
 
 model Project {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   workspaceId String
   createdById String
   name        String
   description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  deletedAt   DateTime?
+  updatedAt   DateTime  @updatedAt
 
   workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   createdBy User      @relation("ProjectCreator", fields: [createdById], references: [id])
@@ -183,7 +208,8 @@ model Project {
 model ProjectMember {
   projectId String
   userId    String
-  joinedAt  DateTime @default(now())
+  joinedAt  DateTime  @default(now())
+  deletedAt DateTime?
 
   project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -208,8 +234,9 @@ model Task {
   // De co the tao SubTask -> Task
   parentId String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  deletedAt DateTime?
+  updatedAt DateTime  @updatedAt
 
   project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
   createdBy User    @relation("TaskCreator", fields: [createdById], references: [id])
@@ -246,6 +273,7 @@ model Objective {
   startDate DateTime?
   endDate   DateTime?
   createdAt DateTime  @default(now())
+  deletedAt DateTime?
   updatedAt DateTime  @updatedAt
 
   projectId String?
@@ -302,7 +330,8 @@ model TaskOutput {
   evidences Evidence[]
 }
 
-//Minh chung cho viec hoan thanh Task
+// Minh chung cho viec hoan thanh Task
+// RULE O SERVICE: Khong duoc phep xoa Evidence neu status dang la ACCEPTED
 model Evidence {
   id         String         @id @default(uuid())
   fileUrl    String //tai vi dung clound nen phai co thang cha nay de save cai url clound
@@ -372,7 +401,7 @@ model TaskMetricValue {
   task   Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
 
   metricId String
-  metric   Metric @relation(fields: [metricId], references: [id], onDelete: Restrict)
+  metric   Metric @relation(fields: [metricId], references: [id], onDelete: NoAction)
 
   value Float @default(0)
 
@@ -393,11 +422,12 @@ model KPISnapshot {
   version      Int
   //cac gia tri metric duoc nhap de tinh ra diem
   metricValues Json
-  
+
   calculatedAt DateTime @default(now())
 }
 
-//Ky danh gia
+// Ky danh gia
+// RULE O SERVICE: Khong duoc phep xoa Ky danh gia neu da co phieu Evaluation o trang thai SUBMITTED tro len
 model EvaluationPeriod {
   id        String   @id @default(uuid())
   name      String
@@ -463,8 +493,9 @@ model Evaluation {
 
   criteriaResults EvaluationCriteriaResult[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  deletedAt DateTime?
+  updatedAt DateTime  @updatedAt
 
   //moi 1 phieu danh gia chi duoc xuat hien 1 lan trong 1 ky danh gia, thuoc 1 user
   @@unique([periodId, userId])
@@ -522,6 +553,7 @@ model Workflow {
   transitions WorkflowTransition[]
 }
 
+// RULE O SERVICE: Khong duoc phep xoa Step neu dang co Task su dung step do
 model WorkflowStep {
   id    String @id @default(uuid())
   name  String //name: TODO, IN_PROGRESS, REVIEW, DONE,...

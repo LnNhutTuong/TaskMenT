@@ -31,6 +31,7 @@ export type ObjectiveMinAggregateOutputType = {
   startDate: Date | null
   endDate: Date | null
   createdAt: Date | null
+  deletedAt: Date | null
   updatedAt: Date | null
   projectId: string | null
   workspaceId: string | null
@@ -43,6 +44,7 @@ export type ObjectiveMaxAggregateOutputType = {
   startDate: Date | null
   endDate: Date | null
   createdAt: Date | null
+  deletedAt: Date | null
   updatedAt: Date | null
   projectId: string | null
   workspaceId: string | null
@@ -55,6 +57,7 @@ export type ObjectiveCountAggregateOutputType = {
   startDate: number
   endDate: number
   createdAt: number
+  deletedAt: number
   updatedAt: number
   projectId: number
   workspaceId: number
@@ -69,6 +72,7 @@ export type ObjectiveMinAggregateInputType = {
   startDate?: true
   endDate?: true
   createdAt?: true
+  deletedAt?: true
   updatedAt?: true
   projectId?: true
   workspaceId?: true
@@ -81,6 +85,7 @@ export type ObjectiveMaxAggregateInputType = {
   startDate?: true
   endDate?: true
   createdAt?: true
+  deletedAt?: true
   updatedAt?: true
   projectId?: true
   workspaceId?: true
@@ -93,6 +98,7 @@ export type ObjectiveCountAggregateInputType = {
   startDate?: true
   endDate?: true
   createdAt?: true
+  deletedAt?: true
   updatedAt?: true
   projectId?: true
   workspaceId?: true
@@ -178,6 +184,7 @@ export type ObjectiveGroupByOutputType = {
   startDate: Date | null
   endDate: Date | null
   createdAt: Date
+  deletedAt: Date | null
   updatedAt: Date
   projectId: string | null
   workspaceId: string
@@ -211,6 +218,7 @@ export type ObjectiveWhereInput = {
   startDate?: Prisma.DateTimeNullableFilter<"Objective"> | Date | string | null
   endDate?: Prisma.DateTimeNullableFilter<"Objective"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Objective"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"Objective"> | Date | string | null
   updatedAt?: Prisma.DateTimeFilter<"Objective"> | Date | string
   projectId?: Prisma.StringNullableFilter<"Objective"> | string | null
   workspaceId?: Prisma.StringFilter<"Objective"> | string
@@ -226,6 +234,7 @@ export type ObjectiveOrderByWithRelationInput = {
   startDate?: Prisma.SortOrderInput | Prisma.SortOrder
   endDate?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   projectId?: Prisma.SortOrderInput | Prisma.SortOrder
   workspaceId?: Prisma.SortOrder
@@ -244,6 +253,7 @@ export type ObjectiveWhereUniqueInput = Prisma.AtLeast<{
   startDate?: Prisma.DateTimeNullableFilter<"Objective"> | Date | string | null
   endDate?: Prisma.DateTimeNullableFilter<"Objective"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Objective"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"Objective"> | Date | string | null
   updatedAt?: Prisma.DateTimeFilter<"Objective"> | Date | string
   projectId?: Prisma.StringNullableFilter<"Objective"> | string | null
   workspaceId?: Prisma.StringFilter<"Objective"> | string
@@ -259,6 +269,7 @@ export type ObjectiveOrderByWithAggregationInput = {
   startDate?: Prisma.SortOrderInput | Prisma.SortOrder
   endDate?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   projectId?: Prisma.SortOrderInput | Prisma.SortOrder
   workspaceId?: Prisma.SortOrder
@@ -277,6 +288,7 @@ export type ObjectiveScalarWhereWithAggregatesInput = {
   startDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Objective"> | Date | string | null
   endDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Objective"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Objective"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Objective"> | Date | string | null
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Objective"> | Date | string
   projectId?: Prisma.StringNullableWithAggregatesFilter<"Objective"> | string | null
   workspaceId?: Prisma.StringWithAggregatesFilter<"Objective"> | string
@@ -289,6 +301,7 @@ export type ObjectiveCreateInput = {
   startDate?: Date | string | null
   endDate?: Date | string | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   updatedAt?: Date | string
   project?: Prisma.ProjectCreateNestedOneWithoutObjectivesInput
   workspace: Prisma.WorkspaceCreateNestedOneWithoutObjectivesInput
@@ -302,6 +315,7 @@ export type ObjectiveUncheckedCreateInput = {
   startDate?: Date | string | null
   endDate?: Date | string | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   updatedAt?: Date | string
   projectId?: string | null
   workspaceId: string
@@ -315,6 +329,7 @@ export type ObjectiveUpdateInput = {
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   project?: Prisma.ProjectUpdateOneWithoutObjectivesNestedInput
   workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutObjectivesNestedInput
@@ -328,6 +343,7 @@ export type ObjectiveUncheckedUpdateInput = {
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -341,6 +357,7 @@ export type ObjectiveCreateManyInput = {
   startDate?: Date | string | null
   endDate?: Date | string | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   updatedAt?: Date | string
   projectId?: string | null
   workspaceId: string
@@ -353,6 +370,7 @@ export type ObjectiveUpdateManyMutationInput = {
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -363,6 +381,7 @@ export type ObjectiveUncheckedUpdateManyInput = {
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -385,6 +404,7 @@ export type ObjectiveCountOrderByAggregateInput = {
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   projectId?: Prisma.SortOrder
   workspaceId?: Prisma.SortOrder
@@ -397,6 +417,7 @@ export type ObjectiveMaxOrderByAggregateInput = {
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   projectId?: Prisma.SortOrder
   workspaceId?: Prisma.SortOrder
@@ -409,6 +430,7 @@ export type ObjectiveMinOrderByAggregateInput = {
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   projectId?: Prisma.SortOrder
   workspaceId?: Prisma.SortOrder
@@ -524,6 +546,7 @@ export type ObjectiveCreateWithoutWorkspaceInput = {
   startDate?: Date | string | null
   endDate?: Date | string | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   updatedAt?: Date | string
   project?: Prisma.ProjectCreateNestedOneWithoutObjectivesInput
   keyResults?: Prisma.KeyResultCreateNestedManyWithoutObjectiveInput
@@ -536,6 +559,7 @@ export type ObjectiveUncheckedCreateWithoutWorkspaceInput = {
   startDate?: Date | string | null
   endDate?: Date | string | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   updatedAt?: Date | string
   projectId?: string | null
   keyResults?: Prisma.KeyResultUncheckedCreateNestedManyWithoutObjectiveInput
@@ -577,6 +601,7 @@ export type ObjectiveScalarWhereInput = {
   startDate?: Prisma.DateTimeNullableFilter<"Objective"> | Date | string | null
   endDate?: Prisma.DateTimeNullableFilter<"Objective"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Objective"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"Objective"> | Date | string | null
   updatedAt?: Prisma.DateTimeFilter<"Objective"> | Date | string
   projectId?: Prisma.StringNullableFilter<"Objective"> | string | null
   workspaceId?: Prisma.StringFilter<"Objective"> | string
@@ -589,6 +614,7 @@ export type ObjectiveCreateWithoutProjectInput = {
   startDate?: Date | string | null
   endDate?: Date | string | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   updatedAt?: Date | string
   workspace: Prisma.WorkspaceCreateNestedOneWithoutObjectivesInput
   keyResults?: Prisma.KeyResultCreateNestedManyWithoutObjectiveInput
@@ -601,6 +627,7 @@ export type ObjectiveUncheckedCreateWithoutProjectInput = {
   startDate?: Date | string | null
   endDate?: Date | string | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   updatedAt?: Date | string
   workspaceId: string
   keyResults?: Prisma.KeyResultUncheckedCreateNestedManyWithoutObjectiveInput
@@ -639,6 +666,7 @@ export type ObjectiveCreateWithoutKeyResultsInput = {
   startDate?: Date | string | null
   endDate?: Date | string | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   updatedAt?: Date | string
   project?: Prisma.ProjectCreateNestedOneWithoutObjectivesInput
   workspace: Prisma.WorkspaceCreateNestedOneWithoutObjectivesInput
@@ -651,6 +679,7 @@ export type ObjectiveUncheckedCreateWithoutKeyResultsInput = {
   startDate?: Date | string | null
   endDate?: Date | string | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   updatedAt?: Date | string
   projectId?: string | null
   workspaceId: string
@@ -679,6 +708,7 @@ export type ObjectiveUpdateWithoutKeyResultsInput = {
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   project?: Prisma.ProjectUpdateOneWithoutObjectivesNestedInput
   workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutObjectivesNestedInput
@@ -691,6 +721,7 @@ export type ObjectiveUncheckedUpdateWithoutKeyResultsInput = {
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -703,6 +734,7 @@ export type ObjectiveCreateManyWorkspaceInput = {
   startDate?: Date | string | null
   endDate?: Date | string | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   updatedAt?: Date | string
   projectId?: string | null
 }
@@ -714,6 +746,7 @@ export type ObjectiveUpdateWithoutWorkspaceInput = {
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   project?: Prisma.ProjectUpdateOneWithoutObjectivesNestedInput
   keyResults?: Prisma.KeyResultUpdateManyWithoutObjectiveNestedInput
@@ -726,6 +759,7 @@ export type ObjectiveUncheckedUpdateWithoutWorkspaceInput = {
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   keyResults?: Prisma.KeyResultUncheckedUpdateManyWithoutObjectiveNestedInput
@@ -738,6 +772,7 @@ export type ObjectiveUncheckedUpdateManyWithoutWorkspaceInput = {
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
@@ -749,6 +784,7 @@ export type ObjectiveCreateManyProjectInput = {
   startDate?: Date | string | null
   endDate?: Date | string | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   updatedAt?: Date | string
   workspaceId: string
 }
@@ -760,6 +796,7 @@ export type ObjectiveUpdateWithoutProjectInput = {
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutObjectivesNestedInput
   keyResults?: Prisma.KeyResultUpdateManyWithoutObjectiveNestedInput
@@ -772,6 +809,7 @@ export type ObjectiveUncheckedUpdateWithoutProjectInput = {
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
   keyResults?: Prisma.KeyResultUncheckedUpdateManyWithoutObjectiveNestedInput
@@ -784,6 +822,7 @@ export type ObjectiveUncheckedUpdateManyWithoutProjectInput = {
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
 }
@@ -826,6 +865,7 @@ export type ObjectiveSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   startDate?: boolean
   endDate?: boolean
   createdAt?: boolean
+  deletedAt?: boolean
   updatedAt?: boolean
   projectId?: boolean
   workspaceId?: boolean
@@ -842,6 +882,7 @@ export type ObjectiveSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   startDate?: boolean
   endDate?: boolean
   createdAt?: boolean
+  deletedAt?: boolean
   updatedAt?: boolean
   projectId?: boolean
   workspaceId?: boolean
@@ -856,6 +897,7 @@ export type ObjectiveSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   startDate?: boolean
   endDate?: boolean
   createdAt?: boolean
+  deletedAt?: boolean
   updatedAt?: boolean
   projectId?: boolean
   workspaceId?: boolean
@@ -870,12 +912,13 @@ export type ObjectiveSelectScalar = {
   startDate?: boolean
   endDate?: boolean
   createdAt?: boolean
+  deletedAt?: boolean
   updatedAt?: boolean
   projectId?: boolean
   workspaceId?: boolean
 }
 
-export type ObjectiveOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "startDate" | "endDate" | "createdAt" | "updatedAt" | "projectId" | "workspaceId", ExtArgs["result"]["objective"]>
+export type ObjectiveOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "startDate" | "endDate" | "createdAt" | "deletedAt" | "updatedAt" | "projectId" | "workspaceId", ExtArgs["result"]["objective"]>
 export type ObjectiveInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   project?: boolean | Prisma.Objective$projectArgs<ExtArgs>
   workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
@@ -905,6 +948,7 @@ export type $ObjectivePayload<ExtArgs extends runtime.Types.Extensions.InternalA
     startDate: Date | null
     endDate: Date | null
     createdAt: Date
+    deletedAt: Date | null
     updatedAt: Date
     projectId: string | null
     workspaceId: string
@@ -1340,6 +1384,7 @@ export interface ObjectiveFieldRefs {
   readonly startDate: Prisma.FieldRef<"Objective", 'DateTime'>
   readonly endDate: Prisma.FieldRef<"Objective", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Objective", 'DateTime'>
+  readonly deletedAt: Prisma.FieldRef<"Objective", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Objective", 'DateTime'>
   readonly projectId: Prisma.FieldRef<"Objective", 'String'>
   readonly workspaceId: Prisma.FieldRef<"Objective", 'String'>

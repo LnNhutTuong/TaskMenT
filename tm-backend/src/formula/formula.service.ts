@@ -6,14 +6,20 @@ import { AuthUser } from '../auth/types/jwt-payload.type.js';
 import { WorkspaceService } from '../workspace/workspace.service.js';
 import {extractVariables, validateExpressionSyntax} from "./utils/formula.utils.js"
 import { TaskService } from '../task/task.service.js';
+import { PermissionService } from '../permission/permission.service.js';
+import { PERMISSION_KEYS } from '../permission/constants/pemission.constants.js';
 
 @Injectable()
 export class FormulaService {
-    constructor(private readonly prisma: PrismaService, private readonly workspaceService: WorkspaceService, private readonly taskService: TaskService){}
+    constructor(private readonly prisma: PrismaService, 
+        private readonly workspaceService: WorkspaceService, 
+        private readonly taskService: TaskService,
+        private readonly permissionService: PermissionService
+    ){}
 
     async create(dto: CreateFormulaDto, user: AuthUser){
         await this.workspaceService.assertWorkspaceMember(dto.workspaceId, user.id)
-
+        
         //lay cong thuc ra -> lay nhung key metric -> bien cac key do thanh mang
         const variables =  extractVariables(dto.expression);
 
@@ -83,7 +89,7 @@ export class FormulaService {
         }
 
         await this.workspaceService.assertWorkspaceMember(formula.workspaceId, user.id);
-        
+        await this.permissionService.assertPermission(formula.workspaceId, user.id, PERMISSION_KEYS.FORMULA_UPDATE)
         if(dto.expression){
             //lay cong thuc ra -> lay nhung key metric -> bien cac key do thanh mang
             const variables =  extractVariables(dto.expression);
@@ -160,6 +166,7 @@ export class FormulaService {
         }
 
         await this.workspaceService.assertWorkspaceMember(formula.workspaceId, user.id);
+        await this.permissionService.assertPermission(formula.workspaceId, user.id, PERMISSION_KEYS.FORMULA_DELETE)
 
         const taksUsing = await this.prisma.task.findMany({
             where:{
@@ -188,6 +195,8 @@ export class FormulaService {
         if(!formula){
             throw new NotFoundException('Formula not found');
         }
+
+        await this.permissionService.assertPermission(formula.workspaceId, user.id, PERMISSION_KEYS.FORMULA_ASSIGN_TASK)
 
         const task = await this.taskService.findOne(taskId, user)
 

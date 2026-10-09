@@ -9,16 +9,23 @@ import { UpdateWorkflowDto } from './dto/update-workflow.dto.js';
 import { AuthUser } from '../auth/types/jwt-payload.type.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { ProjectService } from '../project/project.service.js';
+import { PermissionService } from '../permission/permission.service.js';
+import { PERMISSION_KEYS } from '../permission/constants/pemission.constants.js';
 
 @Injectable()
 export class WorkflowService {
 
-  constructor(private readonly prisma: PrismaService, private readonly projectService: ProjectService){}
+  constructor(
+    private readonly prisma: PrismaService, 
+    private readonly projectService: ProjectService,
+    private readonly permissionService: PermissionService
+  ){}
 
   async create(dto: CreateWorkflowDto, user: AuthUser) {
-    const project = await this.prisma.project.findUnique({
+    const project = await this.prisma.project.findFirst({
       where:{
-        id: dto.projectId
+        id: dto.projectId,
+        deletedAt: null
       },
       include:{
         workflow:{
@@ -35,7 +42,7 @@ export class WorkflowService {
 
     //check project member
     await this.projectService.assertProjectMember(project.id, user.id)
-
+    await this.permissionService.assertSomePermission(project.workspaceId, user.id, [PERMISSION_KEYS.WORKFLOW_CREATE, PERMISSION_KEYS.PROJECT_UPDATE] )
     //check workflow trong project do
     if(project.workflow?.id){
       throw new BadRequestException('This project already has a workflow')
@@ -144,10 +151,10 @@ export class WorkflowService {
   }
 
   async findByProject(projectId: string, user: AuthUser){
-
-    const project = await this.prisma.project.findUnique({
+    const project = await this.prisma.project.findFirst({
       where:{
-        id: projectId
+        id: projectId,
+        deletedAt: null
       }
     })
 

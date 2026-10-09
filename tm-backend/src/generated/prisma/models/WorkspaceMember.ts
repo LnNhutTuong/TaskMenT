@@ -29,6 +29,7 @@ export type WorkspaceMemberMinAggregateOutputType = {
   workspaceId: string | null
   roleId: string | null
   joinedAt: Date | null
+  deletedAt: Date | null
 }
 
 export type WorkspaceMemberMaxAggregateOutputType = {
@@ -36,6 +37,7 @@ export type WorkspaceMemberMaxAggregateOutputType = {
   workspaceId: string | null
   roleId: string | null
   joinedAt: Date | null
+  deletedAt: Date | null
 }
 
 export type WorkspaceMemberCountAggregateOutputType = {
@@ -43,6 +45,7 @@ export type WorkspaceMemberCountAggregateOutputType = {
   workspaceId: number
   roleId: number
   joinedAt: number
+  deletedAt: number
   _all: number
 }
 
@@ -52,6 +55,7 @@ export type WorkspaceMemberMinAggregateInputType = {
   workspaceId?: true
   roleId?: true
   joinedAt?: true
+  deletedAt?: true
 }
 
 export type WorkspaceMemberMaxAggregateInputType = {
@@ -59,6 +63,7 @@ export type WorkspaceMemberMaxAggregateInputType = {
   workspaceId?: true
   roleId?: true
   joinedAt?: true
+  deletedAt?: true
 }
 
 export type WorkspaceMemberCountAggregateInputType = {
@@ -66,6 +71,7 @@ export type WorkspaceMemberCountAggregateInputType = {
   workspaceId?: true
   roleId?: true
   joinedAt?: true
+  deletedAt?: true
   _all?: true
 }
 
@@ -146,6 +152,7 @@ export type WorkspaceMemberGroupByOutputType = {
   workspaceId: string
   roleId: string
   joinedAt: Date
+  deletedAt: Date | null
   _count: WorkspaceMemberCountAggregateOutputType | null
   _min: WorkspaceMemberMinAggregateOutputType | null
   _max: WorkspaceMemberMaxAggregateOutputType | null
@@ -174,6 +181,7 @@ export type WorkspaceMemberWhereInput = {
   workspaceId?: Prisma.StringFilter<"WorkspaceMember"> | string
   roleId?: Prisma.StringFilter<"WorkspaceMember"> | string
   joinedAt?: Prisma.DateTimeFilter<"WorkspaceMember"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"WorkspaceMember"> | Date | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   workspace?: Prisma.XOR<Prisma.WorkspaceScalarRelationFilter, Prisma.WorkspaceWhereInput>
   role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.RoleWhereInput>
@@ -184,6 +192,7 @@ export type WorkspaceMemberOrderByWithRelationInput = {
   workspaceId?: Prisma.SortOrder
   roleId?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   workspace?: Prisma.WorkspaceOrderByWithRelationInput
   role?: Prisma.RoleOrderByWithRelationInput
@@ -198,6 +207,7 @@ export type WorkspaceMemberWhereUniqueInput = Prisma.AtLeast<{
   workspaceId?: Prisma.StringFilter<"WorkspaceMember"> | string
   roleId?: Prisma.StringFilter<"WorkspaceMember"> | string
   joinedAt?: Prisma.DateTimeFilter<"WorkspaceMember"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"WorkspaceMember"> | Date | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   workspace?: Prisma.XOR<Prisma.WorkspaceScalarRelationFilter, Prisma.WorkspaceWhereInput>
   role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.RoleWhereInput>
@@ -208,6 +218,7 @@ export type WorkspaceMemberOrderByWithAggregationInput = {
   workspaceId?: Prisma.SortOrder
   roleId?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.WorkspaceMemberCountOrderByAggregateInput
   _max?: Prisma.WorkspaceMemberMaxOrderByAggregateInput
   _min?: Prisma.WorkspaceMemberMinOrderByAggregateInput
@@ -221,10 +232,12 @@ export type WorkspaceMemberScalarWhereWithAggregatesInput = {
   workspaceId?: Prisma.StringWithAggregatesFilter<"WorkspaceMember"> | string
   roleId?: Prisma.StringWithAggregatesFilter<"WorkspaceMember"> | string
   joinedAt?: Prisma.DateTimeWithAggregatesFilter<"WorkspaceMember"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"WorkspaceMember"> | Date | string | null
 }
 
 export type WorkspaceMemberCreateInput = {
   joinedAt?: Date | string
+  deletedAt?: Date | string | null
   user: Prisma.UserCreateNestedOneWithoutWorkspaceMembershipsInput
   workspace: Prisma.WorkspaceCreateNestedOneWithoutMembersInput
   role: Prisma.RoleCreateNestedOneWithoutWorkspaceUsersInput
@@ -235,10 +248,12 @@ export type WorkspaceMemberUncheckedCreateInput = {
   workspaceId: string
   roleId: string
   joinedAt?: Date | string
+  deletedAt?: Date | string | null
 }
 
 export type WorkspaceMemberUpdateInput = {
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutWorkspaceMembershipsNestedInput
   workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutMembersNestedInput
   role?: Prisma.RoleUpdateOneRequiredWithoutWorkspaceUsersNestedInput
@@ -249,6 +264,7 @@ export type WorkspaceMemberUncheckedUpdateInput = {
   workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
   roleId?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type WorkspaceMemberCreateManyInput = {
@@ -256,10 +272,12 @@ export type WorkspaceMemberCreateManyInput = {
   workspaceId: string
   roleId: string
   joinedAt?: Date | string
+  deletedAt?: Date | string | null
 }
 
 export type WorkspaceMemberUpdateManyMutationInput = {
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type WorkspaceMemberUncheckedUpdateManyInput = {
@@ -267,6 +285,7 @@ export type WorkspaceMemberUncheckedUpdateManyInput = {
   workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
   roleId?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type WorkspaceMemberListRelationFilter = {
@@ -289,6 +308,7 @@ export type WorkspaceMemberCountOrderByAggregateInput = {
   workspaceId?: Prisma.SortOrder
   roleId?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type WorkspaceMemberMaxOrderByAggregateInput = {
@@ -296,6 +316,7 @@ export type WorkspaceMemberMaxOrderByAggregateInput = {
   workspaceId?: Prisma.SortOrder
   roleId?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type WorkspaceMemberMinOrderByAggregateInput = {
@@ -303,6 +324,7 @@ export type WorkspaceMemberMinOrderByAggregateInput = {
   workspaceId?: Prisma.SortOrder
   roleId?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type WorkspaceMemberCreateNestedManyWithoutUserInput = {
@@ -433,6 +455,7 @@ export type WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput = {
 
 export type WorkspaceMemberCreateWithoutUserInput = {
   joinedAt?: Date | string
+  deletedAt?: Date | string | null
   workspace: Prisma.WorkspaceCreateNestedOneWithoutMembersInput
   role: Prisma.RoleCreateNestedOneWithoutWorkspaceUsersInput
 }
@@ -441,6 +464,7 @@ export type WorkspaceMemberUncheckedCreateWithoutUserInput = {
   workspaceId: string
   roleId: string
   joinedAt?: Date | string
+  deletedAt?: Date | string | null
 }
 
 export type WorkspaceMemberCreateOrConnectWithoutUserInput = {
@@ -477,10 +501,12 @@ export type WorkspaceMemberScalarWhereInput = {
   workspaceId?: Prisma.StringFilter<"WorkspaceMember"> | string
   roleId?: Prisma.StringFilter<"WorkspaceMember"> | string
   joinedAt?: Prisma.DateTimeFilter<"WorkspaceMember"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"WorkspaceMember"> | Date | string | null
 }
 
 export type WorkspaceMemberCreateWithoutRoleInput = {
   joinedAt?: Date | string
+  deletedAt?: Date | string | null
   user: Prisma.UserCreateNestedOneWithoutWorkspaceMembershipsInput
   workspace: Prisma.WorkspaceCreateNestedOneWithoutMembersInput
 }
@@ -489,6 +515,7 @@ export type WorkspaceMemberUncheckedCreateWithoutRoleInput = {
   userId: string
   workspaceId: string
   joinedAt?: Date | string
+  deletedAt?: Date | string | null
 }
 
 export type WorkspaceMemberCreateOrConnectWithoutRoleInput = {
@@ -519,6 +546,7 @@ export type WorkspaceMemberUpdateManyWithWhereWithoutRoleInput = {
 
 export type WorkspaceMemberCreateWithoutWorkspaceInput = {
   joinedAt?: Date | string
+  deletedAt?: Date | string | null
   user: Prisma.UserCreateNestedOneWithoutWorkspaceMembershipsInput
   role: Prisma.RoleCreateNestedOneWithoutWorkspaceUsersInput
 }
@@ -527,6 +555,7 @@ export type WorkspaceMemberUncheckedCreateWithoutWorkspaceInput = {
   userId: string
   roleId: string
   joinedAt?: Date | string
+  deletedAt?: Date | string | null
 }
 
 export type WorkspaceMemberCreateOrConnectWithoutWorkspaceInput = {
@@ -559,10 +588,12 @@ export type WorkspaceMemberCreateManyUserInput = {
   workspaceId: string
   roleId: string
   joinedAt?: Date | string
+  deletedAt?: Date | string | null
 }
 
 export type WorkspaceMemberUpdateWithoutUserInput = {
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutMembersNestedInput
   role?: Prisma.RoleUpdateOneRequiredWithoutWorkspaceUsersNestedInput
 }
@@ -571,22 +602,26 @@ export type WorkspaceMemberUncheckedUpdateWithoutUserInput = {
   workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
   roleId?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type WorkspaceMemberUncheckedUpdateManyWithoutUserInput = {
   workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
   roleId?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type WorkspaceMemberCreateManyRoleInput = {
   userId: string
   workspaceId: string
   joinedAt?: Date | string
+  deletedAt?: Date | string | null
 }
 
 export type WorkspaceMemberUpdateWithoutRoleInput = {
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutWorkspaceMembershipsNestedInput
   workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutMembersNestedInput
 }
@@ -595,22 +630,26 @@ export type WorkspaceMemberUncheckedUpdateWithoutRoleInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type WorkspaceMemberUncheckedUpdateManyWithoutRoleInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type WorkspaceMemberCreateManyWorkspaceInput = {
   userId: string
   roleId: string
   joinedAt?: Date | string
+  deletedAt?: Date | string | null
 }
 
 export type WorkspaceMemberUpdateWithoutWorkspaceInput = {
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutWorkspaceMembershipsNestedInput
   role?: Prisma.RoleUpdateOneRequiredWithoutWorkspaceUsersNestedInput
 }
@@ -619,12 +658,14 @@ export type WorkspaceMemberUncheckedUpdateWithoutWorkspaceInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   roleId?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   roleId?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -634,6 +675,7 @@ export type WorkspaceMemberSelect<ExtArgs extends runtime.Types.Extensions.Inter
   workspaceId?: boolean
   roleId?: boolean
   joinedAt?: boolean
+  deletedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
@@ -644,6 +686,7 @@ export type WorkspaceMemberSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   workspaceId?: boolean
   roleId?: boolean
   joinedAt?: boolean
+  deletedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
@@ -654,6 +697,7 @@ export type WorkspaceMemberSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   workspaceId?: boolean
   roleId?: boolean
   joinedAt?: boolean
+  deletedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
@@ -664,9 +708,10 @@ export type WorkspaceMemberSelectScalar = {
   workspaceId?: boolean
   roleId?: boolean
   joinedAt?: boolean
+  deletedAt?: boolean
 }
 
-export type WorkspaceMemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"userId" | "workspaceId" | "roleId" | "joinedAt", ExtArgs["result"]["workspaceMember"]>
+export type WorkspaceMemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"userId" | "workspaceId" | "roleId" | "joinedAt" | "deletedAt", ExtArgs["result"]["workspaceMember"]>
 export type WorkspaceMemberInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
@@ -695,6 +740,7 @@ export type $WorkspaceMemberPayload<ExtArgs extends runtime.Types.Extensions.Int
     workspaceId: string
     roleId: string
     joinedAt: Date
+    deletedAt: Date | null
   }, ExtArgs["result"]["workspaceMember"]>
   composites: {}
 }
@@ -1125,6 +1171,7 @@ export interface WorkspaceMemberFieldRefs {
   readonly workspaceId: Prisma.FieldRef<"WorkspaceMember", 'String'>
   readonly roleId: Prisma.FieldRef<"WorkspaceMember", 'String'>
   readonly joinedAt: Prisma.FieldRef<"WorkspaceMember", 'DateTime'>
+  readonly deletedAt: Prisma.FieldRef<"WorkspaceMember", 'DateTime'>
 }
     
 

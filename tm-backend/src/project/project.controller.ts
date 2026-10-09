@@ -24,7 +24,9 @@ import { CreateProjectDto } from './dto/create-project.dto.js';
 import { UpdateProjectDto } from './dto/update-project.dto.js';
 import { ProjectService } from './project.service.js';
 import {ProjectQueryDto} from './dto/project.query.dto.js'
-@UseGuards(JwtAuthGuard)
+import { RequirePermission } from '../permission/decorations/permission.decoration.js';
+import { PERMISSION_KEYS } from '../permission/constants/pemission.constants.js';
+
 @ApiBearerAuth()
 @ApiTags('PROJECT')
 @Controller('project')
@@ -32,11 +34,11 @@ export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
   @Get()
-@ApiOperation({ summary: 'Get all projects with pagination, search, sort' })
-async findAll(
-  @CurrentUser() user: AuthUser,
-  @Query() query: ProjectQueryDto, // <-- Thêm query ở đây
-) {
+  @ApiOperation({ summary: 'Get all projects with pagination, search, sort' })
+  async findAll(
+    @CurrentUser() user: AuthUser,
+    @Query() query: ProjectQueryDto, // <-- Thêm query ở đây
+  ) {
   const result = await this.projectService.findAll(user, query);
   return {
     message: 'Get all projects successfully',
@@ -68,6 +70,7 @@ async findAll(
   @ApiBody({ type: CreateProjectDto })
   @ApiOperation({ summary: 'Create a new project' })
   @ApiResponse({ status: 201, description: 'Project created successfully' })
+  @RequirePermission(PERMISSION_KEYS.PROJECT_CREATE)
   async createProject(
     @Body() dto: CreateProjectDto,
     @CurrentUser() user: AuthUser,

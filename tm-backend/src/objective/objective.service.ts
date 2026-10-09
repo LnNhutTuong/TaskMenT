@@ -7,10 +7,12 @@ import { ObjectiveQueryDto } from './dto/objective-query.dto.js';
 import { AuthUser } from '../auth/types/jwt-payload.type.js';
 import { Prisma } from '../generated/prisma/client.js';
 import { WorkspaceService } from '../workspace/workspace.service.js';
+import { PermissionService } from '../permission/permission.service.js';
+import {PERMISSION_KEYS} from '../permission/constants/pemission.constants.js'
 
 @Injectable()
 export class ObjectiveService {
-  constructor(private readonly prisma: PrismaService, private readonly workspaceService: WorkspaceService) {}
+  constructor(private readonly prisma: PrismaService, private readonly workspaceService: WorkspaceService, private readonly permissionService:PermissionService) {}
 
   async findAll(user: AuthUser, query: ObjectiveQueryDto) {
     const limit = query.limit ?? 10;
@@ -18,6 +20,7 @@ export class ObjectiveService {
     const skip = (page - 1) * limit;
 
     const where: Prisma.ObjectiveWhereInput={
+      deletedAt: null,
       workspace:{
         members:{
           some:{
@@ -61,6 +64,7 @@ export class ObjectiveService {
     const objective = await this.prisma.objective.findUnique({
       where:{
         id,
+        deletedAt: null,
         workspace:{
           members:{
             some:{
@@ -81,6 +85,8 @@ export class ObjectiveService {
     if(!objective){
       throw new NotFoundException('Objective not found')
     }
+
+    await this.permissionService.assertPermission(objective.workspaceId, user.id, PERMISSION_KEYS.OBJECTIVE_VIEW)
 
     return objective
   }
@@ -117,6 +123,7 @@ export class ObjectiveService {
     const objective = await this.prisma.objective.findUnique({
         where:{
           id,
+          deletedAt: null,
         },
         include:{
           workspace:{
@@ -136,7 +143,7 @@ export class ObjectiveService {
     }
 
     await this.workspaceService.assertWorkspaceMember(objective.workspaceId, user.id)
-
+    await this.permissionService.assertPermission(objective.workspaceId, user.id, PERMISSION_KEYS.OBJECTIVE_UPDATE)
     return this.prisma.objective.update({
       where:{
         id,
@@ -155,6 +162,7 @@ export class ObjectiveService {
     const objective = await this.prisma.objective.findUnique({
       where:{
         id,
+        deletedAt: null,
       },
       include:{
         workspace:{
@@ -173,11 +181,15 @@ export class ObjectiveService {
       throw new NotFoundException('Objective not found')
     }
 
-   await this.workspaceService.assertWorkspaceMember(objective.workspaceId, user.id)
+    await this.workspaceService.assertWorkspaceMember(objective.workspaceId, user.id)
+    await this.permissionService.assertPermission(objective.workspaceId ,user.id, PERMISSION_KEYS.OBJECTIVE_DELETE)
 
-    return this.prisma.objective.delete({
+    return this.prisma.objective.update({
       where:{
         id,
+      },
+      data:{
+        deletedAt: new Date(),
       }
     })
   }

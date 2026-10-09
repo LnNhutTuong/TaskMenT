@@ -6,6 +6,8 @@ import { PrismaService } from '../prisma/prisma.service.js';
 import { TaskOutputService } from '../task-output/task-output.service.js';
 import { ProjectService } from '../project/project.service.js';
 import { TaskService } from '../task/task.service.js';
+import { PermissionService } from '../permission/permission.service.js';
+import { PERMISSION_KEYS } from '../permission/constants/pemission.constants.js';
 
 @Injectable()
 export class EvidenceService {
@@ -14,7 +16,8 @@ export class EvidenceService {
         private readonly prisma: PrismaService,
         private readonly taskOutputService: TaskOutputService,
         private readonly projectService: ProjectService,
-        private readonly taskService: TaskService
+        private readonly taskService: TaskService,
+        private readonly permissionService: PermissionService
     ){}
 
     async submit(dto: SubmitEvidenceDto, user: AuthUser){
@@ -26,6 +29,9 @@ export class EvidenceService {
 
         //check project member
         await this.projectService.assertProjectMember(task.project.id, user.id);
+
+        //check permission
+        await this.permissionService.assertPermission(task.project.workspaceId, user.id, PERMISSION_KEYS.EVIDENCE_SUBMIT)
 
         const submitted = await this.prisma.evidence.create({
             data:{
@@ -79,7 +85,8 @@ export class EvidenceService {
                                 createdById: true, // thang giao task
                                 project:{
                                     select:{
-                                        createdById: true // thang owner project
+                                        createdById: true, // thang owner project,
+                                        workspaceId: true
                                     }
                                 }
                             }
@@ -99,9 +106,15 @@ export class EvidenceService {
             throw new ForbiddenException('You cannot review your own evidence');
         }
 
+        const isSuperAdmin = await this.permissionService.isSuperAdmin(user.id);
         const isReviewer = (user.id === task.project.createdById) || (user.id === task.createdById); 
+        const hasReviewPerm = await this.permissionService.hasPermission(
+            evidence.taskOutput.task.project.workspaceId,
+            user.id,
+            PERMISSION_KEYS.EVIDENCE_REVIEW,
+        );
 
-        if(!isReviewer){
+        if (!isSuperAdmin && !isReviewer && !hasReviewPerm) {
             throw new ForbiddenException('You dont have permission to review this evidence');
         }
 
@@ -203,6 +216,21 @@ export class EvidenceService {
         const evidence = await this.prisma.evidence.findUnique({
             where:{
                 id,
+            },
+            include:{
+                taskOutput:{
+                    select:{
+                        task:{
+                            select:{
+                                project:{
+                                    select:{
+                                        workspaceId: true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         })
 
@@ -214,7 +242,15 @@ export class EvidenceService {
             throw new BadRequestException('This evidence has been reviewed');
         }
 
-        if(evidence.uploadedById !== user.id){
+        const isOwner = evidence.uploadedById === user.id;
+        const isSuperAdmin = await this.permissionService.isSuperAdmin(user.id);
+        const hasDeletePerm = await this.permissionService.hasPermission(
+            evidence.taskOutput.task.project.workspaceId,
+            user.id,
+            PERMISSION_KEYS.EVIDENCE_DELETE,
+        );
+
+        if (!isOwner && !isSuperAdmin && !hasDeletePerm) {
             throw new ForbiddenException('You dont have permission to delete this evidence');
         }
 

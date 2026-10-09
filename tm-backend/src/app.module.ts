@@ -18,11 +18,20 @@ import { TaskMetricValueModule } from './task-metric-value/task-metric-value.mod
 import { FormulaModule } from './formula/formula.module.js';
 import { FormulaEngineModule } from './formula-engine/formula-engine.module.js';
 import { KpiModule } from './kpi/kpi.module.js';
+import { PermissionModule } from './permission/permission.module.js';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard.js';
+import { APP_GUARD } from '@nestjs/core';
+import { SystemGuard } from './permission/guards/system.guard.js';
+import { WorkspaceGuard } from './permission/guards/workspace.guard.js';
+import { ScheduleModule } from '@nestjs/schedule';
+import { CleanupModule } from './utils/cleanup/cleanup.module.js';
 
 @Module({
   imports: [
     PrismaModule,
     TaskModule,
+    ScheduleModule.forRoot(),
+    CleanupModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -39,10 +48,22 @@ import { KpiModule } from './kpi/kpi.module.js';
     TaskMetricValueModule,
     FormulaModule,
     FormulaEngineModule,
-    KpiModule
+    KpiModule,
+    PermissionModule
   ],
 
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: WorkspaceGuard
+    },
+    
+
+  ],
 })
 export class AppModule {}
