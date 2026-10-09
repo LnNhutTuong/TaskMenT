@@ -6,17 +6,10 @@ import { Public } from './permission/decorations/public.decorator.js';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
+  @Public()
   @Get()
   getHello(): string {
     return this.appService.getHello();
   }
 
-  @Public()
-  @Get('test')
-  getTest() {
-    return {
-      message: 'Hello from NestJS',
-      number: 123,
-    };
-  }
 }
