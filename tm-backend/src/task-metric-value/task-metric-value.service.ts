@@ -4,13 +4,16 @@ import { AuthUser } from '../auth/types/jwt-payload.type.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { TaskService } from '../task/task.service.js';
 import { MetricService } from '../metric/metric.service.js';
+import { PermissionService } from '../permission/permission.service.js';
+import { PERMISSION_KEYS } from '../permission/constants/pemission.constants.js';
 
 @Injectable()
 export class TaskMetricValueService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly taskService: TaskService,
-    private readonly metricService: MetricService
+    private readonly metricService: MetricService,
+    private readonly permissionService: PermissionService
   ) {}
 
   async upsert(dto: UpsertMetricValueDTO, user: AuthUser) {
@@ -24,7 +27,7 @@ export class TaskMetricValueService {
       throw new BadRequestException('Task and metric are not in the same Workspace')
     } 
     await this.taskService.assertTaskPermission(dto.taskId,user.id);
-    
+
     return this.prisma.taskMetricValue.upsert({
       where:{
         taskId_metricId: {

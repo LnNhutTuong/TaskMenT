@@ -6,11 +6,12 @@ import { AuthModule } from '../auth/auth.module.js';
 import { TaskOutputModule } from '../task-output/task-output.module.js';
 import { TaskModule } from '../task/task.module.js';
 import { ProjectModule } from '../project/project.module.js';
+import { PermissionModule } from '../permission/permission.module.js';
 
 @Module({
   controllers: [EvidenceController],
   providers: [EvidenceService],
-  imports: [PrismaModule, AuthModule, TaskOutputModule, TaskModule, ProjectModule],
+  imports: [PrismaModule, AuthModule, TaskOutputModule, TaskModule, ProjectModule, PermissionModule],
   exports: [EvidenceService]
 })
 export class EvidenceModule { }

@@ -5,15 +5,21 @@ import { PrismaService } from '../prisma/prisma.service.js';
 import type { AuthUser } from '../auth/types/jwt-payload.type.js';
 import { TaskService } from '../task/task.service.js';
 import { ProjectService } from '../project/project.service.js';
+import {PermissionService} from '../permission/permission.service.js'
+import { PERMISSION_KEYS } from '../permission/constants/pemission.constants.js';
 
 @Injectable()
 export class TaskOutputService {
-    constructor(private readonly prisma:PrismaService, private readonly taskService: TaskService, private readonly projectService: ProjectService){}
+    constructor(private readonly prisma:PrismaService, 
+      private readonly taskService: TaskService, 
+      private readonly projectService: ProjectService, 
+      private readonly permissionService: PermissionService){}
 
     async create(dto: CreateTaskOutputDto, user: AuthUser){
       const task = await this.taskService.findOne(dto.taskId, user);
 
       await this.projectService.assertProjectMember(task.project.id, user.id);
+      await this.permissionService.assertPermission(task.project.workspaceId, user.id, PERMISSION_KEYS.OUTPUT_CREATE)
 
       return this.prisma.taskOutput.create({
         data:{
@@ -44,7 +50,7 @@ export class TaskOutputService {
       }
 
       await this.taskService.assertTaskPermission(taskOutput.task.id, user.id)
-
+      
       return taskOutput;
     }
 
@@ -77,8 +83,13 @@ export class TaskOutputService {
         include:{
           task:{
             select:{
-              id: true
-            }
+              id: true,
+              project:{
+                select:{
+                  workspaceId: true
+                }
+              }
+            },
           }
         }
       })
@@ -88,6 +99,7 @@ export class TaskOutputService {
       }
 
       await this.taskService.assertTaskPermission(taskOutput.task.id, user.id)
+      await this.permissionService.assertPermission(taskOutput.task.project.workspaceId, user.id, PERMISSION_KEYS.OUTPUT_UPDATE)
 
       const taskOutputAfterUpdate = await this.prisma.taskOutput.update({
         where:{
@@ -117,17 +129,24 @@ export class TaskOutputService {
         include:{
           task:{
             select:{
-              id: true
-            }
+              id: true,
+              project:{
+                select:{
+                  workspaceId: true
+                }
+              }
+            },
           }
         }
       })
+
 
       if(!taskOutput){
         throw new NotFoundException('Task output not found')
       }
 
       await this.taskService.assertTaskPermission(taskOutput.task.id, user.id)
+      await this.permissionService.assertPermission(taskOutput.task.project.workspaceId, user.id, PERMISSION_KEYS.OUTPUT_DELETE)
 
       return this.prisma.taskOutput.delete({
         where:{

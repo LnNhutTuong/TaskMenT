@@ -5,16 +5,19 @@ import { UpdateKeyResultProgressDto } from './dto/update-key-result-progress.dto
 import { PrismaService } from '../prisma/prisma.service.js';
 import { AuthUser } from '../auth/types/jwt-payload.type.js';
 import { WorkspaceService } from '../workspace/workspace.service.js';
+import { PermissionService } from '../permission/permission.service.js';
+import { PERMISSION_KEYS } from '../permission/constants/pemission.constants.js';
 
 @Injectable()
 export class KeyResultService {
 
-  constructor(private readonly prisma: PrismaService, private readonly workspaceService: WorkspaceService) {}
+  constructor(private readonly prisma: PrismaService, private readonly workspaceService: WorkspaceService, private readonly permissionService: PermissionService) {}
 
   async findAllByObjective(objId: string, user: AuthUser) {
-    const objective = await this.prisma.objective.findUnique({
+    const objective = await this.prisma.objective.findFirst({
         where:{
           id: objId,
+          deletedAt: null,
         },
         include:{
           workspace:{
@@ -100,9 +103,10 @@ export class KeyResultService {
   }
 
   async create(dto: CreateKeyResultDto, user: AuthUser) {
-    const objective = await this.prisma.objective.findUnique({
+    const objective = await this.prisma.objective.findFirst({
       where:{
-        id: dto.objectiveId
+        id: dto.objectiveId,
+        deletedAt: null
       },
       include:{
         workspace:{
@@ -122,7 +126,7 @@ export class KeyResultService {
     }
 
     await this.workspaceService.assertWorkspaceMember(objective.workspaceId, user.id)
-
+    await this.permissionService.assertPermission(objective.workspaceId, user.id, PERMISSION_KEYS.KEY_RESULT_CREATE)
     return this.prisma.keyResult.create({
       data:{
         objectiveId: objective.id,
@@ -155,7 +159,7 @@ export class KeyResultService {
     }
 
     await this.workspaceService.assertWorkspaceMember(keyResult.objective.workspaceId, user.id)
-
+    await this.permissionService.assertPermission(keyResult.objective.workspaceId, user.id, PERMISSION_KEYS.KEY_RESULT_UPDATE)
 
     return this.prisma.keyResult.update({
       where:{
@@ -189,6 +193,7 @@ export class KeyResultService {
     }
 
     await this.workspaceService.assertWorkspaceMember(keyResult.objective.workspaceId, user.id)
+    await this.permissionService.assertPermission(keyResult.objective.workspaceId, user.id, PERMISSION_KEYS.KEY_RESULT_UPDATE)
 
     if(dto.currentValue !== undefined){
       if(dto.currentValue < 0  || dto.currentValue >  keyResult.targetValue) {
@@ -226,6 +231,7 @@ export class KeyResultService {
     }
 
     await this.workspaceService.assertWorkspaceMember(keyResult.objective.workspaceId, user.id)
+    await this.permissionService.assertPermission(keyResult.objective.workspaceId, user.id, PERMISSION_KEYS.KEY_RESULT_DELETE)
 
     return this.prisma.keyResult.delete({
       where:{

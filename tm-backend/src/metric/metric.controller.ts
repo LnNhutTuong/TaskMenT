@@ -5,12 +5,15 @@ import { UpdateMetricDto } from './dto/update-metric.dto.js';
 import type { AuthUser } from '../auth/types/jwt-payload.type.js';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
 import { CurrentUser } from '../auth/decorations/current-user.decorator.js';
+import { RequirePermission } from '../permission/decorations/permission.decoration.js';
+import { PERMISSION_KEYS } from '../permission/constants/pemission.constants.js';
 
 @UseGuards(JwtAuthGuard)
 @Controller('metric')
 export class MetricController {
   constructor(private readonly metricService: MetricService) {}
 
+  @RequirePermission(PERMISSION_KEYS.METRIC_CREATE)
   @Post('create')
   async create(@Body() dto: CreateMetricDto, @CurrentUser() user:AuthUser) {
     const metric = await  this.metricService.create(dto, user);
@@ -19,7 +22,7 @@ export class MetricController {
       data: metric
     }
   }
-
+  
   @Get('workspace/:workspaceId')
   async findByWorkspace(@Param('workspaceId') workspaceId: string, @CurrentUser() user:AuthUser) {
     const metrics = await this.metricService.findByWorkspace(workspaceId, user);

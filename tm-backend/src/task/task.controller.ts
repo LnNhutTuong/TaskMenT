@@ -32,6 +32,8 @@ import {
   GetAllTaskResponseDto,
   TaskResponseDto,
 } from './dto/task-respone.dto.js';
+import { RequirePermission } from '../permission/decorations/permission.decoration.js';
+
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 @ApiTags('TASK')

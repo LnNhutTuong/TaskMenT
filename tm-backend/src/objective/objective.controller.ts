@@ -6,6 +6,8 @@ import { ObjectiveQueryDto } from './dto/objective-query.dto.js';
 import type { AuthUser } from '../auth/types/jwt-payload.type.js';
 import { CurrentUser } from '../auth/decorations/current-user.decorator.js';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
+import { RequirePermission } from '../permission/decorations/permission.decoration.js';
+import { PERMISSION_KEYS } from '../permission/constants/pemission.constants.js';
 
 @UseGuards(JwtAuthGuard)
 @Controller('objective')
@@ -28,10 +30,10 @@ export class ObjectiveController {
     return{
       message: 'Get objective successfully',
       data: objective,
-    }
-    
+    }    
   }
 
+  @RequirePermission(PERMISSION_KEYS.OBJECTIVE_CREATE)
   @Post('create')
    async create(@Body() createObjectiveDto: CreateObjectiveDto, @CurrentUser() user:AuthUser) {
     const objective = await this.objectiveService.create(createObjectiveDto, user);

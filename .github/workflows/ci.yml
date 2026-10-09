@@ -21,6 +21,11 @@ jobs:
           POSTGRES_DB: task-progress
         ports:
           - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d task-progress"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     env:
       DATABASE_URL: postgresql://postgres:password@localhost:5432/task-progress
@@ -43,19 +48,25 @@ jobs:
           cache: npm
           cache-dependency-path: tm-backend/package-lock.json
 
-      - name: install dependencies
+      - name: Install dependencies
         run: npm ci
 
-      - name: Prisma generate
+      - name: Generate Prisma client
         run: npx prisma generate
 
-      - name: Prisma migrate deploy
+      - name: Lint
+        run: npm run lint
+
+      - name: Apply database migrations
         run: npx prisma migrate deploy
 
-      - name: Run test
-        run: npm test
+      - name: Run unit tests
+        run: npm run test
 
-      - name: Run build
+      - name: Run end-to-end tests
+        run: npm run test:e2e
+
+      - name: Build
         run: npm run build
 
   # frontend:

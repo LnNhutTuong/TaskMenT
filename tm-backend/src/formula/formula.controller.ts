@@ -5,12 +5,15 @@ import { UpdateFormulaDto } from './dto/update-formula.dto.js';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
 import type { AuthUser } from '../auth/types/jwt-payload.type.js';
 import { CurrentUser } from '../auth/decorations/current-user.decorator.js';
+import { RequirePermission } from '../permission/decorations/permission.decoration.js';
+import { PERMISSION_KEYS } from '../permission/constants/pemission.constants.js';
 
 @UseGuards(JwtAuthGuard)
 @Controller('formula')
 export class FormulaController {
   constructor(private readonly formulaService: FormulaService) {}
 
+  @RequirePermission(PERMISSION_KEYS.FORMULA_CREATE)
   @Post('create')
   async create(@Body() dto:CreateFormulaDto, @CurrentUser() user:AuthUser){
     const formula = await this.formulaService.create(dto, user)
