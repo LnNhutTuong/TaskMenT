@@ -12,12 +12,12 @@ export class CleanupService {
   constructor(
     private readonly prisma: PrismaService,
     // private readonly storage: StorageService, // service xóa file cloud của bạn
-  ) {}
+  ) { }
 
   // @Cron(CronExpression.EVERY_DAY_AT_3AM, { timeZone: 'Asia/Ho_Chi_Minh' })
-  @Cron(CronExpression.EVERY_10_SECONDS, { timeZone: 'Asia/Ho_Chi_Minh' })
+  @Cron(CronExpression.EVERY_10_MINUTES, { timeZone: 'Asia/Ho_Chi_Minh' })
   async cleanupDeletedData() {
-    
+
     console.log('\n===========Starting cleanup...===========');
 
     // 1. Lấy URL file cloud TRƯỚC khi xóa dòng DB (cascade sẽ xóa Evidence)
