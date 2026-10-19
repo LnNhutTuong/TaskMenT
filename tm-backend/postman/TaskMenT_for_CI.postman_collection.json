@@ -1,0 +1,2682 @@
+{
+	"info": {
+		"_postman_id": "e2d60bb9-0f3c-4584-9344-fcbbd7074dcf",
+		"name": "TaskMenT for CI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "49420529",
+		"_collection_link": "https://lnnhuttuong-4213230.postman.co/workspace/9e3ed9a7-3a13-4b17-86f3-bda574a614ff/collection/49420529-e2d60bb9-0f3c-4584-9344-fcbbd7074dcf?action=share&source=collection_link&creator=49420529"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const email = `user_${Date.now()}@test.com`;",
+									"pm.collectionVariables.set(\"email\", email);",
+									"pm.collectionVariables.set(\"password\", \"Test@12345\");"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Register thanh cong\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\",\n  \"name\": \"Test User\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BE_URL}}/auth/register",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Login thanh cong\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									"",
+									"const json = pm.response.json();",
+									"",
+									"pm.test(\"Co access token\", function () {",
+									"    pm.expect(json.data).to.have.property(\"accessToken\");",
+									"});",
+									"",
+									"pm.collectionVariables.set(\"token\", json.data.accessToken);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BE_URL}}/auth/login",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Workspace",
+			"item": [
+				{
+					"name": "create new workspace",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Tao workspace thanh cong\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"const json = pm.response.json();",
+									"pm.collectionVariables.set(\"workspaceId\", json.id);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Workspace {{$timestamp}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BE_URL}}/workspace/create",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"workspace",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Khong co token thi 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BE_URL}}/workspace",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"workspace"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get one",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1MGZhNTg0Zi0zZWVmLTQ2MjktOGZkZi1iNjg0ZWNhMGFjYWEiLCJlbWFpbCI6InRlc3RAdGFza21hbmFnZXIubG9jYWwiLCJuYW1lIjoiTMOibSBOZ3V54buFbiBOaOG7sXQgS2nhu4NtIFRo4butIiwiaWF0IjoxNzkxNTI3MjA5LCJleHAiOjE3OTE1MzA4MDl9.0ddAENR_R4HBY6tmCa9vuCwMNYFQYqpWRKfcW1zPGZc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BE_URL}}/workspace/:id",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"workspace",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "032f836c-1508-47aa-aa53-3887f050dcc0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Workspace Test Xóa mềm\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BE_URL}}/workspace/:id",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"workspace",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "00000000-0000-0000-0000-000000000001"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete workspace",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BE_URL}}/workspace/:workspaceId",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"workspace",
+								":workspaceId"
+							],
+							"variable": [
+								{
+									"key": "workspaceId",
+									"value": "360632b7-6e90-4e51-93c1-96f18448d746"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Project",
+			"item": [
+				{
+					"name": "Get all projects with pagination",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmMWRiYTZlOS1kMDhjLTQyNGYtOGNmNi00NmY3MGJmMGM0MWQiLCJlbWFpbCI6Im1hbmFnZXJAdGFza21hbmFnZXIubG9jYWwiLCJuYW1lIjoiVHJhbiBNYW5hZ2VyIiwiaWF0IjoxNzkxNTI4NjcyLCJleHAiOjE3OTE1MzIyNzJ9.IyNdj71Fqmbdd_9LUKhaRqJtNZKMy_MEubxMoJVlS94",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"admin@gmail.com\",\n    \"password\":\"19831987\"\n}"
+						},
+						"url": {
+							"raw": "localhost:2202/project",
+							"host": [
+								"localhost"
+							],
+							"port": "2202",
+							"path": [
+								"project"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "workspaceId",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "sortBy",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "sortOrder",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get one project",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiZDI5ZTQwMS00NmIzLTRkYWYtYjBiNC04NDk0Mjk4YmJhNjUiLCJlbWFpbCI6InRlc3RAdGFza21hbmFnZXIubG9jYWwiLCJuYW1lIjoiTMOibSBOZ3V54buFbiBOaOG7sXQgS2nhu4NtIFRo4butIiwiaWF0IjoxNzkxMzcxNTIwLCJleHAiOjE3OTEzNzUxMjB9.ZZnKjqf8JtXlYoCBiwWMCNOAFNrO4oCn9vjd5GVkRvk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:2202/project/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "2202",
+							"path": [
+								"project",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "4eb2726d-7cdd-439d-8986-c8fa6efad60f"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create new project",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1MGZhNTg0Zi0zZWVmLTQ2MjktOGZkZi1iNjg0ZWNhMGFjYWEiLCJlbWFpbCI6InRlc3RAdGFza21hbmFnZXIubG9jYWwiLCJuYW1lIjoiTMOibSBOZ3V54buFbiBOaOG7sXQgS2nhu4NtIFRo4butIiwiaWF0IjoxNzkxNTI5MjQxLCJleHAiOjE3OTE1MzI4NDF9.k2LDfmPQ3m6bPdTeZFolH8JGvD7RpQW1RL7fcUUeh5A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"workspaceId\": \"35bef74b-8e62-4cf7-8b7d-d438128a5cfe\",\n    \"name\": \"Test create project with permission by Lam Nguyen Nhut Kiem Thu\",\n    \"description\": \"This project created from Postman\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:2202/project/create",
+							"host": [
+								"localhost"
+							],
+							"port": "2202",
+							"path": [
+								"project",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update project",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjNGYyMWQ0My0wYjNkLTRjYjktYjJkNC0zZmRiN2RiODgxMTciLCJlbWFpbCI6InZpZXdlckB0YXNrbWFuYWdlci5sb2NhbCIsIm5hbWUiOiJQaGFtIFZpZXdlciIsImlhdCI6MTc5MTM2NTI0MiwiZXhwIjoxNzkxMzY4ODQyfQ.EYzYpHDMyGoDaOROEwP9-k5FrlBSkzYN3DOzLebVMeE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Four Test Project Again\",\n    \"description\": \"This project update from Postman\",\n    \"status\": \"TODO\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:2202/project/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "2202",
+							"path": [
+								"project",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "4eb2726d-7cdd-439d-8986-c8fa6efad60f"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Project",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmMWRiYTZlOS1kMDhjLTQyNGYtOGNmNi00NmY3MGJmMGM0MWQiLCJlbWFpbCI6Im1hbmFnZXJAdGFza21hbmFnZXIubG9jYWwiLCJuYW1lIjoiVHJhbiBNYW5hZ2VyIiwiaWF0IjoxNzkxNTI5MTI1LCJleHAiOjE3OTE1MzI3MjV9.Wm44wvr6uLa9nYGGF-pggJFFM-D1HFqjykX4xdcd9F0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "localhost:2202/project/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "2202",
+							"path": [
+								"project",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "16d2f75c-3b1a-40b9-9165-e59857dafe95"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Task",
+			"item": [
+				{
+					"name": "Get all tasks with pagination",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiZDI5ZTQwMS00NmIzLTRkYWYtYjBiNC04NDk0Mjk4YmJhNjUiLCJlbWFpbCI6InRlc3RAdGFza21hbmFnZXIubG9jYWwiLCJuYW1lIjoiTMOibSBOZ3V54buFbiBOaOG7sXQgS2nhu4NtIFRo4butIiwiaWF0IjoxNzkxNDE0ODA2LCJleHAiOjE3OTE0MTg0MDZ9.RQAsEzFFEnVug8SI1W5zSdswKD3kWzNirIRSkYE7nfk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:2202/task",
+							"host": [
+								"localhost"
+							],
+							"port": "2202",
+							"path": [
+								"task"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get one task",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1MGZhNTg0Zi0zZWVmLTQ2MjktOGZkZi1iNjg0ZWNhMGFjYWEiLCJlbWFpbCI6InRlc3RAdGFza21hbmFnZXIubG9jYWwiLCJuYW1lIjoiTMOibSBOZ3V54buFbiBOaOG7sXQgS2nhu4NtIFRo4butIiwiaWF0IjoxNzkxNTI5MjQxLCJleHAiOjE3OTE1MzI4NDF9.k2LDfmPQ3m6bPdTeZFolH8JGvD7RpQW1RL7fcUUeh5A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:2202/task/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "2202",
+							"path": [
+								"task",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "be6272b9-c41a-406b-8d4a-a12b54454ddd"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new task",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1MGZhNTg0Zi0zZWVmLTQ2MjktOGZkZi1iNjg0ZWNhMGFjYWEiLCJlbWFpbCI6InRlc3RAdGFza21hbmFnZXIubG9jYWwiLCJuYW1lIjoiTMOibSBOZ3V54buFbiBOaOG7sXQgS2nhu4NtIFRo4butIiwiaWF0IjoxNzkxNTI5MjQxLCJleHAiOjE3OTE1MzI4NDF9.k2LDfmPQ3m6bPdTeZFolH8JGvD7RpQW1RL7fcUUeh5A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"projectId\": \"3befd71b-2902-4094-ad38-62581c27565b\",\n    \"title\": \"Test create subtask with permission by Lam Nguyen Nhut Kiem thu\",\n    \"description\": \"This task created from Postman\",\n    \"priority\": \"MEDIUM\",\n    // \"status\": ,\n    // \"dueDate\": dto.dueDate,\n    \"parentId\": \"be6272b9-c41a-406b-8d4a-a12b54454ddd\",\n    // \"customFields\": {\n    //     \"moduleType\": \"ACADEMIC\",\n    //     \"fields\": {\n    //         \"standardScore\": 40\n    //     }\n    // },\n    \"assigneeIds\": [\"50fa584f-3eef-4629-8fdf-b684eca0acaa\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:2202/task/create",
+							"host": [
+								"localhost"
+							],
+							"port": "2202",
+							"path": [
+								"task",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update task",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiZDI5ZTQwMS00NmIzLTRkYWYtYjBiNC04NDk0Mjk4YmJhNjUiLCJlbWFpbCI6InRlc3RAdGFza21hbmFnZXIubG9jYWwiLCJuYW1lIjoiTMOibSBOZ3V54buFbiBOaOG7sXQgS2nhu4NtIFRo4butIiwiaWF0IjoxNzkxMzcxNzA2LCJleHAiOjE3OTEzNzUzMDZ9.rxyjof-SUxIwZgdMoZJOeT93-qE9_xvdAiz_azSgfto",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    // \"projectId\": \"07ee6858-87fd-4246-a241-f7f35d0d895d\",\n    \"title\": \"update status\",\n    \"description\": \"This task changed asdsadasdsadasdasd Postman\",\n    // \"priority\": \"MEDIUM\",\n    \"status\": \"draft\"\n    // \"dueDate\": dto.dueDate,\n    //  \"customFields\": {\n    //     \"moduleType\": \"ACADEMIC\",\n    //     \"fields\": {\n    //         \"standardScore\": 10,\n    //         \"difficulty\": \"HIGH\"\n    //     }\n    //  }\n    // \"parentId\": \"31319cfd-88ac-476f-a00e-96617c780662\"\n    // \"assigneeIds\": [\"e4275fce-b288-4e2f-bbaa-f0b892eca605\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:2202/task/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "2202",
+							"path": [
+								"task",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "92dcaa5b-ef94-4982-9cfa-efb757aa6041"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete task",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1MGZhNTg0Zi0zZWVmLTQ2MjktOGZkZi1iNjg0ZWNhMGFjYWEiLCJlbWFpbCI6InRlc3RAdGFza21hbmFnZXIubG9jYWwiLCJuYW1lIjoiTMOibSBOZ3V54buFbiBOaOG7sXQgS2nhu4NtIFRo4butIiwiaWF0IjoxNzkxNTI5MjQxLCJleHAiOjE3OTE1MzI4NDF9.k2LDfmPQ3m6bPdTeZFolH8JGvD7RpQW1RL7fcUUeh5A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:2202/task/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "2202",
+							"path": [
+								"task",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "be6272b9-c41a-406b-8d4a-a12b54454ddd"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find all key result linked to task",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDI3NWZjZS1iMjg4LTRlMmYtYmJhYS1mMGI4OTJlY2E2MDUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmxvY2FsIiwibmFtZSI6IlhpbWVuVCIsImlhdCI6MTc5MDkxNjMzNCwiZXhwIjoxNzkwOTE5OTM0fQ.vorf2L7ptWVxpSth5JPUqrAMUgZav2IsPAqtdlXR48c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:2202/task/:taskId/key-results",
+							"host": [
+								"localhost"
+							],
+							"port": "2202",
+							"path": [
+								"task",
+								":taskId",
+								"key-results"
+							],
+							"variable": [
+								{
+									"key": "taskId",
+									"value": "a089097c-8c42-4d46-9c0f-cd4a47a8256c"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Link task to key result",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiZDI5ZTQwMS00NmIzLTRkYWYtYjBiNC04NDk0Mjk4YmJhNjUiLCJlbWFpbCI6InRlc3RAdGFza21hbmFnZXIubG9jYWwiLCJuYW1lIjoiTMOibSBOZ3V54buFbiBOaOG7sXQgS2nhu4NtIFRo4butIiwiaWF0IjoxNzkxNDE0ODA2LCJleHAiOjE3OTE0MTg0MDZ9.RQAsEzFFEnVug8SI1W5zSdswKD3kWzNirIRSkYE7nfk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:2202/task/:taskId/key-results/:keyResultId/link",
+							"host": [
+								"localhost"
+							],
+							"port": "2202",
+							"path": [
+								"task",
+								":taskId",
+								"key-results",
+								":keyResultId",
+								"link"
+							],
+							"variable": [
+								{
+									"key": "taskId",
+									"value": "a153e448-d67e-4307-a91c-c7789f2dbf85"
+								},
+								{
+									"key": "keyResultId",
+									"value": "1add6018-c67f-457b-843c-d0bd5b01352f"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unlink key result",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDI3NWZjZS1iMjg4LTRlMmYtYmJhYS1mMGI4OTJlY2E2MDUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmxvY2FsIiwibmFtZSI6IlhpbWVuVCIsImlhdCI6MTc5MDg3MDk3NywiZXhwIjoxNzkwODc0NTc3fQ.3Eu-lDehF_mO0PKuKSotIXvr53DIZwFlOPvGw2Dv_4E",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:2202/task/:taskId/key-results/:keyResultId/unlink",
+							"host": [
+								"localhost"
+							],
+							"port": "2202",
+							"path": [
+								"task",
+								":taskId",
+								"key-results",
+								":keyResultId",
+								"unlink"
+							],
+							"variable": [
+								{
+									"key": "taskId",
+									"value": "2b81aaed-f8e7-436c-ad10-ff2d1f57bc85"
+								},
+								{
+									"key": "keyResultId",
+									"value": "a5f11d57-2cc4-4a2c-a332-d49efd31fa8a"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Objectives",
+			"item": [
+				{
+					"name": "Get all objectives with pagination",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDI3NWZjZS1iMjg4LTRlMmYtYmJhYS1mMGI4OTJlY2E2MDUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmxvY2FsIiwibmFtZSI6IlhpbWVuVCIsImlhdCI6MTc5MDkxMzkwMSwiZXhwIjoxNzkwOTE3NTAxfQ.ExSEw5Mi6nBMEksvwn3EbW9tyKmVEAo4NHZqhGzmlsc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"admin@gmail.local\",\n    \"password\":\"mengo123\"\n}"
+						},
+						"url": {
+							"raw": "localhost:2202/objective",
+							"host": [
+								"localhost"
+							],
+							"port": "2202",
+							"path": [
+								"objective"
+							],
+							"query": [
+								{
+									"key": "workspaceId",
+									"value": "00000000-0000-0000-0000-000000000001",
+									"disabled": true
+								},
+								{
+									"key": "projectId",
+									"value": "abc",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get one objective",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDI3NWZjZS1iMjg4LTRlMmYtYmJhYS1mMGI4OTJlY2E2MDUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmxvY2FsIiwibmFtZSI6IlhpbWVuVCIsImlhdCI6MTc5MDgzODY5MCwiZXhwIjoxNzkwODQyMjkwfQ.s2qciZI8kKxjUPRqTYOymxtTmf9Rc6ec1stwBIbUc0E",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"admin@gmail.local\",\n    \"password\":\"mengo123\"\n}"
+						},
+						"url": {
+							"raw": "localhost:2202/objective/abc",
+							"host": [
+								"localhost"
+							],
+							"port": "2202",
+							"path": [
+								"objective",
+								"abc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new objective",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiZDI5ZTQwMS00NmIzLTRkYWYtYjBiNC04NDk0Mjk4YmJhNjUiLCJlbWFpbCI6InRlc3RAdGFza21hbmFnZXIubG9jYWwiLCJuYW1lIjoiTMOibSBOZ3V54buFbiBOaOG7sXQgS2nhu4NtIFRo4butIiwiaWF0IjoxNzkxNDE0NTc3LCJleHAiOjE3OTE0MTgxNzd9.yvQ6st2OVy7jg0zcbyfewk_tK9z-KoDFnzQBcmtWFV4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\":\"First Objective no test permission\",\n    \"workspaceId\": \"f6aa13b0-386d-4046-a7a9-a876792b6be0\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:2202/objective/create",
+							"host": [
+								"localhost"
+							],
+							"port": "2202",
+							"path": [
+								"objective",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update objective",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDI3NWZjZS1iMjg4LTRlMmYtYmJhYS1mMGI4OTJlY2E2MDUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmxvY2FsIiwibmFtZSI6IlhpbWVuVCIsImlhdCI6MTc5MDkxNTk3NSwiZXhwIjoxNzkwOTE5NTc1fQ.YyZ_xcFXsJuKAKFj75KOk-NPAVcPKgPMQeiHASPuWQ8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Seccond Objective\",\n    \"description\": \"This objective has updated from Postman\"\n    \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:2202/objective/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "2202",
+							"path": [
+								"objective",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "8215a373-a4bc-40ec-bdd6-c48d89643f4a"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDI3NWZjZS1iMjg4LTRlMmYtYmJhYS1mMGI4OTJlY2E2MDUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmxvY2FsIiwibmFtZSI6IlhpbWVuVCIsImlhdCI6MTc5MDg0Mzg3MSwiZXhwIjoxNzkwODQ3NDcxfQ.POyNOnWty3Ijc8pko89iJ-6RXko_4eU6BpHDyw9lGXU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:2202/objective/5442024f-3f06-4203-bf5b-f7d61afccda0",
+							"host": [
+								"localhost"
+							],
+							"port": "2202",
+							"path": [
+								"objective",
+								"5442024f-3f06-4203-bf5b-f7d61afccda0"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Key result",
+			"item": [
+				{
+					"name": "Get all key result by objective with pagination",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDI3NWZjZS1iMjg4LTRlMmYtYmJhYS1mMGI4OTJlY2E2MDUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmxvY2FsIiwibmFtZSI6IlhpbWVuVCIsImlhdCI6MTc5MDkxNjMzNCwiZXhwIjoxNzkwOTE5OTM0fQ.vorf2L7ptWVxpSth5JPUqrAMUgZav2IsPAqtdlXR48c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:2202/key-result/?objId=083f8b02-0167-406c-bd87-8b576c0b1087",
+							"host": [
+								"localhost"
+							],
+							"port": "2202",
+							"path": [
+								"key-result",
+								""
+							],
+							"query": [
+								{
+									"key": "objId",
+									"value": "083f8b02-0167-406c-bd87-8b576c0b1087"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get one key result",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDI3NWZjZS1iMjg4LTRlMmYtYmJhYS1mMGI4OTJlY2E2MDUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmxvY2FsIiwibmFtZSI6IlhpbWVuVCIsImlhdCI6MTc5MDkxNjMzNCwiZXhwIjoxNzkwOTE5OTM0fQ.vorf2L7ptWVxpSth5JPUqrAMUgZav2IsPAqtdlXR48c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:2202/key-result/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "2202",
+							"path": [
+								"key-result",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "a5f11d57-2cc4-4a2c-a332-d49efd31fa8a"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new key result",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiZDI5ZTQwMS00NmIzLTRkYWYtYjBiNC04NDk0Mjk4YmJhNjUiLCJlbWFpbCI6InRlc3RAdGFza21hbmFnZXIubG9jYWwiLCJuYW1lIjoiTMOibSBOZ3V54buFbiBOaOG7sXQgS2nhu4NtIFRo4butIiwiaWF0IjoxNzkxNDE0NTc3LCJleHAiOjE3OTE0MTgxNzd9.yvQ6st2OVy7jg0zcbyfewk_tK9z-KoDFnzQBcmtWFV4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Cải thiện nhân sự\",\n    \"targetValue\": 30,\n    \"unit\": \"%\",\n    \"objectiveId\": \"1ec5e247-c4d2-425a-91b5-e87c4591770c\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:2202/key-result/create",
+							"host": [
+								"localhost"
+							],
+							"port": "2202",
+							"path": [
+								"key-result",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update key result",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlMTFjZDczNi05M2YxLTQyNzAtYjE1OC05NjAxZmI4ZmI5NjciLCJlbWFpbCI6InVzZXJAZ21haWwubG9jYWwiLCJuYW1lIjoiTmh1dCBUdW9uZyIsImlhdCI6MTc5MDkxNjkyOSwiZXhwIjoxNzkwOTIwNTI5fQ.Nx5r-3NgU3K8qDkj9gf4hSC5unJnWemp9z9Ow_ozZoo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"targetValue\": 31,\n    \"unit\": \"Người\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:2202/key-result/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "2202",
+							"path": [
+								"key-result",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "a5f11d57-2cc4-4a2c-a332-d49efd31fa8a"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update key result progress",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlMTFjZDczNi05M2YxLTQyNzAtYjE1OC05NjAxZmI4ZmI5NjciLCJlbWFpbCI6InVzZXJAZ21haWwubG9jYWwiLCJuYW1lIjoiTmh1dCBUdW9uZyIsImlhdCI6MTc5MDkxNjkyOSwiZXhwIjoxNzkwOTIwNTI5fQ.Nx5r-3NgU3K8qDkj9gf4hSC5unJnWemp9z9Ow_ozZoo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"currentValue\":22\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:2202/key-result/:id/progress",
+							"host": [
+								"localhost"
+							],
+							"port": "2202",
+							"path": [
+								"key-result",
+								":id",
+								"progress"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "a5f11d57-2cc4-4a2c-a332-d49efd31fa8a"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete key result",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlMTFjZDczNi05M2YxLTQyNzAtYjE1OC05NjAxZmI4ZmI5NjciLCJlbWFpbCI6InVzZXJAZ21haWwubG9jYWwiLCJuYW1lIjoiTmh1dCBUdW9uZyIsImlhdCI6MTc5MDkxNjkyOSwiZXhwIjoxNzkwOTIwNTI5fQ.Nx5r-3NgU3K8qDkj9gf4hSC5unJnWemp9z9Ow_ozZoo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:2202/key-result/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "2202",
+							"path": [
+								"key-result",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "a5f11d57-2cc4-4a2c-a332-d49efd31fa8a"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Workflow",
+			"item": [
+				{
+					"name": "Create workflow",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDI3NWZjZS1iMjg4LTRlMmYtYmJhYS1mMGI4OTJlY2E2MDUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmxvY2FsIiwibmFtZSI6IlhpbWVuVCIsImlhdCI6MTc5MDk1NjMzOSwiZXhwIjoxNzkwOTU5OTM5fQ.bcTwX-0JX8t7lc63yPgm41B3-IPvHmY1R4NWDWMgfTg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"projectId\": \"274e1c22-7545-4efd-9ab6-f7fb6c0020ee\",\n  \"name\": \"Document Review\",\n  \"steps\": [\n    {\n      \"name\": \"draft\",\n      \"label\": \"Draft\",\n      \"isInitial\": true,\n      \"isFinal\": false,\n      \"color\": \"#6B7280\",\n      \"order\": 0\n    },\n    {\n      \"name\": \"submitted\",\n      \"label\": \"Submitted\",\n      \"isInitial\": false,\n      \"isFinal\": false,\n      \"color\": \"#3B82F6\",\n      \"order\": 1\n    },\n    {\n      \"name\": \"under_review\",\n      \"label\": \"Under Review\",\n      \"isInitial\": false,\n      \"isFinal\": false,\n      \"color\": \"#F59E0B\",\n      \"order\": 2\n    },\n    {\n      \"name\": \"needs_changes\",\n      \"label\": \"Needs Changes\",\n      \"isInitial\": false,\n      \"isFinal\": false,\n      \"color\": \"#EF4444\",\n      \"order\": 3\n    },\n    {\n      \"name\": \"approved\",\n      \"label\": \"Approved\",\n      \"isInitial\": false,\n      \"isFinal\": true,\n      \"color\": \"#22C55E\",\n      \"order\": 4\n    },\n    {\n      \"name\": \"rejected\",\n      \"label\": \"Rejected\",\n      \"isInitial\": false,\n      \"isFinal\": true,\n      \"color\": \"#DC2626\",\n      \"order\": 5\n    }\n  ],\n  \"transitions\": [\n    {\n      \"fromStepName\": \"draft\",\n      \"toStepName\": \"submitted\",\n      \"label\": \"Submit\"\n    },\n    {\n      \"fromStepName\": \"submitted\",\n      \"toStepName\": \"under_review\",\n      \"label\": \"Start Review\"\n    },\n    {\n      \"fromStepName\": \"under_review\",\n      \"toStepName\": \"approved\",\n      \"label\": \"Approve\"\n    },\n    {\n      \"fromStepName\": \"under_review\",\n      \"toStepName\": \"rejected\",\n      \"label\": \"Reject\"\n    },\n    {\n      \"fromStepName\": \"under_review\",\n      \"toStepName\": \"needs_changes\",\n      \"label\": \"Request Changes\"\n    },\n    {\n      \"fromStepName\": \"needs_changes\",\n      \"toStepName\": \"draft\",\n      \"label\": \"Edit Document\"\n    }\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BE_URL}}/workflow/create",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"workflow",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find workflow by project",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDI3NWZjZS1iMjg4LTRlMmYtYmJhYS1mMGI4OTJlY2E2MDUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmxvY2FsIiwibmFtZSI6IlhpbWVuVCIsImlhdCI6MTc5MDk1NjMzOSwiZXhwIjoxNzkwOTU5OTM5fQ.bcTwX-0JX8t7lc63yPgm41B3-IPvHmY1R4NWDWMgfTg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"projectId\": \"a6b214f5-eba3-42fc-9f71-bddbfab1d7a2\",\n  \"name\": \"Document Review\",\n  \"steps\": [\n    {\n      \"name\": \"draft\",\n      \"label\": \"Draft\",\n      \"isInitial\": true,\n      \"isFinal\": false,\n      \"color\": \"#6B7280\",\n      \"order\": 0\n    },\n    {\n      \"name\": \"submitted\",\n      \"label\": \"Submitted\",\n      \"isInitial\": false,\n      \"isFinal\": false,\n      \"color\": \"#3B82F6\",\n      \"order\": 1\n    },\n    {\n      \"name\": \"under_review\",\n      \"label\": \"Under Review\",\n      \"isInitial\": false,\n      \"isFinal\": false,\n      \"color\": \"#F59E0B\",\n      \"order\": 2\n    },\n    {\n      \"name\": \"needs_changes\",\n      \"label\": \"Needs Changes\",\n      \"isInitial\": false,\n      \"isFinal\": false,\n      \"color\": \"#EF4444\",\n      \"order\": 3\n    },\n    {\n      \"name\": \"approved\",\n      \"label\": \"Approved\",\n      \"isInitial\": false,\n      \"isFinal\": true,\n      \"color\": \"#22C55E\",\n      \"order\": 4\n    },\n    {\n      \"name\": \"rejected\",\n      \"label\": \"Rejected\",\n      \"isInitial\": false,\n      \"isFinal\": true,\n      \"color\": \"#DC2626\",\n      \"order\": 5\n    }\n  ],\n  \"transitions\": [\n    {\n      \"fromStepName\": \"draft\",\n      \"toStepName\": \"submitted\",\n      \"label\": \"Submit\"\n    },\n    {\n      \"fromStepName\": \"submitted\",\n      \"toStepName\": \"under_review\",\n      \"label\": \"Start Review\"\n    },\n    {\n      \"fromStepName\": \"under_review\",\n      \"toStepName\": \"approved\",\n      \"label\": \"Approve\"\n    },\n    {\n      \"fromStepName\": \"under_review\",\n      \"toStepName\": \"rejected\",\n      \"label\": \"Reject\"\n    },\n    {\n      \"fromStepName\": \"under_review\",\n      \"toStepName\": \"needs_changes\",\n      \"label\": \"Request Changes\"\n    },\n    {\n      \"fromStepName\": \"needs_changes\",\n      \"toStepName\": \"draft\",\n      \"label\": \"Edit Document\"\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{BE_URL}}/workflow/:projectId",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"workflow",
+								":projectId"
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "274e1c22-7545-4efd-9ab6-f7fb6c0020ee"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get valid transitions",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDI3NWZjZS1iMjg4LTRlMmYtYmJhYS1mMGI4OTJlY2E2MDUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmxvY2FsIiwibmFtZSI6IlhpbWVuVCIsImlhdCI6MTc5MDk1NDUzNSwiZXhwIjoxNzkwOTU4MTM1fQ.NElgxGseS9xsBF1TtoCwdPweLbIqtJhrs7Pebl6hJko",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BE_URL}}/workflow/:projectId/transitions?from=needs_changes",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"workflow",
+								":projectId",
+								"transitions"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "needs_changes"
+								}
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "a6b214f5-eba3-42fc-9f71-bddbfab1d7a2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Task output",
+			"item": [
+				{
+					"name": "Create new task output",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDI3NWZjZS1iMjg4LTRlMmYtYmJhYS1mMGI4OTJlY2E2MDUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmxvY2FsIiwibmFtZSI6IlhpbWVuVCIsImlhdCI6MTc5MTAwNjI0NCwiZXhwIjoxNzkxMDA5ODQ0fQ.BFvtsLHAj9erJ-Uo62wN0LhW-6mAXOcLYSyt7yjVA6E",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"taskId\":\"2b81aaed-f8e7-436c-ad10-ff2d1f57bc85\",\n    \"title\": \"Third task output\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BE_URL}}/task-output/create",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"task-output",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find by task id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDI3NWZjZS1iMjg4LTRlMmYtYmJhYS1mMGI4OTJlY2E2MDUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmxvY2FsIiwibmFtZSI6IlhpbWVuVCIsImlhdCI6MTc5MTAwNzEwMiwiZXhwIjoxNzkxMDEwNzAyfQ.xsBas1E_d7iWECHoLvgWgjiGbzhAKUMu1-DLb1iwRr8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"taskId\":\"768085ef-40d0-4521-ae36-aa92d3d86a5e\",\n    \"title\": \"Seccond task output\"\n}"
+						},
+						"url": {
+							"raw": "{{BE_URL}}/task-output/task/:taskId",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"task-output",
+								"task",
+								":taskId"
+							],
+							"variable": [
+								{
+									"key": "taskId",
+									"value": "768085ef-40d0-4521-ae36-aa92d3d86a5e"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update task output",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDI3NWZjZS1iMjg4LTRlMmYtYmJhYS1mMGI4OTJlY2E2MDUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmxvY2FsIiwibmFtZSI6IlhpbWVuVCIsImlhdCI6MTc5MTAwMDY3NiwiZXhwIjoxNzkxMDA0Mjc2fQ.M1q7PgtUw-kDZWil5-5FjBbyIDFqufXGlyXA-yIwYwI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    // \"taskId\":\"768085ef-40d0-4521-ae36-aa92d3d86a5e\",\n    // \"title\": \"Seccond task output\",\n    \"description\": \"This task output was updated in Postman\",\n    \"expectedType\": \"LINK\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BE_URL}}/task-output/:id",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"task-output",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "f0242980-902b-4bea-a9ad-028cbc5d35b5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete task output",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlMTFjZDczNi05M2YxLTQyNzAtYjE1OC05NjAxZmI4ZmI5NjciLCJlbWFpbCI6InVzZXJAZ21haWwubG9jYWwiLCJuYW1lIjoiTmh1dCBUdW9uZyIsImlhdCI6MTc5MTAwMTAzMCwiZXhwIjoxNzkxMDA0NjMwfQ.tZQRJRSUhfX1BVyl74BthNpXlz8S9MUMrlmgzUimEJU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BE_URL}}/task-output/:id",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"task-output",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "f0242980-902b-4bea-a9ad-028cbc5d35b5"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Evidence",
+			"item": [
+				{
+					"name": "Submit",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDI3NWZjZS1iMjg4LTRlMmYtYmJhYS1mMGI4OTJlY2E2MDUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmxvY2FsIiwibmFtZSI6IlhpbWVuVCIsImlhdCI6MTc5MTAwMjgwOCwiZXhwIjoxNzkxMDA2NDA4fQ.TI1nj3Y11OMVkAH8Q5qYjyHkyT1aE8v9QYZsV16I8MI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"taskOutputId\": \"63109924-aab9-47b9-ada1-2c7ae77f45be\",\n    \"fileUrl\": \"testurl.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BE_URL}}/evidence",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"evidence"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Review",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlMTFjZDczNi05M2YxLTQyNzAtYjE1OC05NjAxZmI4ZmI5NjciLCJlbWFpbCI6InVzZXJAZ21haWwubG9jYWwiLCJuYW1lIjoiTmh1dCBUdW9uZyIsImlhdCI6MTc5MTAwNjQ0OSwiZXhwIjoxNzkxMDEwMDQ5fQ.rWtpUjoaku7Kv_iaQ5CBo12NTUILuixZQSU6RwZDAuI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"REJECTED\",\n    \"reviewNote\": \"Fk bad bro\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BE_URL}}/evidence/:id/review",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"evidence",
+								":id",
+								"review"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "c7b9ab71-7d3b-41ca-8cf8-ee0758ed7abe"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find by task output",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDI3NWZjZS1iMjg4LTRlMmYtYmJhYS1mMGI4OTJlY2E2MDUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmxvY2FsIiwibmFtZSI6IlhpbWVuVCIsImlhdCI6MTc5MTAwNzY1OCwiZXhwIjoxNzkxMDExMjU4fQ.VG1ecjv_4MZ7CMKP-78fOJtQkx-nVApICmPHhJdJHDI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BE_URL}}/evidence/output/:outputId",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"evidence",
+								"output",
+								":outputId"
+							],
+							"variable": [
+								{
+									"key": "outputId",
+									"value": "f0242980-902b-4bea-a9ad-028cbc5d35b5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete evidence",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDI3NWZjZS1iMjg4LTRlMmYtYmJhYS1mMGI4OTJlY2E2MDUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmxvY2FsIiwibmFtZSI6IlhpbWVuVCIsImlhdCI6MTc5MTAwNzY1OCwiZXhwIjoxNzkxMDExMjU4fQ.VG1ecjv_4MZ7CMKP-78fOJtQkx-nVApICmPHhJdJHDI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BE_URL}}/evidence/:id",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"evidence",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "45d4ae9b-2b95-477a-8cca-6fd4c282fafd"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Metric",
+			"item": [
+				{
+					"name": "Create new metric",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDI3NWZjZS1iMjg4LTRlMmYtYmJhYS1mMGI4OTJlY2E2MDUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmxvY2FsIiwibmFtZSI6IlhpbWVuVCIsImlhdCI6MTc5MTE3NzY2NSwiZXhwIjoxNzkxMTgxMjY1fQ.Eo_BLKNfltpKpcY8J8Swb31Dyy_Wnf1dbliJ6A67__w",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"workspaceId\": \"00000000-0000-0000-0000-000000000001\",\n    \"key\": \"so_commit\",\n    \"name\": \"Số commit\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BE_URL}}/metric/create",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"metric",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "find by workspaceId",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDI3NWZjZS1iMjg4LTRlMmYtYmJhYS1mMGI4OTJlY2E2MDUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmxvY2FsIiwibmFtZSI6IlhpbWVuVCIsImlhdCI6MTc5MTE3NjYxMCwiZXhwIjoxNzkxMTgwMjEwfQ.TYCqZoQuaSGcr043kZjOwk5CdFmz17mLW_xkacVihnE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BE_URL}}/metric/workspace/:workspaceId",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"metric",
+								"workspace",
+								":workspaceId"
+							],
+							"variable": [
+								{
+									"key": "workspaceId",
+									"value": "00000000-0000-0000-0000-000000000001"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update metric",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlMTFjZDczNi05M2YxLTQyNzAtYjE1OC05NjAxZmI4ZmI5NjciLCJlbWFpbCI6InVzZXJAZ21haWwubG9jYWwiLCJuYW1lIjoiTmh1dCBUdW9uZyIsImlhdCI6MTc5MTE2MTc2MiwiZXhwIjoxNzkxMTY1MzYyfQ.OV3bN1lEvgt_pgNKmRJsq42ygCdAScwtiZteLAM0FeY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Test Update\",\n    \"description\": \"This metric has a updated in Postman\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BE_URL}}/metric/:id",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"metric",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "294e9778-708c-4585-a86c-f09d12d88739"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete metric",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDI3NWZjZS1iMjg4LTRlMmYtYmJhYS1mMGI4OTJlY2E2MDUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmxvY2FsIiwibmFtZSI6IlhpbWVuVCIsImlhdCI6MTc5MTE3NjYxMCwiZXhwIjoxNzkxMTgwMjEwfQ.TYCqZoQuaSGcr043kZjOwk5CdFmz17mLW_xkacVihnE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BE_URL}}/metric/:id",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"metric",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "294e9778-708c-4585-a86c-f09d12d88739"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Task metric value",
+			"item": [
+				{
+					"name": "Upsert",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDI3NWZjZS1iMjg4LTRlMmYtYmJhYS1mMGI4OTJlY2E2MDUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmxvY2FsIiwibmFtZSI6IlhpbWVuVCIsImlhdCI6MTc5MTI1NjY0MCwiZXhwIjoxNzkxMjYwMjQwfQ.qPBGSRcBl-XW55OxzOzYBPDyyOIWibqI-OCAev8SVRE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"taskId\": \"c37f4468-a90d-492e-bef3-87a95a01ec74\",\n    \"metricId\": \"9b3c1269-2250-4be3-82d9-ced45ffda251\",\n    \"value\": 9\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BE_URL}}/task-metric-value",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"task-metric-value"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find by task id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDI3NWZjZS1iMjg4LTRlMmYtYmJhYS1mMGI4OTJlY2E2MDUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmxvY2FsIiwibmFtZSI6IlhpbWVuVCIsImlhdCI6MTc5MTI1NjY0MCwiZXhwIjoxNzkxMjYwMjQwfQ.qPBGSRcBl-XW55OxzOzYBPDyyOIWibqI-OCAev8SVRE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BE_URL}}/task-metric-value/task/:taskid",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"task-metric-value",
+								"task",
+								":taskid"
+							],
+							"variable": [
+								{
+									"key": "taskid",
+									"value": "c37f4468-a90d-492e-bef3-87a95a01ec74"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDI3NWZjZS1iMjg4LTRlMmYtYmJhYS1mMGI4OTJlY2E2MDUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmxvY2FsIiwibmFtZSI6IlhpbWVuVCIsImlhdCI6MTc5MTE2OTU5NywiZXhwIjoxNzkxMTczMTk3fQ.bOk3R9145szHCvt5p_H1M7G0ltM2opWbjRNcNfUuoX8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BE_URL}}/task-metric-value/:taskId/:metricId",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"task-metric-value",
+								":taskId",
+								":metricId"
+							],
+							"variable": [
+								{
+									"key": "taskId",
+									"value": "4aef8ea8-4f57-477a-b5e9-737e84084489"
+								},
+								{
+									"key": "metricId",
+									"value": "294e9778-708c-4585-a86c-f09d12d88739"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Formula",
+			"item": [
+				{
+					"name": "Create new formula",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDI3NWZjZS1iMjg4LTRlMmYtYmJhYS1mMGI4OTJlY2E2MDUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmxvY2FsIiwibmFtZSI6IlhpbWVuVCIsImlhdCI6MTc5MTE4MTI3OCwiZXhwIjoxNzkxMTg0ODc4fQ.bcdXBZ4ufleJrlRTXhAZfTSk3RHbKfLqFmnxR1ASO1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"workspaceId\": \"00000000-0000-0000-0000-000000000001\",\n    \"name\": \"Cong thuc tinh Bai bao khoa hoc phien ban 2\",\n    \"expression\": \"so_bai_bao * 1.0 + so_commit * 1.0\" \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BE_URL}}/formula/create",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"formula",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find by workspace id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlMTFjZDczNi05M2YxLTQyNzAtYjE1OC05NjAxZmI4ZmI5NjciLCJlbWFpbCI6InVzZXJAZ21haWwubG9jYWwiLCJuYW1lIjoiTmh1dCBUdW9uZyIsImlhdCI6MTc5MTE3OTQxMSwiZXhwIjoxNzkxMTgzMDExfQ.blEC8kNXu1KC9bZla0Tip2DUWC1tWOP5tsO4OC3rPVo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BE_URL}}/formula/workspace/:workspaceId",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"formula",
+								"workspace",
+								":workspaceId"
+							],
+							"variable": [
+								{
+									"key": "workspaceId",
+									"value": "00000000-0000-0000-0000-000000000001"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDI3NWZjZS1iMjg4LTRlMmYtYmJhYS1mMGI4OTJlY2E2MDUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmxvY2FsIiwibmFtZSI6IlhpbWVuVCIsImlhdCI6MTc5MTE4MTI3OCwiZXhwIjoxNzkxMTg0ODc4fQ.bcdXBZ4ufleJrlRTXhAZfTSk3RHbKfLqFmnxR1ASO1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    // \"expression\": \"so_bai_bao * 0.6 + so_commit * 0.4\",\n    \"description\": \"update in Postmaaaan\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BE_URL}}/formula/:id",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"formula",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5e000316-063a-496b-8789-0f7ed6686fd8"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete formula",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDI3NWZjZS1iMjg4LTRlMmYtYmJhYS1mMGI4OTJlY2E2MDUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmxvY2FsIiwibmFtZSI6IlhpbWVuVCIsImlhdCI6MTc5MTE4MTI3OCwiZXhwIjoxNzkxMTg0ODc4fQ.bcdXBZ4ufleJrlRTXhAZfTSk3RHbKfLqFmnxR1ASO1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BE_URL}}/formula/:id",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"formula",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "f2ed933b-fc1e-4b17-a4dc-60e089b2f846"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "assign to task",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDI3NWZjZS1iMjg4LTRlMmYtYmJhYS1mMGI4OTJlY2E2MDUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmxvY2FsIiwibmFtZSI6IlhpbWVuVCIsImlhdCI6MTc5MTE4NjQyMiwiZXhwIjoxNzkxMTkwMDIyfQ.SkFUrNhJZzEFtrGstt2mmuyYmGYIhwCfnmz2rP79yEI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{BE_URL}}/formula/:formulaId/assign-task/:taskId",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"formula",
+								":formulaId",
+								"assign-task",
+								":taskId"
+							],
+							"variable": [
+								{
+									"key": "formulaId",
+									"value": "5e000316-063a-496b-8789-0f7ed6686fd8"
+								},
+								{
+									"key": "taskId",
+									"value": "c37f4468-a90d-492e-bef3-87a95a01ec74"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "KPI",
+			"item": [
+				{
+					"name": "Get KPI Snapshot by taskId",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDI3NWZjZS1iMjg4LTRlMmYtYmJhYS1mMGI4OTJlY2E2MDUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmxvY2FsIiwibmFtZSI6IlhpbWVuVCIsImlhdCI6MTc5MTI1NjY0MCwiZXhwIjoxNzkxMjYwMjQwfQ.qPBGSRcBl-XW55OxzOzYBPDyyOIWibqI-OCAev8SVRE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BE_URL}}/kpi/task/:taskId",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"kpi",
+								"task",
+								":taskId"
+							],
+							"variable": [
+								{
+									"key": "taskId",
+									"value": "c37f4468-a90d-492e-bef3-87a95a01ec74"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Calculate KPI",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDI3NWZjZS1iMjg4LTRlMmYtYmJhYS1mMGI4OTJlY2E2MDUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmxvY2FsIiwibmFtZSI6IlhpbWVuVCIsImlhdCI6MTc5MTI1NjY0MCwiZXhwIjoxNzkxMjYwMjQwfQ.qPBGSRcBl-XW55OxzOzYBPDyyOIWibqI-OCAev8SVRE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BE_URL}}/kpi/calculate/:taskId",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"kpi",
+								"calculate",
+								":taskId"
+							],
+							"variable": [
+								{
+									"key": "taskId",
+									"value": "c37f4468-a90d-492e-bef3-87a95a01ec74"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Classification Rule",
+			"item": [
+				{
+					"name": "create new rule",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4NDc3Zjk2Yi03MDI1LTQ0ZTgtYmU3YS1iOTE3YTlhNWY1MTMiLCJlbWFpbCI6Im1hbmFnZXJAdGFza21hbmFnZXIubG9jYWwiLCJuYW1lIjoiVHJhbiBNYW5hZ2VyIiwiaWF0IjoxNzkxNTU4NjE3LCJleHAiOjE3OTE1NjIyMTd9.CKVdpgNcc9Hq-u_ahsUyAyi8lVSIhynAq1g6Gqam-2s",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"workspaceId\": \"00000000-0000-0000-0000-000000000001\",\n    \"grade\": \"A+\",\n    \"label\": \"Very good\",\n    \"minScore\": 1,\n    \"maxScore\": 10\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BE_URL}}/classification-rule/create",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"classification-rule",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "find by workspace id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4NDc3Zjk2Yi03MDI1LTQ0ZTgtYmU3YS1iOTE3YTlhNWY1MTMiLCJlbWFpbCI6Im1hbmFnZXJAdGFza21hbmFnZXIubG9jYWwiLCJuYW1lIjoiVHJhbiBNYW5hZ2VyIiwiaWF0IjoxNzkxNTU4NjE3LCJleHAiOjE3OTE1NjIyMTd9.CKVdpgNcc9Hq-u_ahsUyAyi8lVSIhynAq1g6Gqam-2s",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{BE_URL}}/classification-rule/workspace/:workspaceId",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"classification-rule",
+								"workspace",
+								":workspaceId"
+							],
+							"variable": [
+								{
+									"key": "workspaceId",
+									"value": "00000000-0000-0000-0000-000000000001"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update rule",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4NDc3Zjk2Yi03MDI1LTQ0ZTgtYmU3YS1iOTE3YTlhNWY1MTMiLCJlbWFpbCI6Im1hbmFnZXJAdGFza21hbmFnZXIubG9jYWwiLCJuYW1lIjoiVHJhbiBNYW5hZ2VyIiwiaWF0IjoxNzkxNTU4NjE3LCJleHAiOjE3OTE1NjIyMTd9.CKVdpgNcc9Hq-u_ahsUyAyi8lVSIhynAq1g6Gqam-2s",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    // \"workspaceId\": \"00000000-0000-0000-0000-000000000001\",\n    \"grade\": \"A\",\n    \"label\": \"good\",\n    \"minScore\": 9,\n    \"maxScore\": 10\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BE_URL}}/classification-rule/:id",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"classification-rule",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2aab9893-991f-4b82-aa67-4c865e55a118"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete classification rule",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4NDc3Zjk2Yi03MDI1LTQ0ZTgtYmU3YS1iOTE3YTlhNWY1MTMiLCJlbWFpbCI6Im1hbmFnZXJAdGFza21hbmFnZXIubG9jYWwiLCJuYW1lIjoiVHJhbiBNYW5hZ2VyIiwiaWF0IjoxNzkxNTU4NjE3LCJleHAiOjE3OTE1NjIyMTd9.CKVdpgNcc9Hq-u_ahsUyAyi8lVSIhynAq1g6Gqam-2s",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    // \"workspaceId\": \"00000000-0000-0000-0000-000000000001\",\n    \"grade\": \"A\",\n    \"label\": \"good\",\n    \"minScore\": 9,\n    \"maxScore\": 10\n}"
+						},
+						"url": {
+							"raw": "{{BE_URL}}/classification-rule/:id",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"classification-rule",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2aab9893-991f-4b82-aa67-4c865e55a118"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Evaluation period",
+			"item": [
+				{
+					"name": "create new period",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"workspaceId\": \"00000000-0000-0000-0000-000000000001\",\n    \"name\": \"Kỳ đánh giá toàn diện - Quý 3 - 2026\",\n    \"startDate\": \"2026-02-22T00:00:00.000Z\",\n    \"endDate\": \"2030-08-26T00:00:00.000Z\",\n    \"kpiWeight\": 0.5,\n    \"criteriaWeight\": 0.5,\n    \"criteria\":[\n        {\"name\": \"criteria1\", \"maxScore\": 5}, {\"name\": \"criteria1\", \"maxScore\": 10}\n    ]\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BE_URL}}/evaluation-period/create",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"evaluation-period",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "find all by workspace id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BE_URL}}/evaluation-period/workspace/:workspaceId",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"evaluation-period",
+								"workspace",
+								":workspaceId"
+							],
+							"variable": [
+								{
+									"key": "workspaceId",
+									"value": "00000000-0000-0000-0000-000000000001"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "find one",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BE_URL}}/evaluation-period/:id",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"evaluation-period",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "296a99bb-6530-4607-b72a-7c06c6900c6c"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Kỳ đánh giá toàn diện - Quý 6666666666 - 2026\",\n    \"startDate\": \"2026-02-22T00:00:00.000Z\",\n    \"endDate\": \"2030-08-26T00:00:00.000Z\",\n    \"kpiWeight\": 0.5,\n    \"criteriaWeight\": 0.5,\n    \"criteria\":[\n        {\"name\": \"7777777\", \"maxScore\": 5}, {\"name\": \"criteria1\", \"maxScore\": 10}\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BE_URL}}/evaluation-period/:id",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"evaluation-period",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "296a99bb-6530-4607-b72a-7c06c6900c6c"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BE_URL}}/evaluation-period/:id",
+							"host": [
+								"{{BE_URL}}"
+							],
+							"path": [
+								"evaluation-period",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "3d151b5b-f4fb-49bc-9746-9ca514fb43b8"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4NDc3Zjk2Yi03MDI1LTQ0ZTgtYmU3YS1iOTE3YTlhNWY1MTMiLCJlbWFpbCI6Im1hbmFnZXJAdGFza21hbmFnZXIubG9jYWwiLCJuYW1lIjoiVHJhbiBNYW5hZ2VyIiwiaWF0IjoxNzkxNjAzNjI2LCJleHAiOjE3OTE2MDcyMjZ9.KfDZXx5Ioe20Q-YLxoDFHqAboUZeXKMohQbHXrE7D8k",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "email",
+			"value": ""
+		},
+		{
+			"key": "password",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "workspaceId",
+			"value": ""
+		}
+	]
+}

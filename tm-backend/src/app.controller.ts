@@ -12,4 +12,10 @@ export class AppController {
     return this.appService.getHello();
   }
 
+  @Public()
+  @Get("/health")
+  health() {
+    return { status: 'ok' };
+  }
+
 }

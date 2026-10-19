@@ -21,10 +21,12 @@ import { KpiModule } from './kpi/kpi.module.js';
 import { PermissionModule } from './permission/permission.module.js';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard.js';
 import { APP_GUARD } from '@nestjs/core';
-import { SystemGuard } from './permission/guards/system.guard.js';
 import { WorkspaceGuard } from './permission/guards/workspace.guard.js';
 import { ScheduleModule } from '@nestjs/schedule';
 import { CleanupModule } from './utils/cleanup/cleanup.module.js';
+import { ClassificationRuleModule } from './classification-rule/classification-rule.module.js';
+import { EvaluationPeriodModule } from './evaluation-period/evaluation-period.module.js';
+import { EvaluationModule } from './evaluation/evaluation.module.js';
 
 @Module({
   imports: [
@@ -49,7 +51,10 @@ import { CleanupModule } from './utils/cleanup/cleanup.module.js';
     FormulaModule,
     FormulaEngineModule,
     KpiModule,
-    PermissionModule
+    PermissionModule,
+    ClassificationRuleModule,
+    EvaluationPeriodModule,
+    EvaluationModule
   ],
 
   controllers: [AppController],

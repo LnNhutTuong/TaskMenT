@@ -92,4 +92,20 @@ export const PERMISSION_KEYS = {
     WORKFLOW_CREATE: 'workflow:create',
     WORKFLOW_UPDATE: 'workflow:update',
     WORKFLOW_DELETE: 'workflow:delete',
+
+    // ─── EVALUATION PERIOD ───────────────────────────
+    EVALUATION_PERIOD_VIEW: 'evaluation-period:view',
+    EVALUATION_PERIOD_CREATE: 'evaluation-period:create',
+    EVALUATION_PERIOD_UPDATE: 'evaluation-period:update',
+    EVALUATION_PERIOD_DELETE: 'evaluation-period:delete',
+
+    // ─── EVALUATION ──────────────────────────────────
+    EVALUATION_VIEW: 'evaluation:view',
+    EVALUATION_VIEW_ALL: 'evaluation:view-all',
+    EVALUATION_SUBMIT: 'evaluation:submit',
+    EVALUATION_REVIEW: 'evaluation:review',
+
+    // ─── CLASSIFICATION RULE ─────────────────────────
+    CLASSIFICATION_VIEW: 'classification:view',
+    CLASSIFICATION_MANAGE: 'classification:manage',
 };

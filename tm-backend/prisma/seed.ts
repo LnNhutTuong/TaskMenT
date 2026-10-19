@@ -75,6 +75,13 @@ const ROLE_DEFINITIONS: { name: string; permissions: string[] }[] = [
       P.METRIC_VIEW, P.FORMULA_VIEW, P.KPI_VIEW,
       //workflow
       P.WORKFLOW_VIEW,
+      //evaluation period
+      P.EVALUATION_PERIOD_VIEW,
+      //evaluation 
+      P.EVALUATION_VIEW,
+      P.EVALUATION_REVIEW, //review cai evaluation cua thang user
+      //classification
+      P.CLASSIFICATION_VIEW, //view rule classification
     ],
   },
   {
@@ -96,6 +103,12 @@ const ROLE_DEFINITIONS: { name: string; permissions: string[] }[] = [
       P.METRIC_VIEW, P.FORMULA_VIEW, P.KPI_VIEW,
       //workflow
       P.WORKFLOW_VIEW,
+      //evaluation period
+      P.EVALUATION_PERIOD_VIEW,
+      //evaluation
+      P.EVALUATION_VIEW,
+      //classification
+      P.CLASSIFICATION_VIEW, //view rule classification
     ],
   },
 ];
