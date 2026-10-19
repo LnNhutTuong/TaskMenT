@@ -99,8 +99,8 @@ jobs:
 
       - name: Run Postman collection (Newman)
         run: |
-          npx --yes newman@6 run postman/TaskMenT.postman_collection.json \
-            -e postman/ci.postman_environment.json \
+          npx --yes newman@6 run postman/TaskMenT_for_CI.postman_collection.json \
+            -e postman/For_CI.postman_environment.json \
             --env-var baseUrl=http://localhost:2202 \
             --reporters cli,junit \
             --reporter-junit-export newman-results.xml
