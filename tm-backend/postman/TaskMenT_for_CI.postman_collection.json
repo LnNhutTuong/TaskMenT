@@ -287,16 +287,6 @@
 				{
 					"name": "Delete workspace",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1MGZhNTg0Zi0zZWVmLTQ2MjktOGZkZi1iNjg0ZWNhMGFjYWEiLCJlbWFpbCI6InRlc3RAdGFza21hbmFnZXIubG9jYWwiLCJuYW1lIjoiTMOibSBOZ3V54buFbiBOaOG7sXQgS2nhu4NtIFRo4butIiwiaWF0IjoxNzkxNTI3MDE1LCJleHAiOjE3OTE1MzA2MTV9.hNOZYz0nDHu-UjxpXp9SSLufDdzWFmsK8aL4nrYA7_o",
-									"type": "string"
-								}
-							]
-						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
@@ -2635,14 +2625,6 @@
 					}
 				}
 			]
-		},
-		{
-			"name": "New Request",
-			"request": {
-				"method": "GET",
-				"header": []
-			},
-			"response": []
 		}
 	],
 	"auth": {

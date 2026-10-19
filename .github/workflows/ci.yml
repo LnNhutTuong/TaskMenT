@@ -41,7 +41,7 @@ jobs:
       JWT_SECRET: ci-only-secret-not-used-anywhere-else
       JWT_ACCESS_TOKEN_EXPIRES_IN: 15m
       FE_URL: http://localhost:5173
-      PORT: 3000
+      PORT: 2202
       NODE_ENV: test
 
     defaults:
@@ -65,7 +65,7 @@ jobs:
       - name: Generate Prisma client
         run: npx prisma generate
 
-      - name: Validate Prisma schema
+      - name: Validate Prisma schema2202
         run: npx prisma validate
 
       - name: Lint
@@ -99,8 +99,8 @@ jobs:
 
       - name: Run Postman collection (Newman)
         run: |
-          npx --yes newman@6 run postman/TaskMenT.postman_collection.json \
-            -e postman/ci.postman_environment.json \
+          npx --yes newman@6 run postman/TaskMenT_for_CI.postman_collection.json \
+            -e postman/For_CI.postman_environment.json \
             --env-var baseUrl=http://localhost:2202 \
             --reporters cli,junit \
             --reporter-junit-export newman-results.xml
