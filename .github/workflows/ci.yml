@@ -41,7 +41,7 @@ jobs:
       JWT_SECRET: ci-only-secret-not-used-anywhere-else
       JWT_ACCESS_TOKEN_EXPIRES_IN: 15m
       FE_URL: http://localhost:5173
-      PORT: 3000
+      PORT: 2202
       NODE_ENV: test
 
     defaults:
