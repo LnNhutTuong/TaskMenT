@@ -39,7 +39,16 @@ export class PermissionService {
     /** Trả về boolean, không ném lỗi. Không phải member thì cũng là false */
     async hasPermission(workspaceId: string, userId: string, permissionKey: string): Promise<boolean> {
     const member = await this.prisma.workspaceMember.findUnique({
-      where: { userId_workspaceId: { userId, workspaceId } },
+      where: { 
+        userId_workspaceId: { userId, workspaceId },
+        AND: [
+        {user:{
+          deletedAt: null
+        }},
+        {workspace:{
+          deletedAt: null
+        }}
+      ] },
       select: {
         role: {
           select: {
