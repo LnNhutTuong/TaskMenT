@@ -1,34 +1,12 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { EvaluationService } from './evaluation.service.js';
-import { CreateEvaluationDto } from './dto/create-evaluation.dto.js';
-import { UpdateEvaluationDto } from './dto/update-evaluation.dto.js';
+import { AuthUser } from '../auth/types/jwt-payload.type.js';
+import { GenearateEvaluationDto } from './dto/generate-evaluation.dto.js';
+import { ReviewEvaluationDto } from './dto/review-evaluation.dto.js';
+import { SelfEvaluationDto } from './dto/self-evaluation.dto.js';
 
 @Controller('evaluation')
 export class EvaluationController {
   constructor(private readonly evaluationService: EvaluationService) {}
 
-  @Post()
-  create(@Body() createEvaluationDto: CreateEvaluationDto) {
-    return this.evaluationService.create(createEvaluationDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.evaluationService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.evaluationService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEvaluationDto: UpdateEvaluationDto) {
-    return this.evaluationService.update(+id, updateEvaluationDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.evaluationService.remove(+id);
-  }
 }
