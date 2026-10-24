@@ -30,6 +30,7 @@ export type WorkflowMinAggregateOutputType = {
   description: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  workspaceId: string | null
   projectId: string | null
 }
 
@@ -39,6 +40,7 @@ export type WorkflowMaxAggregateOutputType = {
   description: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  workspaceId: string | null
   projectId: string | null
 }
 
@@ -48,6 +50,7 @@ export type WorkflowCountAggregateOutputType = {
   description: number
   createdAt: number
   updatedAt: number
+  workspaceId: number
   projectId: number
   _all: number
 }
@@ -59,6 +62,7 @@ export type WorkflowMinAggregateInputType = {
   description?: true
   createdAt?: true
   updatedAt?: true
+  workspaceId?: true
   projectId?: true
 }
 
@@ -68,6 +72,7 @@ export type WorkflowMaxAggregateInputType = {
   description?: true
   createdAt?: true
   updatedAt?: true
+  workspaceId?: true
   projectId?: true
 }
 
@@ -77,6 +82,7 @@ export type WorkflowCountAggregateInputType = {
   description?: true
   createdAt?: true
   updatedAt?: true
+  workspaceId?: true
   projectId?: true
   _all?: true
 }
@@ -159,7 +165,8 @@ export type WorkflowGroupByOutputType = {
   description: string | null
   createdAt: Date
   updatedAt: Date
-  projectId: string
+  workspaceId: string
+  projectId: string | null
   _count: WorkflowCountAggregateOutputType | null
   _min: WorkflowMinAggregateOutputType | null
   _max: WorkflowMaxAggregateOutputType | null
@@ -189,8 +196,10 @@ export type WorkflowWhereInput = {
   description?: Prisma.StringNullableFilter<"Workflow"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Workflow"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Workflow"> | Date | string
-  projectId?: Prisma.StringFilter<"Workflow"> | string
-  project?: Prisma.XOR<Prisma.ProjectScalarRelationFilter, Prisma.ProjectWhereInput>
+  workspaceId?: Prisma.StringFilter<"Workflow"> | string
+  projectId?: Prisma.StringNullableFilter<"Workflow"> | string | null
+  workspace?: Prisma.XOR<Prisma.WorkspaceScalarRelationFilter, Prisma.WorkspaceWhereInput>
+  project?: Prisma.XOR<Prisma.ProjectNullableScalarRelationFilter, Prisma.ProjectWhereInput> | null
   steps?: Prisma.WorkflowStepListRelationFilter
   transitions?: Prisma.WorkflowTransitionListRelationFilter
 }
@@ -201,7 +210,9 @@ export type WorkflowOrderByWithRelationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  projectId?: Prisma.SortOrder
+  workspaceId?: Prisma.SortOrder
+  projectId?: Prisma.SortOrderInput | Prisma.SortOrder
+  workspace?: Prisma.WorkspaceOrderByWithRelationInput
   project?: Prisma.ProjectOrderByWithRelationInput
   steps?: Prisma.WorkflowStepOrderByRelationAggregateInput
   transitions?: Prisma.WorkflowTransitionOrderByRelationAggregateInput
@@ -217,7 +228,9 @@ export type WorkflowWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringNullableFilter<"Workflow"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Workflow"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Workflow"> | Date | string
-  project?: Prisma.XOR<Prisma.ProjectScalarRelationFilter, Prisma.ProjectWhereInput>
+  workspaceId?: Prisma.StringFilter<"Workflow"> | string
+  workspace?: Prisma.XOR<Prisma.WorkspaceScalarRelationFilter, Prisma.WorkspaceWhereInput>
+  project?: Prisma.XOR<Prisma.ProjectNullableScalarRelationFilter, Prisma.ProjectWhereInput> | null
   steps?: Prisma.WorkflowStepListRelationFilter
   transitions?: Prisma.WorkflowTransitionListRelationFilter
 }, "id" | "projectId">
@@ -228,7 +241,8 @@ export type WorkflowOrderByWithAggregationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  projectId?: Prisma.SortOrder
+  workspaceId?: Prisma.SortOrder
+  projectId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.WorkflowCountOrderByAggregateInput
   _max?: Prisma.WorkflowMaxOrderByAggregateInput
   _min?: Prisma.WorkflowMinOrderByAggregateInput
@@ -243,7 +257,8 @@ export type WorkflowScalarWhereWithAggregatesInput = {
   description?: Prisma.StringNullableWithAggregatesFilter<"Workflow"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Workflow"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Workflow"> | Date | string
-  projectId?: Prisma.StringWithAggregatesFilter<"Workflow"> | string
+  workspaceId?: Prisma.StringWithAggregatesFilter<"Workflow"> | string
+  projectId?: Prisma.StringNullableWithAggregatesFilter<"Workflow"> | string | null
 }
 
 export type WorkflowCreateInput = {
@@ -252,7 +267,8 @@ export type WorkflowCreateInput = {
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  project: Prisma.ProjectCreateNestedOneWithoutWorkflowInput
+  workspace: Prisma.WorkspaceCreateNestedOneWithoutWorkflowsInput
+  project?: Prisma.ProjectCreateNestedOneWithoutWorkflowInput
   steps?: Prisma.WorkflowStepCreateNestedManyWithoutWorkflowInput
   transitions?: Prisma.WorkflowTransitionCreateNestedManyWithoutWorkflowInput
 }
@@ -263,7 +279,8 @@ export type WorkflowUncheckedCreateInput = {
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  projectId: string
+  workspaceId: string
+  projectId?: string | null
   steps?: Prisma.WorkflowStepUncheckedCreateNestedManyWithoutWorkflowInput
   transitions?: Prisma.WorkflowTransitionUncheckedCreateNestedManyWithoutWorkflowInput
 }
@@ -274,7 +291,8 @@ export type WorkflowUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  project?: Prisma.ProjectUpdateOneRequiredWithoutWorkflowNestedInput
+  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutWorkflowsNestedInput
+  project?: Prisma.ProjectUpdateOneWithoutWorkflowNestedInput
   steps?: Prisma.WorkflowStepUpdateManyWithoutWorkflowNestedInput
   transitions?: Prisma.WorkflowTransitionUpdateManyWithoutWorkflowNestedInput
 }
@@ -285,7 +303,8 @@ export type WorkflowUncheckedUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  projectId?: Prisma.StringFieldUpdateOperationsInput | string
+  workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   steps?: Prisma.WorkflowStepUncheckedUpdateManyWithoutWorkflowNestedInput
   transitions?: Prisma.WorkflowTransitionUncheckedUpdateManyWithoutWorkflowNestedInput
 }
@@ -296,7 +315,8 @@ export type WorkflowCreateManyInput = {
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  projectId: string
+  workspaceId: string
+  projectId?: string | null
 }
 
 export type WorkflowUpdateManyMutationInput = {
@@ -313,7 +333,18 @@ export type WorkflowUncheckedUpdateManyInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  projectId?: Prisma.StringFieldUpdateOperationsInput | string
+  workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type WorkflowListRelationFilter = {
+  every?: Prisma.WorkflowWhereInput
+  some?: Prisma.WorkflowWhereInput
+  none?: Prisma.WorkflowWhereInput
+}
+
+export type WorkflowOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type WorkflowNullableScalarRelationFilter = {
@@ -327,6 +358,7 @@ export type WorkflowCountOrderByAggregateInput = {
   description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  workspaceId?: Prisma.SortOrder
   projectId?: Prisma.SortOrder
 }
 
@@ -336,6 +368,7 @@ export type WorkflowMaxOrderByAggregateInput = {
   description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  workspaceId?: Prisma.SortOrder
   projectId?: Prisma.SortOrder
 }
 
@@ -345,12 +378,55 @@ export type WorkflowMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  workspaceId?: Prisma.SortOrder
   projectId?: Prisma.SortOrder
 }
 
 export type WorkflowScalarRelationFilter = {
   is?: Prisma.WorkflowWhereInput
   isNot?: Prisma.WorkflowWhereInput
+}
+
+export type WorkflowCreateNestedManyWithoutWorkspaceInput = {
+  create?: Prisma.XOR<Prisma.WorkflowCreateWithoutWorkspaceInput, Prisma.WorkflowUncheckedCreateWithoutWorkspaceInput> | Prisma.WorkflowCreateWithoutWorkspaceInput[] | Prisma.WorkflowUncheckedCreateWithoutWorkspaceInput[]
+  connectOrCreate?: Prisma.WorkflowCreateOrConnectWithoutWorkspaceInput | Prisma.WorkflowCreateOrConnectWithoutWorkspaceInput[]
+  createMany?: Prisma.WorkflowCreateManyWorkspaceInputEnvelope
+  connect?: Prisma.WorkflowWhereUniqueInput | Prisma.WorkflowWhereUniqueInput[]
+}
+
+export type WorkflowUncheckedCreateNestedManyWithoutWorkspaceInput = {
+  create?: Prisma.XOR<Prisma.WorkflowCreateWithoutWorkspaceInput, Prisma.WorkflowUncheckedCreateWithoutWorkspaceInput> | Prisma.WorkflowCreateWithoutWorkspaceInput[] | Prisma.WorkflowUncheckedCreateWithoutWorkspaceInput[]
+  connectOrCreate?: Prisma.WorkflowCreateOrConnectWithoutWorkspaceInput | Prisma.WorkflowCreateOrConnectWithoutWorkspaceInput[]
+  createMany?: Prisma.WorkflowCreateManyWorkspaceInputEnvelope
+  connect?: Prisma.WorkflowWhereUniqueInput | Prisma.WorkflowWhereUniqueInput[]
+}
+
+export type WorkflowUpdateManyWithoutWorkspaceNestedInput = {
+  create?: Prisma.XOR<Prisma.WorkflowCreateWithoutWorkspaceInput, Prisma.WorkflowUncheckedCreateWithoutWorkspaceInput> | Prisma.WorkflowCreateWithoutWorkspaceInput[] | Prisma.WorkflowUncheckedCreateWithoutWorkspaceInput[]
+  connectOrCreate?: Prisma.WorkflowCreateOrConnectWithoutWorkspaceInput | Prisma.WorkflowCreateOrConnectWithoutWorkspaceInput[]
+  upsert?: Prisma.WorkflowUpsertWithWhereUniqueWithoutWorkspaceInput | Prisma.WorkflowUpsertWithWhereUniqueWithoutWorkspaceInput[]
+  createMany?: Prisma.WorkflowCreateManyWorkspaceInputEnvelope
+  set?: Prisma.WorkflowWhereUniqueInput | Prisma.WorkflowWhereUniqueInput[]
+  disconnect?: Prisma.WorkflowWhereUniqueInput | Prisma.WorkflowWhereUniqueInput[]
+  delete?: Prisma.WorkflowWhereUniqueInput | Prisma.WorkflowWhereUniqueInput[]
+  connect?: Prisma.WorkflowWhereUniqueInput | Prisma.WorkflowWhereUniqueInput[]
+  update?: Prisma.WorkflowUpdateWithWhereUniqueWithoutWorkspaceInput | Prisma.WorkflowUpdateWithWhereUniqueWithoutWorkspaceInput[]
+  updateMany?: Prisma.WorkflowUpdateManyWithWhereWithoutWorkspaceInput | Prisma.WorkflowUpdateManyWithWhereWithoutWorkspaceInput[]
+  deleteMany?: Prisma.WorkflowScalarWhereInput | Prisma.WorkflowScalarWhereInput[]
+}
+
+export type WorkflowUncheckedUpdateManyWithoutWorkspaceNestedInput = {
+  create?: Prisma.XOR<Prisma.WorkflowCreateWithoutWorkspaceInput, Prisma.WorkflowUncheckedCreateWithoutWorkspaceInput> | Prisma.WorkflowCreateWithoutWorkspaceInput[] | Prisma.WorkflowUncheckedCreateWithoutWorkspaceInput[]
+  connectOrCreate?: Prisma.WorkflowCreateOrConnectWithoutWorkspaceInput | Prisma.WorkflowCreateOrConnectWithoutWorkspaceInput[]
+  upsert?: Prisma.WorkflowUpsertWithWhereUniqueWithoutWorkspaceInput | Prisma.WorkflowUpsertWithWhereUniqueWithoutWorkspaceInput[]
+  createMany?: Prisma.WorkflowCreateManyWorkspaceInputEnvelope
+  set?: Prisma.WorkflowWhereUniqueInput | Prisma.WorkflowWhereUniqueInput[]
+  disconnect?: Prisma.WorkflowWhereUniqueInput | Prisma.WorkflowWhereUniqueInput[]
+  delete?: Prisma.WorkflowWhereUniqueInput | Prisma.WorkflowWhereUniqueInput[]
+  connect?: Prisma.WorkflowWhereUniqueInput | Prisma.WorkflowWhereUniqueInput[]
+  update?: Prisma.WorkflowUpdateWithWhereUniqueWithoutWorkspaceInput | Prisma.WorkflowUpdateWithWhereUniqueWithoutWorkspaceInput[]
+  updateMany?: Prisma.WorkflowUpdateManyWithWhereWithoutWorkspaceInput | Prisma.WorkflowUpdateManyWithWhereWithoutWorkspaceInput[]
+  deleteMany?: Prisma.WorkflowScalarWhereInput | Prisma.WorkflowScalarWhereInput[]
 }
 
 export type WorkflowCreateNestedOneWithoutProjectInput = {
@@ -415,12 +491,74 @@ export type WorkflowUpdateOneWithoutTransitionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.WorkflowUpdateToOneWithWhereWithoutTransitionsInput, Prisma.WorkflowUpdateWithoutTransitionsInput>, Prisma.WorkflowUncheckedUpdateWithoutTransitionsInput>
 }
 
+export type WorkflowCreateWithoutWorkspaceInput = {
+  id?: string
+  name: string
+  description?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  project?: Prisma.ProjectCreateNestedOneWithoutWorkflowInput
+  steps?: Prisma.WorkflowStepCreateNestedManyWithoutWorkflowInput
+  transitions?: Prisma.WorkflowTransitionCreateNestedManyWithoutWorkflowInput
+}
+
+export type WorkflowUncheckedCreateWithoutWorkspaceInput = {
+  id?: string
+  name: string
+  description?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  projectId?: string | null
+  steps?: Prisma.WorkflowStepUncheckedCreateNestedManyWithoutWorkflowInput
+  transitions?: Prisma.WorkflowTransitionUncheckedCreateNestedManyWithoutWorkflowInput
+}
+
+export type WorkflowCreateOrConnectWithoutWorkspaceInput = {
+  where: Prisma.WorkflowWhereUniqueInput
+  create: Prisma.XOR<Prisma.WorkflowCreateWithoutWorkspaceInput, Prisma.WorkflowUncheckedCreateWithoutWorkspaceInput>
+}
+
+export type WorkflowCreateManyWorkspaceInputEnvelope = {
+  data: Prisma.WorkflowCreateManyWorkspaceInput | Prisma.WorkflowCreateManyWorkspaceInput[]
+  skipDuplicates?: boolean
+}
+
+export type WorkflowUpsertWithWhereUniqueWithoutWorkspaceInput = {
+  where: Prisma.WorkflowWhereUniqueInput
+  update: Prisma.XOR<Prisma.WorkflowUpdateWithoutWorkspaceInput, Prisma.WorkflowUncheckedUpdateWithoutWorkspaceInput>
+  create: Prisma.XOR<Prisma.WorkflowCreateWithoutWorkspaceInput, Prisma.WorkflowUncheckedCreateWithoutWorkspaceInput>
+}
+
+export type WorkflowUpdateWithWhereUniqueWithoutWorkspaceInput = {
+  where: Prisma.WorkflowWhereUniqueInput
+  data: Prisma.XOR<Prisma.WorkflowUpdateWithoutWorkspaceInput, Prisma.WorkflowUncheckedUpdateWithoutWorkspaceInput>
+}
+
+export type WorkflowUpdateManyWithWhereWithoutWorkspaceInput = {
+  where: Prisma.WorkflowScalarWhereInput
+  data: Prisma.XOR<Prisma.WorkflowUpdateManyMutationInput, Prisma.WorkflowUncheckedUpdateManyWithoutWorkspaceInput>
+}
+
+export type WorkflowScalarWhereInput = {
+  AND?: Prisma.WorkflowScalarWhereInput | Prisma.WorkflowScalarWhereInput[]
+  OR?: Prisma.WorkflowScalarWhereInput[]
+  NOT?: Prisma.WorkflowScalarWhereInput | Prisma.WorkflowScalarWhereInput[]
+  id?: Prisma.StringFilter<"Workflow"> | string
+  name?: Prisma.StringFilter<"Workflow"> | string
+  description?: Prisma.StringNullableFilter<"Workflow"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Workflow"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Workflow"> | Date | string
+  workspaceId?: Prisma.StringFilter<"Workflow"> | string
+  projectId?: Prisma.StringNullableFilter<"Workflow"> | string | null
+}
+
 export type WorkflowCreateWithoutProjectInput = {
   id?: string
   name: string
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  workspace: Prisma.WorkspaceCreateNestedOneWithoutWorkflowsInput
   steps?: Prisma.WorkflowStepCreateNestedManyWithoutWorkflowInput
   transitions?: Prisma.WorkflowTransitionCreateNestedManyWithoutWorkflowInput
 }
@@ -431,6 +569,7 @@ export type WorkflowUncheckedCreateWithoutProjectInput = {
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  workspaceId: string
   steps?: Prisma.WorkflowStepUncheckedCreateNestedManyWithoutWorkflowInput
   transitions?: Prisma.WorkflowTransitionUncheckedCreateNestedManyWithoutWorkflowInput
 }
@@ -457,6 +596,7 @@ export type WorkflowUpdateWithoutProjectInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutWorkflowsNestedInput
   steps?: Prisma.WorkflowStepUpdateManyWithoutWorkflowNestedInput
   transitions?: Prisma.WorkflowTransitionUpdateManyWithoutWorkflowNestedInput
 }
@@ -467,6 +607,7 @@ export type WorkflowUncheckedUpdateWithoutProjectInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
   steps?: Prisma.WorkflowStepUncheckedUpdateManyWithoutWorkflowNestedInput
   transitions?: Prisma.WorkflowTransitionUncheckedUpdateManyWithoutWorkflowNestedInput
 }
@@ -477,7 +618,8 @@ export type WorkflowCreateWithoutStepsInput = {
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  project: Prisma.ProjectCreateNestedOneWithoutWorkflowInput
+  workspace: Prisma.WorkspaceCreateNestedOneWithoutWorkflowsInput
+  project?: Prisma.ProjectCreateNestedOneWithoutWorkflowInput
   transitions?: Prisma.WorkflowTransitionCreateNestedManyWithoutWorkflowInput
 }
 
@@ -487,7 +629,8 @@ export type WorkflowUncheckedCreateWithoutStepsInput = {
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  projectId: string
+  workspaceId: string
+  projectId?: string | null
   transitions?: Prisma.WorkflowTransitionUncheckedCreateNestedManyWithoutWorkflowInput
 }
 
@@ -513,7 +656,8 @@ export type WorkflowUpdateWithoutStepsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  project?: Prisma.ProjectUpdateOneRequiredWithoutWorkflowNestedInput
+  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutWorkflowsNestedInput
+  project?: Prisma.ProjectUpdateOneWithoutWorkflowNestedInput
   transitions?: Prisma.WorkflowTransitionUpdateManyWithoutWorkflowNestedInput
 }
 
@@ -523,7 +667,8 @@ export type WorkflowUncheckedUpdateWithoutStepsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  projectId?: Prisma.StringFieldUpdateOperationsInput | string
+  workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transitions?: Prisma.WorkflowTransitionUncheckedUpdateManyWithoutWorkflowNestedInput
 }
 
@@ -533,7 +678,8 @@ export type WorkflowCreateWithoutTransitionsInput = {
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  project: Prisma.ProjectCreateNestedOneWithoutWorkflowInput
+  workspace: Prisma.WorkspaceCreateNestedOneWithoutWorkflowsInput
+  project?: Prisma.ProjectCreateNestedOneWithoutWorkflowInput
   steps?: Prisma.WorkflowStepCreateNestedManyWithoutWorkflowInput
 }
 
@@ -543,7 +689,8 @@ export type WorkflowUncheckedCreateWithoutTransitionsInput = {
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  projectId: string
+  workspaceId: string
+  projectId?: string | null
   steps?: Prisma.WorkflowStepUncheckedCreateNestedManyWithoutWorkflowInput
 }
 
@@ -569,7 +716,8 @@ export type WorkflowUpdateWithoutTransitionsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  project?: Prisma.ProjectUpdateOneRequiredWithoutWorkflowNestedInput
+  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutWorkflowsNestedInput
+  project?: Prisma.ProjectUpdateOneWithoutWorkflowNestedInput
   steps?: Prisma.WorkflowStepUpdateManyWithoutWorkflowNestedInput
 }
 
@@ -579,8 +727,49 @@ export type WorkflowUncheckedUpdateWithoutTransitionsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  projectId?: Prisma.StringFieldUpdateOperationsInput | string
+  workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   steps?: Prisma.WorkflowStepUncheckedUpdateManyWithoutWorkflowNestedInput
+}
+
+export type WorkflowCreateManyWorkspaceInput = {
+  id?: string
+  name: string
+  description?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  projectId?: string | null
+}
+
+export type WorkflowUpdateWithoutWorkspaceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  project?: Prisma.ProjectUpdateOneWithoutWorkflowNestedInput
+  steps?: Prisma.WorkflowStepUpdateManyWithoutWorkflowNestedInput
+  transitions?: Prisma.WorkflowTransitionUpdateManyWithoutWorkflowNestedInput
+}
+
+export type WorkflowUncheckedUpdateWithoutWorkspaceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  steps?: Prisma.WorkflowStepUncheckedUpdateManyWithoutWorkflowNestedInput
+  transitions?: Prisma.WorkflowTransitionUncheckedUpdateManyWithoutWorkflowNestedInput
+}
+
+export type WorkflowUncheckedUpdateManyWithoutWorkspaceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -629,8 +818,10 @@ export type WorkflowSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  workspaceId?: boolean
   projectId?: boolean
-  project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
+  workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
+  project?: boolean | Prisma.Workflow$projectArgs<ExtArgs>
   steps?: boolean | Prisma.Workflow$stepsArgs<ExtArgs>
   transitions?: boolean | Prisma.Workflow$transitionsArgs<ExtArgs>
   _count?: boolean | Prisma.WorkflowCountOutputTypeDefaultArgs<ExtArgs>
@@ -642,8 +833,10 @@ export type WorkflowSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  workspaceId?: boolean
   projectId?: boolean
-  project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
+  workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
+  project?: boolean | Prisma.Workflow$projectArgs<ExtArgs>
 }, ExtArgs["result"]["workflow"]>
 
 export type WorkflowSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -652,8 +845,10 @@ export type WorkflowSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  workspaceId?: boolean
   projectId?: boolean
-  project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
+  workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
+  project?: boolean | Prisma.Workflow$projectArgs<ExtArgs>
 }, ExtArgs["result"]["workflow"]>
 
 export type WorkflowSelectScalar = {
@@ -662,27 +857,32 @@ export type WorkflowSelectScalar = {
   description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  workspaceId?: boolean
   projectId?: boolean
 }
 
-export type WorkflowOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "createdAt" | "updatedAt" | "projectId", ExtArgs["result"]["workflow"]>
+export type WorkflowOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "createdAt" | "updatedAt" | "workspaceId" | "projectId", ExtArgs["result"]["workflow"]>
 export type WorkflowInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
+  workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
+  project?: boolean | Prisma.Workflow$projectArgs<ExtArgs>
   steps?: boolean | Prisma.Workflow$stepsArgs<ExtArgs>
   transitions?: boolean | Prisma.Workflow$transitionsArgs<ExtArgs>
   _count?: boolean | Prisma.WorkflowCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type WorkflowIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
+  workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
+  project?: boolean | Prisma.Workflow$projectArgs<ExtArgs>
 }
 export type WorkflowIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
+  workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
+  project?: boolean | Prisma.Workflow$projectArgs<ExtArgs>
 }
 
 export type $WorkflowPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Workflow"
   objects: {
-    project: Prisma.$ProjectPayload<ExtArgs>
+    workspace: Prisma.$WorkspacePayload<ExtArgs>
+    project: Prisma.$ProjectPayload<ExtArgs> | null
     steps: Prisma.$WorkflowStepPayload<ExtArgs>[]
     transitions: Prisma.$WorkflowTransitionPayload<ExtArgs>[]
   }
@@ -692,7 +892,8 @@ export type $WorkflowPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     description: string | null
     createdAt: Date
     updatedAt: Date
-    projectId: string
+    workspaceId: string
+    projectId: string | null
   }, ExtArgs["result"]["workflow"]>
   composites: {}
 }
@@ -1087,7 +1288,8 @@ readonly fields: WorkflowFieldRefs;
  */
 export interface Prisma__WorkflowClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  project<T extends Prisma.ProjectDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProjectDefaultArgs<ExtArgs>>): Prisma.Prisma__ProjectClient<runtime.Types.Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  workspace<T extends Prisma.WorkspaceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WorkspaceDefaultArgs<ExtArgs>>): Prisma.Prisma__WorkspaceClient<runtime.Types.Result.GetResult<Prisma.$WorkspacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  project<T extends Prisma.Workflow$projectArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Workflow$projectArgs<ExtArgs>>): Prisma.Prisma__ProjectClient<runtime.Types.Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   steps<T extends Prisma.Workflow$stepsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Workflow$stepsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkflowStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   transitions<T extends Prisma.Workflow$transitionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Workflow$transitionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkflowTransitionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1124,6 +1326,7 @@ export interface WorkflowFieldRefs {
   readonly description: Prisma.FieldRef<"Workflow", 'String'>
   readonly createdAt: Prisma.FieldRef<"Workflow", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Workflow", 'DateTime'>
+  readonly workspaceId: Prisma.FieldRef<"Workflow", 'String'>
   readonly projectId: Prisma.FieldRef<"Workflow", 'String'>
 }
     
@@ -1523,6 +1726,25 @@ export type WorkflowDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Limit how many Workflows to delete.
    */
   limit?: number
+}
+
+/**
+ * Workflow.project
+ */
+export type Workflow$projectArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Project
+   */
+  select?: Prisma.ProjectSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Project
+   */
+  omit?: Prisma.ProjectOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProjectInclude<ExtArgs> | null
+  where?: Prisma.ProjectWhereInput
 }
 
 /**

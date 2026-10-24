@@ -6,10 +6,12 @@ import { AuthModule } from '../auth/auth.module.js';
 import { WorkspaceModule } from '../workspace/workspace.module.js';
 import { TaskModule } from '../task/task.module.js';
 import { PermissionModule } from '../permission/permission.module.js';
+import { FormulaEngineModule } from '../formula-engine/formula-engine.module.js';
 
 @Module({
   controllers: [FormulaController],
   providers: [FormulaService],
-  imports: [PrismaModule, AuthModule, WorkspaceModule, TaskModule, PermissionModule]
+  imports: [PrismaModule, AuthModule, WorkspaceModule, TaskModule, PermissionModule, FormulaEngineModule]
 })
 export class FormulaModule { }
+

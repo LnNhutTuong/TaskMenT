@@ -23,20 +23,13 @@ export class KpiService {
         id: taskId,
         deletedAt: null
       },
-      include:{
-        project:{
-          select:{
-            workspaceId: true
-          }
-        }
-      }
     })
 
     if(!task){
       throw new NotFoundException('Task not found')
     }
 
-    await this.permissionService.assertPermission(task.project.workspaceId, user.id, PERMISSION_KEYS.KPI_VIEW)
+    await this.permissionService.assertPermission(task.workspaceId, user.id, PERMISSION_KEYS.KPI_VIEW, task.projectId ?? undefined)
 
     return this.prisma.task.findUnique({
       where:{
@@ -53,7 +46,8 @@ export class KpiService {
   async caculatorKpi (taskId: string, user: AuthUser){
     const task = await this.prisma.task.findUnique({
       where:{
-        id: taskId
+        id: taskId,
+        deletedAt: null,
       },
       include:{
         formula: true,
@@ -69,13 +63,11 @@ export class KpiService {
       throw new NotFoundException('Task not found');
     }
 
-    await this.taskService.assertTaskPermission(task.id, user.id)
-
     if(!task.formula){
       throw new BadRequestException('This task has not formula assigned')
     }
 
-    await this.permissionService.assertPermission(task.formula.workspaceId, user.id, PERMISSION_KEYS.KPI_CALCULATE )
+    await this.permissionService.assertPermission(task.workspaceId, user.id, PERMISSION_KEYS.KPI_CALCULATE, task.projectId ?? undefined)
 
     // tao variables 
     const variables: Record<string, number> = {};

@@ -216,7 +216,7 @@ export type UserWhereInput = {
   submittedEvidence?: Prisma.EvidenceListRelationFilter
   reviewedEvidence?: Prisma.EvidenceListRelationFilter
   userEvaluation?: Prisma.EvaluationListRelationFilter
-  reviewerEvaluation?: Prisma.EvaluationListRelationFilter
+  evaluationReviews?: Prisma.EvaluationReviewerListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -238,7 +238,7 @@ export type UserOrderByWithRelationInput = {
   submittedEvidence?: Prisma.EvidenceOrderByRelationAggregateInput
   reviewedEvidence?: Prisma.EvidenceOrderByRelationAggregateInput
   userEvaluation?: Prisma.EvaluationOrderByRelationAggregateInput
-  reviewerEvaluation?: Prisma.EvaluationOrderByRelationAggregateInput
+  evaluationReviews?: Prisma.EvaluationReviewerOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -263,7 +263,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   submittedEvidence?: Prisma.EvidenceListRelationFilter
   reviewedEvidence?: Prisma.EvidenceListRelationFilter
   userEvaluation?: Prisma.EvaluationListRelationFilter
-  reviewerEvaluation?: Prisma.EvaluationListRelationFilter
+  evaluationReviews?: Prisma.EvaluationReviewerListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -313,7 +313,7 @@ export type UserCreateInput = {
   submittedEvidence?: Prisma.EvidenceCreateNestedManyWithoutUploadedByInput
   reviewedEvidence?: Prisma.EvidenceCreateNestedManyWithoutReviewedByInput
   userEvaluation?: Prisma.EvaluationCreateNestedManyWithoutUserInput
-  reviewerEvaluation?: Prisma.EvaluationCreateNestedManyWithoutReviewerInput
+  evaluationReviews?: Prisma.EvaluationReviewerCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -335,7 +335,7 @@ export type UserUncheckedCreateInput = {
   submittedEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutUploadedByInput
   reviewedEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutReviewedByInput
   userEvaluation?: Prisma.EvaluationUncheckedCreateNestedManyWithoutUserInput
-  reviewerEvaluation?: Prisma.EvaluationUncheckedCreateNestedManyWithoutReviewerInput
+  evaluationReviews?: Prisma.EvaluationReviewerUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUpdateInput = {
@@ -357,7 +357,7 @@ export type UserUpdateInput = {
   submittedEvidence?: Prisma.EvidenceUpdateManyWithoutUploadedByNestedInput
   reviewedEvidence?: Prisma.EvidenceUpdateManyWithoutReviewedByNestedInput
   userEvaluation?: Prisma.EvaluationUpdateManyWithoutUserNestedInput
-  reviewerEvaluation?: Prisma.EvaluationUpdateManyWithoutReviewerNestedInput
+  evaluationReviews?: Prisma.EvaluationReviewerUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -379,7 +379,7 @@ export type UserUncheckedUpdateInput = {
   submittedEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutUploadedByNestedInput
   reviewedEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutReviewedByNestedInput
   userEvaluation?: Prisma.EvaluationUncheckedUpdateManyWithoutUserNestedInput
-  reviewerEvaluation?: Prisma.EvaluationUncheckedUpdateManyWithoutReviewerNestedInput
+  evaluationReviews?: Prisma.EvaluationReviewerUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -608,12 +608,6 @@ export type UserCreateNestedOneWithoutUserEvaluationInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserCreateNestedOneWithoutReviewerEvaluationInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutReviewerEvaluationInput, Prisma.UserUncheckedCreateWithoutReviewerEvaluationInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReviewerEvaluationInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
 export type UserUpdateOneRequiredWithoutUserEvaluationNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutUserEvaluationInput, Prisma.UserUncheckedCreateWithoutUserEvaluationInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutUserEvaluationInput
@@ -622,14 +616,18 @@ export type UserUpdateOneRequiredWithoutUserEvaluationNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutUserEvaluationInput, Prisma.UserUpdateWithoutUserEvaluationInput>, Prisma.UserUncheckedUpdateWithoutUserEvaluationInput>
 }
 
-export type UserUpdateOneWithoutReviewerEvaluationNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutReviewerEvaluationInput, Prisma.UserUncheckedCreateWithoutReviewerEvaluationInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReviewerEvaluationInput
-  upsert?: Prisma.UserUpsertWithoutReviewerEvaluationInput
-  disconnect?: Prisma.UserWhereInput | boolean
-  delete?: Prisma.UserWhereInput | boolean
+export type UserCreateNestedOneWithoutEvaluationReviewsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutEvaluationReviewsInput, Prisma.UserUncheckedCreateWithoutEvaluationReviewsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEvaluationReviewsInput
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReviewerEvaluationInput, Prisma.UserUpdateWithoutReviewerEvaluationInput>, Prisma.UserUncheckedUpdateWithoutReviewerEvaluationInput>
+}
+
+export type UserUpdateOneRequiredWithoutEvaluationReviewsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutEvaluationReviewsInput, Prisma.UserUncheckedCreateWithoutEvaluationReviewsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEvaluationReviewsInput
+  upsert?: Prisma.UserUpsertWithoutEvaluationReviewsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEvaluationReviewsInput, Prisma.UserUpdateWithoutEvaluationReviewsInput>, Prisma.UserUncheckedUpdateWithoutEvaluationReviewsInput>
 }
 
 export type UserCreateWithoutSystemRolesInput = {
@@ -650,7 +648,7 @@ export type UserCreateWithoutSystemRolesInput = {
   submittedEvidence?: Prisma.EvidenceCreateNestedManyWithoutUploadedByInput
   reviewedEvidence?: Prisma.EvidenceCreateNestedManyWithoutReviewedByInput
   userEvaluation?: Prisma.EvaluationCreateNestedManyWithoutUserInput
-  reviewerEvaluation?: Prisma.EvaluationCreateNestedManyWithoutReviewerInput
+  evaluationReviews?: Prisma.EvaluationReviewerCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutSystemRolesInput = {
@@ -671,7 +669,7 @@ export type UserUncheckedCreateWithoutSystemRolesInput = {
   submittedEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutUploadedByInput
   reviewedEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutReviewedByInput
   userEvaluation?: Prisma.EvaluationUncheckedCreateNestedManyWithoutUserInput
-  reviewerEvaluation?: Prisma.EvaluationUncheckedCreateNestedManyWithoutReviewerInput
+  evaluationReviews?: Prisma.EvaluationReviewerUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutSystemRolesInput = {
@@ -708,7 +706,7 @@ export type UserUpdateWithoutSystemRolesInput = {
   submittedEvidence?: Prisma.EvidenceUpdateManyWithoutUploadedByNestedInput
   reviewedEvidence?: Prisma.EvidenceUpdateManyWithoutReviewedByNestedInput
   userEvaluation?: Prisma.EvaluationUpdateManyWithoutUserNestedInput
-  reviewerEvaluation?: Prisma.EvaluationUpdateManyWithoutReviewerNestedInput
+  evaluationReviews?: Prisma.EvaluationReviewerUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSystemRolesInput = {
@@ -729,7 +727,7 @@ export type UserUncheckedUpdateWithoutSystemRolesInput = {
   submittedEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutUploadedByNestedInput
   reviewedEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutReviewedByNestedInput
   userEvaluation?: Prisma.EvaluationUncheckedUpdateManyWithoutUserNestedInput
-  reviewerEvaluation?: Prisma.EvaluationUncheckedUpdateManyWithoutReviewerNestedInput
+  evaluationReviews?: Prisma.EvaluationReviewerUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserCreateWithoutOwnedWorkspacesInput = {
@@ -750,7 +748,7 @@ export type UserCreateWithoutOwnedWorkspacesInput = {
   submittedEvidence?: Prisma.EvidenceCreateNestedManyWithoutUploadedByInput
   reviewedEvidence?: Prisma.EvidenceCreateNestedManyWithoutReviewedByInput
   userEvaluation?: Prisma.EvaluationCreateNestedManyWithoutUserInput
-  reviewerEvaluation?: Prisma.EvaluationCreateNestedManyWithoutReviewerInput
+  evaluationReviews?: Prisma.EvaluationReviewerCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutOwnedWorkspacesInput = {
@@ -771,7 +769,7 @@ export type UserUncheckedCreateWithoutOwnedWorkspacesInput = {
   submittedEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutUploadedByInput
   reviewedEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutReviewedByInput
   userEvaluation?: Prisma.EvaluationUncheckedCreateNestedManyWithoutUserInput
-  reviewerEvaluation?: Prisma.EvaluationUncheckedCreateNestedManyWithoutReviewerInput
+  evaluationReviews?: Prisma.EvaluationReviewerUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutOwnedWorkspacesInput = {
@@ -808,7 +806,7 @@ export type UserUpdateWithoutOwnedWorkspacesInput = {
   submittedEvidence?: Prisma.EvidenceUpdateManyWithoutUploadedByNestedInput
   reviewedEvidence?: Prisma.EvidenceUpdateManyWithoutReviewedByNestedInput
   userEvaluation?: Prisma.EvaluationUpdateManyWithoutUserNestedInput
-  reviewerEvaluation?: Prisma.EvaluationUpdateManyWithoutReviewerNestedInput
+  evaluationReviews?: Prisma.EvaluationReviewerUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOwnedWorkspacesInput = {
@@ -829,7 +827,7 @@ export type UserUncheckedUpdateWithoutOwnedWorkspacesInput = {
   submittedEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutUploadedByNestedInput
   reviewedEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutReviewedByNestedInput
   userEvaluation?: Prisma.EvaluationUncheckedUpdateManyWithoutUserNestedInput
-  reviewerEvaluation?: Prisma.EvaluationUncheckedUpdateManyWithoutReviewerNestedInput
+  evaluationReviews?: Prisma.EvaluationReviewerUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserCreateWithoutWorkspaceMembershipsInput = {
@@ -850,7 +848,7 @@ export type UserCreateWithoutWorkspaceMembershipsInput = {
   submittedEvidence?: Prisma.EvidenceCreateNestedManyWithoutUploadedByInput
   reviewedEvidence?: Prisma.EvidenceCreateNestedManyWithoutReviewedByInput
   userEvaluation?: Prisma.EvaluationCreateNestedManyWithoutUserInput
-  reviewerEvaluation?: Prisma.EvaluationCreateNestedManyWithoutReviewerInput
+  evaluationReviews?: Prisma.EvaluationReviewerCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutWorkspaceMembershipsInput = {
@@ -871,7 +869,7 @@ export type UserUncheckedCreateWithoutWorkspaceMembershipsInput = {
   submittedEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutUploadedByInput
   reviewedEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutReviewedByInput
   userEvaluation?: Prisma.EvaluationUncheckedCreateNestedManyWithoutUserInput
-  reviewerEvaluation?: Prisma.EvaluationUncheckedCreateNestedManyWithoutReviewerInput
+  evaluationReviews?: Prisma.EvaluationReviewerUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutWorkspaceMembershipsInput = {
@@ -908,7 +906,7 @@ export type UserUpdateWithoutWorkspaceMembershipsInput = {
   submittedEvidence?: Prisma.EvidenceUpdateManyWithoutUploadedByNestedInput
   reviewedEvidence?: Prisma.EvidenceUpdateManyWithoutReviewedByNestedInput
   userEvaluation?: Prisma.EvaluationUpdateManyWithoutUserNestedInput
-  reviewerEvaluation?: Prisma.EvaluationUpdateManyWithoutReviewerNestedInput
+  evaluationReviews?: Prisma.EvaluationReviewerUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutWorkspaceMembershipsInput = {
@@ -929,7 +927,7 @@ export type UserUncheckedUpdateWithoutWorkspaceMembershipsInput = {
   submittedEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutUploadedByNestedInput
   reviewedEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutReviewedByNestedInput
   userEvaluation?: Prisma.EvaluationUncheckedUpdateManyWithoutUserNestedInput
-  reviewerEvaluation?: Prisma.EvaluationUncheckedUpdateManyWithoutReviewerNestedInput
+  evaluationReviews?: Prisma.EvaluationReviewerUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserCreateWithoutCreatedProjectsInput = {
@@ -950,7 +948,7 @@ export type UserCreateWithoutCreatedProjectsInput = {
   submittedEvidence?: Prisma.EvidenceCreateNestedManyWithoutUploadedByInput
   reviewedEvidence?: Prisma.EvidenceCreateNestedManyWithoutReviewedByInput
   userEvaluation?: Prisma.EvaluationCreateNestedManyWithoutUserInput
-  reviewerEvaluation?: Prisma.EvaluationCreateNestedManyWithoutReviewerInput
+  evaluationReviews?: Prisma.EvaluationReviewerCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutCreatedProjectsInput = {
@@ -971,7 +969,7 @@ export type UserUncheckedCreateWithoutCreatedProjectsInput = {
   submittedEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutUploadedByInput
   reviewedEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutReviewedByInput
   userEvaluation?: Prisma.EvaluationUncheckedCreateNestedManyWithoutUserInput
-  reviewerEvaluation?: Prisma.EvaluationUncheckedCreateNestedManyWithoutReviewerInput
+  evaluationReviews?: Prisma.EvaluationReviewerUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutCreatedProjectsInput = {
@@ -1008,7 +1006,7 @@ export type UserUpdateWithoutCreatedProjectsInput = {
   submittedEvidence?: Prisma.EvidenceUpdateManyWithoutUploadedByNestedInput
   reviewedEvidence?: Prisma.EvidenceUpdateManyWithoutReviewedByNestedInput
   userEvaluation?: Prisma.EvaluationUpdateManyWithoutUserNestedInput
-  reviewerEvaluation?: Prisma.EvaluationUpdateManyWithoutReviewerNestedInput
+  evaluationReviews?: Prisma.EvaluationReviewerUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedProjectsInput = {
@@ -1029,7 +1027,7 @@ export type UserUncheckedUpdateWithoutCreatedProjectsInput = {
   submittedEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutUploadedByNestedInput
   reviewedEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutReviewedByNestedInput
   userEvaluation?: Prisma.EvaluationUncheckedUpdateManyWithoutUserNestedInput
-  reviewerEvaluation?: Prisma.EvaluationUncheckedUpdateManyWithoutReviewerNestedInput
+  evaluationReviews?: Prisma.EvaluationReviewerUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserCreateWithoutProjectMembershipsInput = {
@@ -1050,7 +1048,7 @@ export type UserCreateWithoutProjectMembershipsInput = {
   submittedEvidence?: Prisma.EvidenceCreateNestedManyWithoutUploadedByInput
   reviewedEvidence?: Prisma.EvidenceCreateNestedManyWithoutReviewedByInput
   userEvaluation?: Prisma.EvaluationCreateNestedManyWithoutUserInput
-  reviewerEvaluation?: Prisma.EvaluationCreateNestedManyWithoutReviewerInput
+  evaluationReviews?: Prisma.EvaluationReviewerCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutProjectMembershipsInput = {
@@ -1071,7 +1069,7 @@ export type UserUncheckedCreateWithoutProjectMembershipsInput = {
   submittedEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutUploadedByInput
   reviewedEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutReviewedByInput
   userEvaluation?: Prisma.EvaluationUncheckedCreateNestedManyWithoutUserInput
-  reviewerEvaluation?: Prisma.EvaluationUncheckedCreateNestedManyWithoutReviewerInput
+  evaluationReviews?: Prisma.EvaluationReviewerUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutProjectMembershipsInput = {
@@ -1108,7 +1106,7 @@ export type UserUpdateWithoutProjectMembershipsInput = {
   submittedEvidence?: Prisma.EvidenceUpdateManyWithoutUploadedByNestedInput
   reviewedEvidence?: Prisma.EvidenceUpdateManyWithoutReviewedByNestedInput
   userEvaluation?: Prisma.EvaluationUpdateManyWithoutUserNestedInput
-  reviewerEvaluation?: Prisma.EvaluationUpdateManyWithoutReviewerNestedInput
+  evaluationReviews?: Prisma.EvaluationReviewerUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProjectMembershipsInput = {
@@ -1129,7 +1127,7 @@ export type UserUncheckedUpdateWithoutProjectMembershipsInput = {
   submittedEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutUploadedByNestedInput
   reviewedEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutReviewedByNestedInput
   userEvaluation?: Prisma.EvaluationUncheckedUpdateManyWithoutUserNestedInput
-  reviewerEvaluation?: Prisma.EvaluationUncheckedUpdateManyWithoutReviewerNestedInput
+  evaluationReviews?: Prisma.EvaluationReviewerUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserCreateWithoutCreatedTasksInput = {
@@ -1150,7 +1148,7 @@ export type UserCreateWithoutCreatedTasksInput = {
   submittedEvidence?: Prisma.EvidenceCreateNestedManyWithoutUploadedByInput
   reviewedEvidence?: Prisma.EvidenceCreateNestedManyWithoutReviewedByInput
   userEvaluation?: Prisma.EvaluationCreateNestedManyWithoutUserInput
-  reviewerEvaluation?: Prisma.EvaluationCreateNestedManyWithoutReviewerInput
+  evaluationReviews?: Prisma.EvaluationReviewerCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutCreatedTasksInput = {
@@ -1171,7 +1169,7 @@ export type UserUncheckedCreateWithoutCreatedTasksInput = {
   submittedEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutUploadedByInput
   reviewedEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutReviewedByInput
   userEvaluation?: Prisma.EvaluationUncheckedCreateNestedManyWithoutUserInput
-  reviewerEvaluation?: Prisma.EvaluationUncheckedCreateNestedManyWithoutReviewerInput
+  evaluationReviews?: Prisma.EvaluationReviewerUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutCreatedTasksInput = {
@@ -1208,7 +1206,7 @@ export type UserUpdateWithoutCreatedTasksInput = {
   submittedEvidence?: Prisma.EvidenceUpdateManyWithoutUploadedByNestedInput
   reviewedEvidence?: Prisma.EvidenceUpdateManyWithoutReviewedByNestedInput
   userEvaluation?: Prisma.EvaluationUpdateManyWithoutUserNestedInput
-  reviewerEvaluation?: Prisma.EvaluationUpdateManyWithoutReviewerNestedInput
+  evaluationReviews?: Prisma.EvaluationReviewerUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedTasksInput = {
@@ -1229,7 +1227,7 @@ export type UserUncheckedUpdateWithoutCreatedTasksInput = {
   submittedEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutUploadedByNestedInput
   reviewedEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutReviewedByNestedInput
   userEvaluation?: Prisma.EvaluationUncheckedUpdateManyWithoutUserNestedInput
-  reviewerEvaluation?: Prisma.EvaluationUncheckedUpdateManyWithoutReviewerNestedInput
+  evaluationReviews?: Prisma.EvaluationReviewerUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserCreateWithoutTaskAssigneesInput = {
@@ -1250,7 +1248,7 @@ export type UserCreateWithoutTaskAssigneesInput = {
   submittedEvidence?: Prisma.EvidenceCreateNestedManyWithoutUploadedByInput
   reviewedEvidence?: Prisma.EvidenceCreateNestedManyWithoutReviewedByInput
   userEvaluation?: Prisma.EvaluationCreateNestedManyWithoutUserInput
-  reviewerEvaluation?: Prisma.EvaluationCreateNestedManyWithoutReviewerInput
+  evaluationReviews?: Prisma.EvaluationReviewerCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutTaskAssigneesInput = {
@@ -1271,7 +1269,7 @@ export type UserUncheckedCreateWithoutTaskAssigneesInput = {
   submittedEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutUploadedByInput
   reviewedEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutReviewedByInput
   userEvaluation?: Prisma.EvaluationUncheckedCreateNestedManyWithoutUserInput
-  reviewerEvaluation?: Prisma.EvaluationUncheckedCreateNestedManyWithoutReviewerInput
+  evaluationReviews?: Prisma.EvaluationReviewerUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutTaskAssigneesInput = {
@@ -1308,7 +1306,7 @@ export type UserUpdateWithoutTaskAssigneesInput = {
   submittedEvidence?: Prisma.EvidenceUpdateManyWithoutUploadedByNestedInput
   reviewedEvidence?: Prisma.EvidenceUpdateManyWithoutReviewedByNestedInput
   userEvaluation?: Prisma.EvaluationUpdateManyWithoutUserNestedInput
-  reviewerEvaluation?: Prisma.EvaluationUpdateManyWithoutReviewerNestedInput
+  evaluationReviews?: Prisma.EvaluationReviewerUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTaskAssigneesInput = {
@@ -1329,7 +1327,7 @@ export type UserUncheckedUpdateWithoutTaskAssigneesInput = {
   submittedEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutUploadedByNestedInput
   reviewedEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutReviewedByNestedInput
   userEvaluation?: Prisma.EvaluationUncheckedUpdateManyWithoutUserNestedInput
-  reviewerEvaluation?: Prisma.EvaluationUncheckedUpdateManyWithoutReviewerNestedInput
+  evaluationReviews?: Prisma.EvaluationReviewerUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserCreateWithoutSubmittedEvidenceInput = {
@@ -1350,7 +1348,7 @@ export type UserCreateWithoutSubmittedEvidenceInput = {
   taskAssignees?: Prisma.TaskAssigneeCreateNestedManyWithoutUserInput
   reviewedEvidence?: Prisma.EvidenceCreateNestedManyWithoutReviewedByInput
   userEvaluation?: Prisma.EvaluationCreateNestedManyWithoutUserInput
-  reviewerEvaluation?: Prisma.EvaluationCreateNestedManyWithoutReviewerInput
+  evaluationReviews?: Prisma.EvaluationReviewerCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutSubmittedEvidenceInput = {
@@ -1371,7 +1369,7 @@ export type UserUncheckedCreateWithoutSubmittedEvidenceInput = {
   taskAssignees?: Prisma.TaskAssigneeUncheckedCreateNestedManyWithoutUserInput
   reviewedEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutReviewedByInput
   userEvaluation?: Prisma.EvaluationUncheckedCreateNestedManyWithoutUserInput
-  reviewerEvaluation?: Prisma.EvaluationUncheckedCreateNestedManyWithoutReviewerInput
+  evaluationReviews?: Prisma.EvaluationReviewerUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutSubmittedEvidenceInput = {
@@ -1397,7 +1395,7 @@ export type UserCreateWithoutReviewedEvidenceInput = {
   taskAssignees?: Prisma.TaskAssigneeCreateNestedManyWithoutUserInput
   submittedEvidence?: Prisma.EvidenceCreateNestedManyWithoutUploadedByInput
   userEvaluation?: Prisma.EvaluationCreateNestedManyWithoutUserInput
-  reviewerEvaluation?: Prisma.EvaluationCreateNestedManyWithoutReviewerInput
+  evaluationReviews?: Prisma.EvaluationReviewerCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutReviewedEvidenceInput = {
@@ -1418,7 +1416,7 @@ export type UserUncheckedCreateWithoutReviewedEvidenceInput = {
   taskAssignees?: Prisma.TaskAssigneeUncheckedCreateNestedManyWithoutUserInput
   submittedEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutUploadedByInput
   userEvaluation?: Prisma.EvaluationUncheckedCreateNestedManyWithoutUserInput
-  reviewerEvaluation?: Prisma.EvaluationUncheckedCreateNestedManyWithoutReviewerInput
+  evaluationReviews?: Prisma.EvaluationReviewerUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutReviewedEvidenceInput = {
@@ -1455,7 +1453,7 @@ export type UserUpdateWithoutSubmittedEvidenceInput = {
   taskAssignees?: Prisma.TaskAssigneeUpdateManyWithoutUserNestedInput
   reviewedEvidence?: Prisma.EvidenceUpdateManyWithoutReviewedByNestedInput
   userEvaluation?: Prisma.EvaluationUpdateManyWithoutUserNestedInput
-  reviewerEvaluation?: Prisma.EvaluationUpdateManyWithoutReviewerNestedInput
+  evaluationReviews?: Prisma.EvaluationReviewerUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSubmittedEvidenceInput = {
@@ -1476,7 +1474,7 @@ export type UserUncheckedUpdateWithoutSubmittedEvidenceInput = {
   taskAssignees?: Prisma.TaskAssigneeUncheckedUpdateManyWithoutUserNestedInput
   reviewedEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutReviewedByNestedInput
   userEvaluation?: Prisma.EvaluationUncheckedUpdateManyWithoutUserNestedInput
-  reviewerEvaluation?: Prisma.EvaluationUncheckedUpdateManyWithoutReviewerNestedInput
+  evaluationReviews?: Prisma.EvaluationReviewerUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUpsertWithoutReviewedEvidenceInput = {
@@ -1508,7 +1506,7 @@ export type UserUpdateWithoutReviewedEvidenceInput = {
   taskAssignees?: Prisma.TaskAssigneeUpdateManyWithoutUserNestedInput
   submittedEvidence?: Prisma.EvidenceUpdateManyWithoutUploadedByNestedInput
   userEvaluation?: Prisma.EvaluationUpdateManyWithoutUserNestedInput
-  reviewerEvaluation?: Prisma.EvaluationUpdateManyWithoutReviewerNestedInput
+  evaluationReviews?: Prisma.EvaluationReviewerUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReviewedEvidenceInput = {
@@ -1529,7 +1527,7 @@ export type UserUncheckedUpdateWithoutReviewedEvidenceInput = {
   taskAssignees?: Prisma.TaskAssigneeUncheckedUpdateManyWithoutUserNestedInput
   submittedEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutUploadedByNestedInput
   userEvaluation?: Prisma.EvaluationUncheckedUpdateManyWithoutUserNestedInput
-  reviewerEvaluation?: Prisma.EvaluationUncheckedUpdateManyWithoutReviewerNestedInput
+  evaluationReviews?: Prisma.EvaluationReviewerUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserCreateWithoutUserEvaluationInput = {
@@ -1550,7 +1548,7 @@ export type UserCreateWithoutUserEvaluationInput = {
   taskAssignees?: Prisma.TaskAssigneeCreateNestedManyWithoutUserInput
   submittedEvidence?: Prisma.EvidenceCreateNestedManyWithoutUploadedByInput
   reviewedEvidence?: Prisma.EvidenceCreateNestedManyWithoutReviewedByInput
-  reviewerEvaluation?: Prisma.EvaluationCreateNestedManyWithoutReviewerInput
+  evaluationReviews?: Prisma.EvaluationReviewerCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutUserEvaluationInput = {
@@ -1571,59 +1569,12 @@ export type UserUncheckedCreateWithoutUserEvaluationInput = {
   taskAssignees?: Prisma.TaskAssigneeUncheckedCreateNestedManyWithoutUserInput
   submittedEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutUploadedByInput
   reviewedEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutReviewedByInput
-  reviewerEvaluation?: Prisma.EvaluationUncheckedCreateNestedManyWithoutReviewerInput
+  evaluationReviews?: Prisma.EvaluationReviewerUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutUserEvaluationInput = {
   where: Prisma.UserWhereUniqueInput
   create: Prisma.XOR<Prisma.UserCreateWithoutUserEvaluationInput, Prisma.UserUncheckedCreateWithoutUserEvaluationInput>
-}
-
-export type UserCreateWithoutReviewerEvaluationInput = {
-  id?: string
-  email: string
-  password: string
-  name: string
-  avatar?: string | null
-  createdAt?: Date | string
-  deletedAt?: Date | string | null
-  updatedAt?: Date | string
-  ownedWorkspaces?: Prisma.WorkspaceCreateNestedManyWithoutOwnerInput
-  systemRoles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
-  workspaceMemberships?: Prisma.WorkspaceMemberCreateNestedManyWithoutUserInput
-  createdProjects?: Prisma.ProjectCreateNestedManyWithoutCreatedByInput
-  projectMemberships?: Prisma.ProjectMemberCreateNestedManyWithoutUserInput
-  createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  taskAssignees?: Prisma.TaskAssigneeCreateNestedManyWithoutUserInput
-  submittedEvidence?: Prisma.EvidenceCreateNestedManyWithoutUploadedByInput
-  reviewedEvidence?: Prisma.EvidenceCreateNestedManyWithoutReviewedByInput
-  userEvaluation?: Prisma.EvaluationCreateNestedManyWithoutUserInput
-}
-
-export type UserUncheckedCreateWithoutReviewerEvaluationInput = {
-  id?: string
-  email: string
-  password: string
-  name: string
-  avatar?: string | null
-  createdAt?: Date | string
-  deletedAt?: Date | string | null
-  updatedAt?: Date | string
-  ownedWorkspaces?: Prisma.WorkspaceUncheckedCreateNestedManyWithoutOwnerInput
-  systemRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
-  workspaceMemberships?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutUserInput
-  createdProjects?: Prisma.ProjectUncheckedCreateNestedManyWithoutCreatedByInput
-  projectMemberships?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutUserInput
-  createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  taskAssignees?: Prisma.TaskAssigneeUncheckedCreateNestedManyWithoutUserInput
-  submittedEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutUploadedByInput
-  reviewedEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutReviewedByInput
-  userEvaluation?: Prisma.EvaluationUncheckedCreateNestedManyWithoutUserInput
-}
-
-export type UserCreateOrConnectWithoutReviewerEvaluationInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutReviewerEvaluationInput, Prisma.UserUncheckedCreateWithoutReviewerEvaluationInput>
 }
 
 export type UserUpsertWithoutUserEvaluationInput = {
@@ -1655,7 +1606,7 @@ export type UserUpdateWithoutUserEvaluationInput = {
   taskAssignees?: Prisma.TaskAssigneeUpdateManyWithoutUserNestedInput
   submittedEvidence?: Prisma.EvidenceUpdateManyWithoutUploadedByNestedInput
   reviewedEvidence?: Prisma.EvidenceUpdateManyWithoutReviewedByNestedInput
-  reviewerEvaluation?: Prisma.EvaluationUpdateManyWithoutReviewerNestedInput
+  evaluationReviews?: Prisma.EvaluationReviewerUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserEvaluationInput = {
@@ -1676,21 +1627,68 @@ export type UserUncheckedUpdateWithoutUserEvaluationInput = {
   taskAssignees?: Prisma.TaskAssigneeUncheckedUpdateManyWithoutUserNestedInput
   submittedEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutUploadedByNestedInput
   reviewedEvidence?: Prisma.EvidenceUncheckedUpdateManyWithoutReviewedByNestedInput
-  reviewerEvaluation?: Prisma.EvaluationUncheckedUpdateManyWithoutReviewerNestedInput
+  evaluationReviews?: Prisma.EvaluationReviewerUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
-export type UserUpsertWithoutReviewerEvaluationInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutReviewerEvaluationInput, Prisma.UserUncheckedUpdateWithoutReviewerEvaluationInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutReviewerEvaluationInput, Prisma.UserUncheckedCreateWithoutReviewerEvaluationInput>
+export type UserCreateWithoutEvaluationReviewsInput = {
+  id?: string
+  email: string
+  password: string
+  name: string
+  avatar?: string | null
+  createdAt?: Date | string
+  deletedAt?: Date | string | null
+  updatedAt?: Date | string
+  ownedWorkspaces?: Prisma.WorkspaceCreateNestedManyWithoutOwnerInput
+  systemRoles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  workspaceMemberships?: Prisma.WorkspaceMemberCreateNestedManyWithoutUserInput
+  createdProjects?: Prisma.ProjectCreateNestedManyWithoutCreatedByInput
+  projectMemberships?: Prisma.ProjectMemberCreateNestedManyWithoutUserInput
+  createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
+  taskAssignees?: Prisma.TaskAssigneeCreateNestedManyWithoutUserInput
+  submittedEvidence?: Prisma.EvidenceCreateNestedManyWithoutUploadedByInput
+  reviewedEvidence?: Prisma.EvidenceCreateNestedManyWithoutReviewedByInput
+  userEvaluation?: Prisma.EvaluationCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutEvaluationReviewsInput = {
+  id?: string
+  email: string
+  password: string
+  name: string
+  avatar?: string | null
+  createdAt?: Date | string
+  deletedAt?: Date | string | null
+  updatedAt?: Date | string
+  ownedWorkspaces?: Prisma.WorkspaceUncheckedCreateNestedManyWithoutOwnerInput
+  systemRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutUserInput
+  createdProjects?: Prisma.ProjectUncheckedCreateNestedManyWithoutCreatedByInput
+  projectMemberships?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutUserInput
+  createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
+  taskAssignees?: Prisma.TaskAssigneeUncheckedCreateNestedManyWithoutUserInput
+  submittedEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutUploadedByInput
+  reviewedEvidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutReviewedByInput
+  userEvaluation?: Prisma.EvaluationUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutEvaluationReviewsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutEvaluationReviewsInput, Prisma.UserUncheckedCreateWithoutEvaluationReviewsInput>
+}
+
+export type UserUpsertWithoutEvaluationReviewsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutEvaluationReviewsInput, Prisma.UserUncheckedUpdateWithoutEvaluationReviewsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutEvaluationReviewsInput, Prisma.UserUncheckedCreateWithoutEvaluationReviewsInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutReviewerEvaluationInput = {
+export type UserUpdateToOneWithWhereWithoutEvaluationReviewsInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutReviewerEvaluationInput, Prisma.UserUncheckedUpdateWithoutReviewerEvaluationInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutEvaluationReviewsInput, Prisma.UserUncheckedUpdateWithoutEvaluationReviewsInput>
 }
 
-export type UserUpdateWithoutReviewerEvaluationInput = {
+export type UserUpdateWithoutEvaluationReviewsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1711,7 +1709,7 @@ export type UserUpdateWithoutReviewerEvaluationInput = {
   userEvaluation?: Prisma.EvaluationUpdateManyWithoutUserNestedInput
 }
 
-export type UserUncheckedUpdateWithoutReviewerEvaluationInput = {
+export type UserUncheckedUpdateWithoutEvaluationReviewsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1748,7 +1746,7 @@ export type UserCountOutputType = {
   submittedEvidence: number
   reviewedEvidence: number
   userEvaluation: number
-  reviewerEvaluation: number
+  evaluationReviews: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1762,7 +1760,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   submittedEvidence?: boolean | UserCountOutputTypeCountSubmittedEvidenceArgs
   reviewedEvidence?: boolean | UserCountOutputTypeCountReviewedEvidenceArgs
   userEvaluation?: boolean | UserCountOutputTypeCountUserEvaluationArgs
-  reviewerEvaluation?: boolean | UserCountOutputTypeCountReviewerEvaluationArgs
+  evaluationReviews?: boolean | UserCountOutputTypeCountEvaluationReviewsArgs
 }
 
 /**
@@ -1848,8 +1846,8 @@ export type UserCountOutputTypeCountUserEvaluationArgs<ExtArgs extends runtime.T
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountReviewerEvaluationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.EvaluationWhereInput
+export type UserCountOutputTypeCountEvaluationReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EvaluationReviewerWhereInput
 }
 
 
@@ -1872,7 +1870,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   submittedEvidence?: boolean | Prisma.User$submittedEvidenceArgs<ExtArgs>
   reviewedEvidence?: boolean | Prisma.User$reviewedEvidenceArgs<ExtArgs>
   userEvaluation?: boolean | Prisma.User$userEvaluationArgs<ExtArgs>
-  reviewerEvaluation?: boolean | Prisma.User$reviewerEvaluationArgs<ExtArgs>
+  evaluationReviews?: boolean | Prisma.User$evaluationReviewsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1921,7 +1919,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   submittedEvidence?: boolean | Prisma.User$submittedEvidenceArgs<ExtArgs>
   reviewedEvidence?: boolean | Prisma.User$reviewedEvidenceArgs<ExtArgs>
   userEvaluation?: boolean | Prisma.User$userEvaluationArgs<ExtArgs>
-  reviewerEvaluation?: boolean | Prisma.User$reviewerEvaluationArgs<ExtArgs>
+  evaluationReviews?: boolean | Prisma.User$evaluationReviewsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1940,7 +1938,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     submittedEvidence: Prisma.$EvidencePayload<ExtArgs>[]
     reviewedEvidence: Prisma.$EvidencePayload<ExtArgs>[]
     userEvaluation: Prisma.$EvaluationPayload<ExtArgs>[]
-    reviewerEvaluation: Prisma.$EvaluationPayload<ExtArgs>[]
+    evaluationReviews: Prisma.$EvaluationReviewerPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2355,7 +2353,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   submittedEvidence<T extends Prisma.User$submittedEvidenceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$submittedEvidenceArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EvidencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reviewedEvidence<T extends Prisma.User$reviewedEvidenceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewedEvidenceArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EvidencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   userEvaluation<T extends Prisma.User$userEvaluationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$userEvaluationArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EvaluationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  reviewerEvaluation<T extends Prisma.User$reviewerEvaluationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewerEvaluationArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EvaluationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  evaluationReviews<T extends Prisma.User$evaluationReviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$evaluationReviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EvaluationReviewerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3026,27 +3024,27 @@ export type User$userEvaluationArgs<ExtArgs extends runtime.Types.Extensions.Int
 }
 
 /**
- * User.reviewerEvaluation
+ * User.evaluationReviews
  */
-export type User$reviewerEvaluationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$evaluationReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Evaluation
+   * Select specific fields to fetch from the EvaluationReviewer
    */
-  select?: Prisma.EvaluationSelect<ExtArgs> | null
+  select?: Prisma.EvaluationReviewerSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Evaluation
+   * Omit specific fields from the EvaluationReviewer
    */
-  omit?: Prisma.EvaluationOmit<ExtArgs> | null
+  omit?: Prisma.EvaluationReviewerOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.EvaluationInclude<ExtArgs> | null
-  where?: Prisma.EvaluationWhereInput
-  orderBy?: Prisma.EvaluationOrderByWithRelationInput | Prisma.EvaluationOrderByWithRelationInput[]
-  cursor?: Prisma.EvaluationWhereUniqueInput
+  include?: Prisma.EvaluationReviewerInclude<ExtArgs> | null
+  where?: Prisma.EvaluationReviewerWhereInput
+  orderBy?: Prisma.EvaluationReviewerOrderByWithRelationInput | Prisma.EvaluationReviewerOrderByWithRelationInput[]
+  cursor?: Prisma.EvaluationReviewerWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.EvaluationScalarFieldEnum | Prisma.EvaluationScalarFieldEnum[]
+  distinct?: Prisma.EvaluationReviewerScalarFieldEnum | Prisma.EvaluationReviewerScalarFieldEnum[]
 }
 
 /**

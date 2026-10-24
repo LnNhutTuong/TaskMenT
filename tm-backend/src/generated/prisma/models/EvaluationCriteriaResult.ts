@@ -28,12 +28,10 @@ export type AggregateEvaluationCriteriaResult = {
 
 export type EvaluationCriteriaResultAvgAggregateOutputType = {
   selfScore: number | null
-  reviewerScore: number | null
 }
 
 export type EvaluationCriteriaResultSumAggregateOutputType = {
   selfScore: number | null
-  reviewerScore: number | null
 }
 
 export type EvaluationCriteriaResultMinAggregateOutputType = {
@@ -41,7 +39,6 @@ export type EvaluationCriteriaResultMinAggregateOutputType = {
   evaluationId: string | null
   evaluationCriteriaId: string | null
   selfScore: number | null
-  reviewerScore: number | null
   comment: string | null
 }
 
@@ -50,7 +47,6 @@ export type EvaluationCriteriaResultMaxAggregateOutputType = {
   evaluationId: string | null
   evaluationCriteriaId: string | null
   selfScore: number | null
-  reviewerScore: number | null
   comment: string | null
 }
 
@@ -59,7 +55,6 @@ export type EvaluationCriteriaResultCountAggregateOutputType = {
   evaluationId: number
   evaluationCriteriaId: number
   selfScore: number
-  reviewerScore: number
   comment: number
   _all: number
 }
@@ -67,12 +62,10 @@ export type EvaluationCriteriaResultCountAggregateOutputType = {
 
 export type EvaluationCriteriaResultAvgAggregateInputType = {
   selfScore?: true
-  reviewerScore?: true
 }
 
 export type EvaluationCriteriaResultSumAggregateInputType = {
   selfScore?: true
-  reviewerScore?: true
 }
 
 export type EvaluationCriteriaResultMinAggregateInputType = {
@@ -80,7 +73,6 @@ export type EvaluationCriteriaResultMinAggregateInputType = {
   evaluationId?: true
   evaluationCriteriaId?: true
   selfScore?: true
-  reviewerScore?: true
   comment?: true
 }
 
@@ -89,7 +81,6 @@ export type EvaluationCriteriaResultMaxAggregateInputType = {
   evaluationId?: true
   evaluationCriteriaId?: true
   selfScore?: true
-  reviewerScore?: true
   comment?: true
 }
 
@@ -98,7 +89,6 @@ export type EvaluationCriteriaResultCountAggregateInputType = {
   evaluationId?: true
   evaluationCriteriaId?: true
   selfScore?: true
-  reviewerScore?: true
   comment?: true
   _all?: true
 }
@@ -194,7 +184,6 @@ export type EvaluationCriteriaResultGroupByOutputType = {
   evaluationId: string
   evaluationCriteriaId: string
   selfScore: number
-  reviewerScore: number
   comment: string | null
   _count: EvaluationCriteriaResultCountAggregateOutputType | null
   _avg: EvaluationCriteriaResultAvgAggregateOutputType | null
@@ -226,7 +215,6 @@ export type EvaluationCriteriaResultWhereInput = {
   evaluationId?: Prisma.StringFilter<"EvaluationCriteriaResult"> | string
   evaluationCriteriaId?: Prisma.StringFilter<"EvaluationCriteriaResult"> | string
   selfScore?: Prisma.FloatFilter<"EvaluationCriteriaResult"> | number
-  reviewerScore?: Prisma.FloatFilter<"EvaluationCriteriaResult"> | number
   comment?: Prisma.StringNullableFilter<"EvaluationCriteriaResult"> | string | null
   evaluation?: Prisma.XOR<Prisma.EvaluationScalarRelationFilter, Prisma.EvaluationWhereInput>
   evaluationCriteria?: Prisma.XOR<Prisma.EvaluationCriteriaScalarRelationFilter, Prisma.EvaluationCriteriaWhereInput>
@@ -237,7 +225,6 @@ export type EvaluationCriteriaResultOrderByWithRelationInput = {
   evaluationId?: Prisma.SortOrder
   evaluationCriteriaId?: Prisma.SortOrder
   selfScore?: Prisma.SortOrder
-  reviewerScore?: Prisma.SortOrder
   comment?: Prisma.SortOrderInput | Prisma.SortOrder
   evaluation?: Prisma.EvaluationOrderByWithRelationInput
   evaluationCriteria?: Prisma.EvaluationCriteriaOrderByWithRelationInput
@@ -252,7 +239,6 @@ export type EvaluationCriteriaResultWhereUniqueInput = Prisma.AtLeast<{
   evaluationId?: Prisma.StringFilter<"EvaluationCriteriaResult"> | string
   evaluationCriteriaId?: Prisma.StringFilter<"EvaluationCriteriaResult"> | string
   selfScore?: Prisma.FloatFilter<"EvaluationCriteriaResult"> | number
-  reviewerScore?: Prisma.FloatFilter<"EvaluationCriteriaResult"> | number
   comment?: Prisma.StringNullableFilter<"EvaluationCriteriaResult"> | string | null
   evaluation?: Prisma.XOR<Prisma.EvaluationScalarRelationFilter, Prisma.EvaluationWhereInput>
   evaluationCriteria?: Prisma.XOR<Prisma.EvaluationCriteriaScalarRelationFilter, Prisma.EvaluationCriteriaWhereInput>
@@ -263,7 +249,6 @@ export type EvaluationCriteriaResultOrderByWithAggregationInput = {
   evaluationId?: Prisma.SortOrder
   evaluationCriteriaId?: Prisma.SortOrder
   selfScore?: Prisma.SortOrder
-  reviewerScore?: Prisma.SortOrder
   comment?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.EvaluationCriteriaResultCountOrderByAggregateInput
   _avg?: Prisma.EvaluationCriteriaResultAvgOrderByAggregateInput
@@ -280,14 +265,12 @@ export type EvaluationCriteriaResultScalarWhereWithAggregatesInput = {
   evaluationId?: Prisma.StringWithAggregatesFilter<"EvaluationCriteriaResult"> | string
   evaluationCriteriaId?: Prisma.StringWithAggregatesFilter<"EvaluationCriteriaResult"> | string
   selfScore?: Prisma.FloatWithAggregatesFilter<"EvaluationCriteriaResult"> | number
-  reviewerScore?: Prisma.FloatWithAggregatesFilter<"EvaluationCriteriaResult"> | number
   comment?: Prisma.StringNullableWithAggregatesFilter<"EvaluationCriteriaResult"> | string | null
 }
 
 export type EvaluationCriteriaResultCreateInput = {
   id?: string
   selfScore?: number
-  reviewerScore?: number
   comment?: string | null
   evaluation: Prisma.EvaluationCreateNestedOneWithoutCriteriaResultsInput
   evaluationCriteria: Prisma.EvaluationCriteriaCreateNestedOneWithoutResultsInput
@@ -298,14 +281,12 @@ export type EvaluationCriteriaResultUncheckedCreateInput = {
   evaluationId: string
   evaluationCriteriaId: string
   selfScore?: number
-  reviewerScore?: number
   comment?: string | null
 }
 
 export type EvaluationCriteriaResultUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   selfScore?: Prisma.FloatFieldUpdateOperationsInput | number
-  reviewerScore?: Prisma.FloatFieldUpdateOperationsInput | number
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   evaluation?: Prisma.EvaluationUpdateOneRequiredWithoutCriteriaResultsNestedInput
   evaluationCriteria?: Prisma.EvaluationCriteriaUpdateOneRequiredWithoutResultsNestedInput
@@ -316,7 +297,6 @@ export type EvaluationCriteriaResultUncheckedUpdateInput = {
   evaluationId?: Prisma.StringFieldUpdateOperationsInput | string
   evaluationCriteriaId?: Prisma.StringFieldUpdateOperationsInput | string
   selfScore?: Prisma.FloatFieldUpdateOperationsInput | number
-  reviewerScore?: Prisma.FloatFieldUpdateOperationsInput | number
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -325,14 +305,12 @@ export type EvaluationCriteriaResultCreateManyInput = {
   evaluationId: string
   evaluationCriteriaId: string
   selfScore?: number
-  reviewerScore?: number
   comment?: string | null
 }
 
 export type EvaluationCriteriaResultUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   selfScore?: Prisma.FloatFieldUpdateOperationsInput | number
-  reviewerScore?: Prisma.FloatFieldUpdateOperationsInput | number
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -341,7 +319,6 @@ export type EvaluationCriteriaResultUncheckedUpdateManyInput = {
   evaluationId?: Prisma.StringFieldUpdateOperationsInput | string
   evaluationCriteriaId?: Prisma.StringFieldUpdateOperationsInput | string
   selfScore?: Prisma.FloatFieldUpdateOperationsInput | number
-  reviewerScore?: Prisma.FloatFieldUpdateOperationsInput | number
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -365,13 +342,11 @@ export type EvaluationCriteriaResultCountOrderByAggregateInput = {
   evaluationId?: Prisma.SortOrder
   evaluationCriteriaId?: Prisma.SortOrder
   selfScore?: Prisma.SortOrder
-  reviewerScore?: Prisma.SortOrder
   comment?: Prisma.SortOrder
 }
 
 export type EvaluationCriteriaResultAvgOrderByAggregateInput = {
   selfScore?: Prisma.SortOrder
-  reviewerScore?: Prisma.SortOrder
 }
 
 export type EvaluationCriteriaResultMaxOrderByAggregateInput = {
@@ -379,7 +354,6 @@ export type EvaluationCriteriaResultMaxOrderByAggregateInput = {
   evaluationId?: Prisma.SortOrder
   evaluationCriteriaId?: Prisma.SortOrder
   selfScore?: Prisma.SortOrder
-  reviewerScore?: Prisma.SortOrder
   comment?: Prisma.SortOrder
 }
 
@@ -388,13 +362,11 @@ export type EvaluationCriteriaResultMinOrderByAggregateInput = {
   evaluationId?: Prisma.SortOrder
   evaluationCriteriaId?: Prisma.SortOrder
   selfScore?: Prisma.SortOrder
-  reviewerScore?: Prisma.SortOrder
   comment?: Prisma.SortOrder
 }
 
 export type EvaluationCriteriaResultSumOrderByAggregateInput = {
   selfScore?: Prisma.SortOrder
-  reviewerScore?: Prisma.SortOrder
 }
 
 export type EvaluationCriteriaResultCreateNestedManyWithoutEvaluationCriteriaInput = {
@@ -484,7 +456,6 @@ export type EvaluationCriteriaResultUncheckedUpdateManyWithoutEvaluationNestedIn
 export type EvaluationCriteriaResultCreateWithoutEvaluationCriteriaInput = {
   id?: string
   selfScore?: number
-  reviewerScore?: number
   comment?: string | null
   evaluation: Prisma.EvaluationCreateNestedOneWithoutCriteriaResultsInput
 }
@@ -493,7 +464,6 @@ export type EvaluationCriteriaResultUncheckedCreateWithoutEvaluationCriteriaInpu
   id?: string
   evaluationId: string
   selfScore?: number
-  reviewerScore?: number
   comment?: string | null
 }
 
@@ -531,14 +501,12 @@ export type EvaluationCriteriaResultScalarWhereInput = {
   evaluationId?: Prisma.StringFilter<"EvaluationCriteriaResult"> | string
   evaluationCriteriaId?: Prisma.StringFilter<"EvaluationCriteriaResult"> | string
   selfScore?: Prisma.FloatFilter<"EvaluationCriteriaResult"> | number
-  reviewerScore?: Prisma.FloatFilter<"EvaluationCriteriaResult"> | number
   comment?: Prisma.StringNullableFilter<"EvaluationCriteriaResult"> | string | null
 }
 
 export type EvaluationCriteriaResultCreateWithoutEvaluationInput = {
   id?: string
   selfScore?: number
-  reviewerScore?: number
   comment?: string | null
   evaluationCriteria: Prisma.EvaluationCriteriaCreateNestedOneWithoutResultsInput
 }
@@ -547,7 +515,6 @@ export type EvaluationCriteriaResultUncheckedCreateWithoutEvaluationInput = {
   id?: string
   evaluationCriteriaId: string
   selfScore?: number
-  reviewerScore?: number
   comment?: string | null
 }
 
@@ -581,14 +548,12 @@ export type EvaluationCriteriaResultCreateManyEvaluationCriteriaInput = {
   id?: string
   evaluationId: string
   selfScore?: number
-  reviewerScore?: number
   comment?: string | null
 }
 
 export type EvaluationCriteriaResultUpdateWithoutEvaluationCriteriaInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   selfScore?: Prisma.FloatFieldUpdateOperationsInput | number
-  reviewerScore?: Prisma.FloatFieldUpdateOperationsInput | number
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   evaluation?: Prisma.EvaluationUpdateOneRequiredWithoutCriteriaResultsNestedInput
 }
@@ -597,7 +562,6 @@ export type EvaluationCriteriaResultUncheckedUpdateWithoutEvaluationCriteriaInpu
   id?: Prisma.StringFieldUpdateOperationsInput | string
   evaluationId?: Prisma.StringFieldUpdateOperationsInput | string
   selfScore?: Prisma.FloatFieldUpdateOperationsInput | number
-  reviewerScore?: Prisma.FloatFieldUpdateOperationsInput | number
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -605,7 +569,6 @@ export type EvaluationCriteriaResultUncheckedUpdateManyWithoutEvaluationCriteria
   id?: Prisma.StringFieldUpdateOperationsInput | string
   evaluationId?: Prisma.StringFieldUpdateOperationsInput | string
   selfScore?: Prisma.FloatFieldUpdateOperationsInput | number
-  reviewerScore?: Prisma.FloatFieldUpdateOperationsInput | number
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -613,14 +576,12 @@ export type EvaluationCriteriaResultCreateManyEvaluationInput = {
   id?: string
   evaluationCriteriaId: string
   selfScore?: number
-  reviewerScore?: number
   comment?: string | null
 }
 
 export type EvaluationCriteriaResultUpdateWithoutEvaluationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   selfScore?: Prisma.FloatFieldUpdateOperationsInput | number
-  reviewerScore?: Prisma.FloatFieldUpdateOperationsInput | number
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   evaluationCriteria?: Prisma.EvaluationCriteriaUpdateOneRequiredWithoutResultsNestedInput
 }
@@ -629,7 +590,6 @@ export type EvaluationCriteriaResultUncheckedUpdateWithoutEvaluationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   evaluationCriteriaId?: Prisma.StringFieldUpdateOperationsInput | string
   selfScore?: Prisma.FloatFieldUpdateOperationsInput | number
-  reviewerScore?: Prisma.FloatFieldUpdateOperationsInput | number
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -637,7 +597,6 @@ export type EvaluationCriteriaResultUncheckedUpdateManyWithoutEvaluationInput = 
   id?: Prisma.StringFieldUpdateOperationsInput | string
   evaluationCriteriaId?: Prisma.StringFieldUpdateOperationsInput | string
   selfScore?: Prisma.FloatFieldUpdateOperationsInput | number
-  reviewerScore?: Prisma.FloatFieldUpdateOperationsInput | number
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -648,7 +607,6 @@ export type EvaluationCriteriaResultSelect<ExtArgs extends runtime.Types.Extensi
   evaluationId?: boolean
   evaluationCriteriaId?: boolean
   selfScore?: boolean
-  reviewerScore?: boolean
   comment?: boolean
   evaluation?: boolean | Prisma.EvaluationDefaultArgs<ExtArgs>
   evaluationCriteria?: boolean | Prisma.EvaluationCriteriaDefaultArgs<ExtArgs>
@@ -659,7 +617,6 @@ export type EvaluationCriteriaResultSelectCreateManyAndReturn<ExtArgs extends ru
   evaluationId?: boolean
   evaluationCriteriaId?: boolean
   selfScore?: boolean
-  reviewerScore?: boolean
   comment?: boolean
   evaluation?: boolean | Prisma.EvaluationDefaultArgs<ExtArgs>
   evaluationCriteria?: boolean | Prisma.EvaluationCriteriaDefaultArgs<ExtArgs>
@@ -670,7 +627,6 @@ export type EvaluationCriteriaResultSelectUpdateManyAndReturn<ExtArgs extends ru
   evaluationId?: boolean
   evaluationCriteriaId?: boolean
   selfScore?: boolean
-  reviewerScore?: boolean
   comment?: boolean
   evaluation?: boolean | Prisma.EvaluationDefaultArgs<ExtArgs>
   evaluationCriteria?: boolean | Prisma.EvaluationCriteriaDefaultArgs<ExtArgs>
@@ -681,11 +637,10 @@ export type EvaluationCriteriaResultSelectScalar = {
   evaluationId?: boolean
   evaluationCriteriaId?: boolean
   selfScore?: boolean
-  reviewerScore?: boolean
   comment?: boolean
 }
 
-export type EvaluationCriteriaResultOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "evaluationId" | "evaluationCriteriaId" | "selfScore" | "reviewerScore" | "comment", ExtArgs["result"]["evaluationCriteriaResult"]>
+export type EvaluationCriteriaResultOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "evaluationId" | "evaluationCriteriaId" | "selfScore" | "comment", ExtArgs["result"]["evaluationCriteriaResult"]>
 export type EvaluationCriteriaResultInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   evaluation?: boolean | Prisma.EvaluationDefaultArgs<ExtArgs>
   evaluationCriteria?: boolean | Prisma.EvaluationCriteriaDefaultArgs<ExtArgs>
@@ -710,7 +665,6 @@ export type $EvaluationCriteriaResultPayload<ExtArgs extends runtime.Types.Exten
     evaluationId: string
     evaluationCriteriaId: string
     selfScore: number
-    reviewerScore: number
     comment: string | null
   }, ExtArgs["result"]["evaluationCriteriaResult"]>
   composites: {}
@@ -1141,7 +1095,6 @@ export interface EvaluationCriteriaResultFieldRefs {
   readonly evaluationId: Prisma.FieldRef<"EvaluationCriteriaResult", 'String'>
   readonly evaluationCriteriaId: Prisma.FieldRef<"EvaluationCriteriaResult", 'String'>
   readonly selfScore: Prisma.FieldRef<"EvaluationCriteriaResult", 'Float'>
-  readonly reviewerScore: Prisma.FieldRef<"EvaluationCriteriaResult", 'Float'>
   readonly comment: Prisma.FieldRef<"EvaluationCriteriaResult", 'String'>
 }
     

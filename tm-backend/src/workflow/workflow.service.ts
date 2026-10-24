@@ -42,7 +42,7 @@ export class WorkflowService {
 
     //check project member
     await this.projectService.assertProjectMember(project.id, user.id)
-    await this.permissionService.assertSomePermission(project.workspaceId, user.id, [PERMISSION_KEYS.WORKFLOW_CREATE, PERMISSION_KEYS.PROJECT_UPDATE] )
+    await this.permissionService.assertSomePermission(project.workspaceId, user.id, [PERMISSION_KEYS.WORKFLOW_CREATE, PERMISSION_KEYS.PROJECT_UPDATE], project.id)
     //check workflow trong project do
     if(project.workflow?.id){
       throw new BadRequestException('This project already has a workflow')
@@ -91,6 +91,7 @@ export class WorkflowService {
       const workflow = await tx.workflow.create({
         data:{
           projectId: project.id,
+          workspaceId: project.workspaceId,
           name: dto.name
         }
       })
@@ -231,23 +232,39 @@ export class WorkflowService {
   }
 
   async assertValidTransition(
-    projectId: string,
+    workspaceId: string,
+    projectId: string | null,
     fromStatus: string,
     toStatus: string,
   ) {
-    const workflow = await this.prisma.workflow.findUnique({
-      where: {
-        projectId,
-      },
-      include: {
-        steps: {
-          orderBy: {
-            order: 'asc',
-        },
-      },
-        transitions: true,
-      },
-    });
+    const workflow = projectId
+      ? await this.prisma.workflow.findUnique({
+          where: {
+            projectId,
+          },
+          include: {
+            steps: {
+              orderBy: {
+                order: 'asc',
+              },
+            },
+            transitions: true,
+          },
+        })
+      : await this.prisma.workflow.findFirst({
+          where: {
+            workspaceId,
+            projectId: null,
+          },
+          include: {
+            steps: {
+              orderBy: {
+                order: 'asc',
+              },
+            },
+            transitions: true,
+          },
+        });
 
     if (!workflow) return;
 

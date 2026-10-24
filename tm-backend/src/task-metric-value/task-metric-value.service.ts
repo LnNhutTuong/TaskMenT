@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, ForbiddenException } from '@nestjs/common';
 import { UpsertMetricValueDTO } from './dto/upsert-metric-value.dto.js';
 import { AuthUser } from '../auth/types/jwt-payload.type.js';
 import { PrismaService } from '../prisma/prisma.service.js';
@@ -21,12 +21,25 @@ export class TaskMetricValueService {
 
     const metric = await this.metricService.findOne(dto.metricId, user);
 
-    const isSameWorkspace = task.project.workspaceId  === metric.workspaceId
+    const isSameWorkspace = task.workspaceId  === metric.workspaceId
     
     if(!isSameWorkspace){
       throw new BadRequestException('Task and metric are not in the same Workspace')
     } 
-    await this.taskService.assertTaskPermission(dto.taskId,user.id);
+
+    const isAssignee = task.taskAssignees?.some(
+      (a: any) => a.userId === user.id || a.user?.id === user.id
+    );
+    const hasKpiCalcPerm = await this.permissionService.hasPermission(
+      task.workspaceId,
+      user.id,
+      PERMISSION_KEYS.KPI_CALCULATE,
+      task.project?.id
+    );
+
+    if (!isAssignee && !hasKpiCalcPerm) {
+      throw new ForbiddenException('You must be assigned to this task or have KPI_CALCULATE permission');
+    }
 
     return this.prisma.taskMetricValue.upsert({
       where:{

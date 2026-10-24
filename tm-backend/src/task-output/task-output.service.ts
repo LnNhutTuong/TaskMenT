@@ -18,8 +18,11 @@ export class TaskOutputService {
     async create(dto: CreateTaskOutputDto, user: AuthUser){
       const task = await this.taskService.findOne(dto.taskId, user);
 
-      await this.projectService.assertProjectMember(task.project.id, user.id);
-      await this.permissionService.assertPermission(task.project.workspaceId, user.id, PERMISSION_KEYS.OUTPUT_CREATE)
+      if(task.project){
+        await this.projectService.assertProjectMember(task.project.id, user.id);
+      }
+      await this.taskService.assertTaskPermission(task.id, user.id);
+      await this.permissionService.assertPermission(task.workspaceId, user.id, PERMISSION_KEYS.OUTPUT_CREATE, task.project?.id)
 
       return this.prisma.taskOutput.create({
         data:{
@@ -49,7 +52,7 @@ export class TaskOutputService {
         throw new NotFoundException('Task output not found');
       }
 
-      await this.taskService.assertTaskPermission(taskOutput.task.id, user.id)
+      await this.taskService.findOne(taskOutput.task.id, user);
       
       return taskOutput;
     }
@@ -84,11 +87,8 @@ export class TaskOutputService {
           task:{
             select:{
               id: true,
-              project:{
-                select:{
-                  workspaceId: true
-                }
-              }
+              workspaceId: true,
+              projectId: true
             },
           }
         }
@@ -99,7 +99,7 @@ export class TaskOutputService {
       }
 
       await this.taskService.assertTaskPermission(taskOutput.task.id, user.id)
-      await this.permissionService.assertPermission(taskOutput.task.project.workspaceId, user.id, PERMISSION_KEYS.OUTPUT_UPDATE)
+      await this.permissionService.assertPermission(taskOutput.task.workspaceId, user.id, PERMISSION_KEYS.OUTPUT_UPDATE, taskOutput.task.projectId ?? undefined)
 
       const taskOutputAfterUpdate = await this.prisma.taskOutput.update({
         where:{
@@ -130,11 +130,8 @@ export class TaskOutputService {
           task:{
             select:{
               id: true,
-              project:{
-                select:{
-                  workspaceId: true
-                }
-              }
+              workspaceId: true,
+              projectId: true              
             },
           }
         }
@@ -145,8 +142,7 @@ export class TaskOutputService {
         throw new NotFoundException('Task output not found')
       }
 
-      await this.taskService.assertTaskPermission(taskOutput.task.id, user.id)
-      await this.permissionService.assertPermission(taskOutput.task.project.workspaceId, user.id, PERMISSION_KEYS.OUTPUT_DELETE)
+      await this.permissionService.assertPermission(taskOutput.task.workspaceId, user.id, PERMISSION_KEYS.OUTPUT_DELETE, taskOutput.task.projectId ?? undefined)
 
       return this.prisma.taskOutput.delete({
         where:{

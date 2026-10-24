@@ -218,6 +218,7 @@ export type EvaluationCriteriaWhereInput = {
   periodId?: Prisma.StringFilter<"EvaluationCriteria"> | string
   period?: Prisma.XOR<Prisma.EvaluationPeriodScalarRelationFilter, Prisma.EvaluationPeriodWhereInput>
   results?: Prisma.EvaluationCriteriaResultListRelationFilter
+  reviewerScores?: Prisma.EvaluationReviewerScoreListRelationFilter
 }
 
 export type EvaluationCriteriaOrderByWithRelationInput = {
@@ -228,6 +229,7 @@ export type EvaluationCriteriaOrderByWithRelationInput = {
   periodId?: Prisma.SortOrder
   period?: Prisma.EvaluationPeriodOrderByWithRelationInput
   results?: Prisma.EvaluationCriteriaResultOrderByRelationAggregateInput
+  reviewerScores?: Prisma.EvaluationReviewerScoreOrderByRelationAggregateInput
 }
 
 export type EvaluationCriteriaWhereUniqueInput = Prisma.AtLeast<{
@@ -241,6 +243,7 @@ export type EvaluationCriteriaWhereUniqueInput = Prisma.AtLeast<{
   periodId?: Prisma.StringFilter<"EvaluationCriteria"> | string
   period?: Prisma.XOR<Prisma.EvaluationPeriodScalarRelationFilter, Prisma.EvaluationPeriodWhereInput>
   results?: Prisma.EvaluationCriteriaResultListRelationFilter
+  reviewerScores?: Prisma.EvaluationReviewerScoreListRelationFilter
 }, "id">
 
 export type EvaluationCriteriaOrderByWithAggregationInput = {
@@ -274,6 +277,7 @@ export type EvaluationCriteriaCreateInput = {
   maxScore?: number
   period: Prisma.EvaluationPeriodCreateNestedOneWithoutCriteriaInput
   results?: Prisma.EvaluationCriteriaResultCreateNestedManyWithoutEvaluationCriteriaInput
+  reviewerScores?: Prisma.EvaluationReviewerScoreCreateNestedManyWithoutEvaluationCriteriaInput
 }
 
 export type EvaluationCriteriaUncheckedCreateInput = {
@@ -283,6 +287,7 @@ export type EvaluationCriteriaUncheckedCreateInput = {
   maxScore?: number
   periodId: string
   results?: Prisma.EvaluationCriteriaResultUncheckedCreateNestedManyWithoutEvaluationCriteriaInput
+  reviewerScores?: Prisma.EvaluationReviewerScoreUncheckedCreateNestedManyWithoutEvaluationCriteriaInput
 }
 
 export type EvaluationCriteriaUpdateInput = {
@@ -292,6 +297,7 @@ export type EvaluationCriteriaUpdateInput = {
   maxScore?: Prisma.FloatFieldUpdateOperationsInput | number
   period?: Prisma.EvaluationPeriodUpdateOneRequiredWithoutCriteriaNestedInput
   results?: Prisma.EvaluationCriteriaResultUpdateManyWithoutEvaluationCriteriaNestedInput
+  reviewerScores?: Prisma.EvaluationReviewerScoreUpdateManyWithoutEvaluationCriteriaNestedInput
 }
 
 export type EvaluationCriteriaUncheckedUpdateInput = {
@@ -301,6 +307,7 @@ export type EvaluationCriteriaUncheckedUpdateInput = {
   maxScore?: Prisma.FloatFieldUpdateOperationsInput | number
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
   results?: Prisma.EvaluationCriteriaResultUncheckedUpdateManyWithoutEvaluationCriteriaNestedInput
+  reviewerScores?: Prisma.EvaluationReviewerScoreUncheckedUpdateManyWithoutEvaluationCriteriaNestedInput
 }
 
 export type EvaluationCriteriaCreateManyInput = {
@@ -429,12 +436,27 @@ export type EvaluationCriteriaUpdateOneRequiredWithoutResultsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.EvaluationCriteriaUpdateToOneWithWhereWithoutResultsInput, Prisma.EvaluationCriteriaUpdateWithoutResultsInput>, Prisma.EvaluationCriteriaUncheckedUpdateWithoutResultsInput>
 }
 
+export type EvaluationCriteriaCreateNestedOneWithoutReviewerScoresInput = {
+  create?: Prisma.XOR<Prisma.EvaluationCriteriaCreateWithoutReviewerScoresInput, Prisma.EvaluationCriteriaUncheckedCreateWithoutReviewerScoresInput>
+  connectOrCreate?: Prisma.EvaluationCriteriaCreateOrConnectWithoutReviewerScoresInput
+  connect?: Prisma.EvaluationCriteriaWhereUniqueInput
+}
+
+export type EvaluationCriteriaUpdateOneRequiredWithoutReviewerScoresNestedInput = {
+  create?: Prisma.XOR<Prisma.EvaluationCriteriaCreateWithoutReviewerScoresInput, Prisma.EvaluationCriteriaUncheckedCreateWithoutReviewerScoresInput>
+  connectOrCreate?: Prisma.EvaluationCriteriaCreateOrConnectWithoutReviewerScoresInput
+  upsert?: Prisma.EvaluationCriteriaUpsertWithoutReviewerScoresInput
+  connect?: Prisma.EvaluationCriteriaWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EvaluationCriteriaUpdateToOneWithWhereWithoutReviewerScoresInput, Prisma.EvaluationCriteriaUpdateWithoutReviewerScoresInput>, Prisma.EvaluationCriteriaUncheckedUpdateWithoutReviewerScoresInput>
+}
+
 export type EvaluationCriteriaCreateWithoutPeriodInput = {
   id?: string
   name: string
   description?: string | null
   maxScore?: number
   results?: Prisma.EvaluationCriteriaResultCreateNestedManyWithoutEvaluationCriteriaInput
+  reviewerScores?: Prisma.EvaluationReviewerScoreCreateNestedManyWithoutEvaluationCriteriaInput
 }
 
 export type EvaluationCriteriaUncheckedCreateWithoutPeriodInput = {
@@ -443,6 +465,7 @@ export type EvaluationCriteriaUncheckedCreateWithoutPeriodInput = {
   description?: string | null
   maxScore?: number
   results?: Prisma.EvaluationCriteriaResultUncheckedCreateNestedManyWithoutEvaluationCriteriaInput
+  reviewerScores?: Prisma.EvaluationReviewerScoreUncheckedCreateNestedManyWithoutEvaluationCriteriaInput
 }
 
 export type EvaluationCriteriaCreateOrConnectWithoutPeriodInput = {
@@ -488,6 +511,7 @@ export type EvaluationCriteriaCreateWithoutResultsInput = {
   description?: string | null
   maxScore?: number
   period: Prisma.EvaluationPeriodCreateNestedOneWithoutCriteriaInput
+  reviewerScores?: Prisma.EvaluationReviewerScoreCreateNestedManyWithoutEvaluationCriteriaInput
 }
 
 export type EvaluationCriteriaUncheckedCreateWithoutResultsInput = {
@@ -496,6 +520,7 @@ export type EvaluationCriteriaUncheckedCreateWithoutResultsInput = {
   description?: string | null
   maxScore?: number
   periodId: string
+  reviewerScores?: Prisma.EvaluationReviewerScoreUncheckedCreateNestedManyWithoutEvaluationCriteriaInput
 }
 
 export type EvaluationCriteriaCreateOrConnectWithoutResultsInput = {
@@ -520,6 +545,7 @@ export type EvaluationCriteriaUpdateWithoutResultsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   maxScore?: Prisma.FloatFieldUpdateOperationsInput | number
   period?: Prisma.EvaluationPeriodUpdateOneRequiredWithoutCriteriaNestedInput
+  reviewerScores?: Prisma.EvaluationReviewerScoreUpdateManyWithoutEvaluationCriteriaNestedInput
 }
 
 export type EvaluationCriteriaUncheckedUpdateWithoutResultsInput = {
@@ -528,6 +554,59 @@ export type EvaluationCriteriaUncheckedUpdateWithoutResultsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   maxScore?: Prisma.FloatFieldUpdateOperationsInput | number
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
+  reviewerScores?: Prisma.EvaluationReviewerScoreUncheckedUpdateManyWithoutEvaluationCriteriaNestedInput
+}
+
+export type EvaluationCriteriaCreateWithoutReviewerScoresInput = {
+  id?: string
+  name: string
+  description?: string | null
+  maxScore?: number
+  period: Prisma.EvaluationPeriodCreateNestedOneWithoutCriteriaInput
+  results?: Prisma.EvaluationCriteriaResultCreateNestedManyWithoutEvaluationCriteriaInput
+}
+
+export type EvaluationCriteriaUncheckedCreateWithoutReviewerScoresInput = {
+  id?: string
+  name: string
+  description?: string | null
+  maxScore?: number
+  periodId: string
+  results?: Prisma.EvaluationCriteriaResultUncheckedCreateNestedManyWithoutEvaluationCriteriaInput
+}
+
+export type EvaluationCriteriaCreateOrConnectWithoutReviewerScoresInput = {
+  where: Prisma.EvaluationCriteriaWhereUniqueInput
+  create: Prisma.XOR<Prisma.EvaluationCriteriaCreateWithoutReviewerScoresInput, Prisma.EvaluationCriteriaUncheckedCreateWithoutReviewerScoresInput>
+}
+
+export type EvaluationCriteriaUpsertWithoutReviewerScoresInput = {
+  update: Prisma.XOR<Prisma.EvaluationCriteriaUpdateWithoutReviewerScoresInput, Prisma.EvaluationCriteriaUncheckedUpdateWithoutReviewerScoresInput>
+  create: Prisma.XOR<Prisma.EvaluationCriteriaCreateWithoutReviewerScoresInput, Prisma.EvaluationCriteriaUncheckedCreateWithoutReviewerScoresInput>
+  where?: Prisma.EvaluationCriteriaWhereInput
+}
+
+export type EvaluationCriteriaUpdateToOneWithWhereWithoutReviewerScoresInput = {
+  where?: Prisma.EvaluationCriteriaWhereInput
+  data: Prisma.XOR<Prisma.EvaluationCriteriaUpdateWithoutReviewerScoresInput, Prisma.EvaluationCriteriaUncheckedUpdateWithoutReviewerScoresInput>
+}
+
+export type EvaluationCriteriaUpdateWithoutReviewerScoresInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maxScore?: Prisma.FloatFieldUpdateOperationsInput | number
+  period?: Prisma.EvaluationPeriodUpdateOneRequiredWithoutCriteriaNestedInput
+  results?: Prisma.EvaluationCriteriaResultUpdateManyWithoutEvaluationCriteriaNestedInput
+}
+
+export type EvaluationCriteriaUncheckedUpdateWithoutReviewerScoresInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maxScore?: Prisma.FloatFieldUpdateOperationsInput | number
+  periodId?: Prisma.StringFieldUpdateOperationsInput | string
+  results?: Prisma.EvaluationCriteriaResultUncheckedUpdateManyWithoutEvaluationCriteriaNestedInput
 }
 
 export type EvaluationCriteriaCreateManyPeriodInput = {
@@ -543,6 +622,7 @@ export type EvaluationCriteriaUpdateWithoutPeriodInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   maxScore?: Prisma.FloatFieldUpdateOperationsInput | number
   results?: Prisma.EvaluationCriteriaResultUpdateManyWithoutEvaluationCriteriaNestedInput
+  reviewerScores?: Prisma.EvaluationReviewerScoreUpdateManyWithoutEvaluationCriteriaNestedInput
 }
 
 export type EvaluationCriteriaUncheckedUpdateWithoutPeriodInput = {
@@ -551,6 +631,7 @@ export type EvaluationCriteriaUncheckedUpdateWithoutPeriodInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   maxScore?: Prisma.FloatFieldUpdateOperationsInput | number
   results?: Prisma.EvaluationCriteriaResultUncheckedUpdateManyWithoutEvaluationCriteriaNestedInput
+  reviewerScores?: Prisma.EvaluationReviewerScoreUncheckedUpdateManyWithoutEvaluationCriteriaNestedInput
 }
 
 export type EvaluationCriteriaUncheckedUpdateManyWithoutPeriodInput = {
@@ -567,10 +648,12 @@ export type EvaluationCriteriaUncheckedUpdateManyWithoutPeriodInput = {
 
 export type EvaluationCriteriaCountOutputType = {
   results: number
+  reviewerScores: number
 }
 
 export type EvaluationCriteriaCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   results?: boolean | EvaluationCriteriaCountOutputTypeCountResultsArgs
+  reviewerScores?: boolean | EvaluationCriteriaCountOutputTypeCountReviewerScoresArgs
 }
 
 /**
@@ -590,6 +673,13 @@ export type EvaluationCriteriaCountOutputTypeCountResultsArgs<ExtArgs extends ru
   where?: Prisma.EvaluationCriteriaResultWhereInput
 }
 
+/**
+ * EvaluationCriteriaCountOutputType without action
+ */
+export type EvaluationCriteriaCountOutputTypeCountReviewerScoresArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EvaluationReviewerScoreWhereInput
+}
+
 
 export type EvaluationCriteriaSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -599,6 +689,7 @@ export type EvaluationCriteriaSelect<ExtArgs extends runtime.Types.Extensions.In
   periodId?: boolean
   period?: boolean | Prisma.EvaluationPeriodDefaultArgs<ExtArgs>
   results?: boolean | Prisma.EvaluationCriteria$resultsArgs<ExtArgs>
+  reviewerScores?: boolean | Prisma.EvaluationCriteria$reviewerScoresArgs<ExtArgs>
   _count?: boolean | Prisma.EvaluationCriteriaCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["evaluationCriteria"]>
 
@@ -632,6 +723,7 @@ export type EvaluationCriteriaOmit<ExtArgs extends runtime.Types.Extensions.Inte
 export type EvaluationCriteriaInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   period?: boolean | Prisma.EvaluationPeriodDefaultArgs<ExtArgs>
   results?: boolean | Prisma.EvaluationCriteria$resultsArgs<ExtArgs>
+  reviewerScores?: boolean | Prisma.EvaluationCriteria$reviewerScoresArgs<ExtArgs>
   _count?: boolean | Prisma.EvaluationCriteriaCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type EvaluationCriteriaIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -646,6 +738,7 @@ export type $EvaluationCriteriaPayload<ExtArgs extends runtime.Types.Extensions.
   objects: {
     period: Prisma.$EvaluationPeriodPayload<ExtArgs>
     results: Prisma.$EvaluationCriteriaResultPayload<ExtArgs>[]
+    reviewerScores: Prisma.$EvaluationReviewerScorePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1049,6 +1142,7 @@ export interface Prisma__EvaluationCriteriaClient<T, Null = never, ExtArgs exten
   readonly [Symbol.toStringTag]: "PrismaPromise"
   period<T extends Prisma.EvaluationPeriodDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EvaluationPeriodDefaultArgs<ExtArgs>>): Prisma.Prisma__EvaluationPeriodClient<runtime.Types.Result.GetResult<Prisma.$EvaluationPeriodPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   results<T extends Prisma.EvaluationCriteria$resultsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EvaluationCriteria$resultsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EvaluationCriteriaResultPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reviewerScores<T extends Prisma.EvaluationCriteria$reviewerScoresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EvaluationCriteria$reviewerScoresArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EvaluationReviewerScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1505,6 +1599,30 @@ export type EvaluationCriteria$resultsArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   distinct?: Prisma.EvaluationCriteriaResultScalarFieldEnum | Prisma.EvaluationCriteriaResultScalarFieldEnum[]
+}
+
+/**
+ * EvaluationCriteria.reviewerScores
+ */
+export type EvaluationCriteria$reviewerScoresArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EvaluationReviewerScore
+   */
+  select?: Prisma.EvaluationReviewerScoreSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EvaluationReviewerScore
+   */
+  omit?: Prisma.EvaluationReviewerScoreOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EvaluationReviewerScoreInclude<ExtArgs> | null
+  where?: Prisma.EvaluationReviewerScoreWhereInput
+  orderBy?: Prisma.EvaluationReviewerScoreOrderByWithRelationInput | Prisma.EvaluationReviewerScoreOrderByWithRelationInput[]
+  cursor?: Prisma.EvaluationReviewerScoreWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EvaluationReviewerScoreScalarFieldEnum | Prisma.EvaluationReviewerScoreScalarFieldEnum[]
 }
 
 /**

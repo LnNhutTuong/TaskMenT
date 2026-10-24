@@ -42,14 +42,12 @@ export type EvaluationMinAggregateOutputType = {
   id: string | null
   periodId: string | null
   userId: string | null
-  reviewerId: string | null
   status: $Enums.EvaluationStatus | null
   kpiScore: number | null
   criteriaScore: number | null
   finalScore: number | null
   classification: string | null
   selfComment: string | null
-  reviewerComment: string | null
   createdAt: Date | null
   deletedAt: Date | null
   updatedAt: Date | null
@@ -59,14 +57,12 @@ export type EvaluationMaxAggregateOutputType = {
   id: string | null
   periodId: string | null
   userId: string | null
-  reviewerId: string | null
   status: $Enums.EvaluationStatus | null
   kpiScore: number | null
   criteriaScore: number | null
   finalScore: number | null
   classification: string | null
   selfComment: string | null
-  reviewerComment: string | null
   createdAt: Date | null
   deletedAt: Date | null
   updatedAt: Date | null
@@ -76,14 +72,12 @@ export type EvaluationCountAggregateOutputType = {
   id: number
   periodId: number
   userId: number
-  reviewerId: number
   status: number
   kpiScore: number
   criteriaScore: number
   finalScore: number
   classification: number
   selfComment: number
-  reviewerComment: number
   createdAt: number
   deletedAt: number
   updatedAt: number
@@ -107,14 +101,12 @@ export type EvaluationMinAggregateInputType = {
   id?: true
   periodId?: true
   userId?: true
-  reviewerId?: true
   status?: true
   kpiScore?: true
   criteriaScore?: true
   finalScore?: true
   classification?: true
   selfComment?: true
-  reviewerComment?: true
   createdAt?: true
   deletedAt?: true
   updatedAt?: true
@@ -124,14 +116,12 @@ export type EvaluationMaxAggregateInputType = {
   id?: true
   periodId?: true
   userId?: true
-  reviewerId?: true
   status?: true
   kpiScore?: true
   criteriaScore?: true
   finalScore?: true
   classification?: true
   selfComment?: true
-  reviewerComment?: true
   createdAt?: true
   deletedAt?: true
   updatedAt?: true
@@ -141,14 +131,12 @@ export type EvaluationCountAggregateInputType = {
   id?: true
   periodId?: true
   userId?: true
-  reviewerId?: true
   status?: true
   kpiScore?: true
   criteriaScore?: true
   finalScore?: true
   classification?: true
   selfComment?: true
-  reviewerComment?: true
   createdAt?: true
   deletedAt?: true
   updatedAt?: true
@@ -245,14 +233,12 @@ export type EvaluationGroupByOutputType = {
   id: string
   periodId: string
   userId: string
-  reviewerId: string | null
   status: $Enums.EvaluationStatus
   kpiScore: number
   criteriaScore: number
   finalScore: number
   classification: string | null
   selfComment: string | null
-  reviewerComment: string | null
   createdAt: Date
   deletedAt: Date | null
   updatedAt: Date
@@ -285,20 +271,18 @@ export type EvaluationWhereInput = {
   id?: Prisma.StringFilter<"Evaluation"> | string
   periodId?: Prisma.StringFilter<"Evaluation"> | string
   userId?: Prisma.StringFilter<"Evaluation"> | string
-  reviewerId?: Prisma.StringNullableFilter<"Evaluation"> | string | null
   status?: Prisma.EnumEvaluationStatusFilter<"Evaluation"> | $Enums.EvaluationStatus
   kpiScore?: Prisma.FloatFilter<"Evaluation"> | number
   criteriaScore?: Prisma.FloatFilter<"Evaluation"> | number
   finalScore?: Prisma.FloatFilter<"Evaluation"> | number
   classification?: Prisma.StringNullableFilter<"Evaluation"> | string | null
   selfComment?: Prisma.StringNullableFilter<"Evaluation"> | string | null
-  reviewerComment?: Prisma.StringNullableFilter<"Evaluation"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Evaluation"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Evaluation"> | Date | string | null
   updatedAt?: Prisma.DateTimeFilter<"Evaluation"> | Date | string
   period?: Prisma.XOR<Prisma.EvaluationPeriodScalarRelationFilter, Prisma.EvaluationPeriodWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  reviewer?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  reviewers?: Prisma.EvaluationReviewerListRelationFilter
   criteriaResults?: Prisma.EvaluationCriteriaResultListRelationFilter
 }
 
@@ -306,20 +290,18 @@ export type EvaluationOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   periodId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  reviewerId?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   kpiScore?: Prisma.SortOrder
   criteriaScore?: Prisma.SortOrder
   finalScore?: Prisma.SortOrder
   classification?: Prisma.SortOrderInput | Prisma.SortOrder
   selfComment?: Prisma.SortOrderInput | Prisma.SortOrder
-  reviewerComment?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   period?: Prisma.EvaluationPeriodOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
-  reviewer?: Prisma.UserOrderByWithRelationInput
+  reviewers?: Prisma.EvaluationReviewerOrderByRelationAggregateInput
   criteriaResults?: Prisma.EvaluationCriteriaResultOrderByRelationAggregateInput
 }
 
@@ -331,20 +313,18 @@ export type EvaluationWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.EvaluationWhereInput | Prisma.EvaluationWhereInput[]
   periodId?: Prisma.StringFilter<"Evaluation"> | string
   userId?: Prisma.StringFilter<"Evaluation"> | string
-  reviewerId?: Prisma.StringNullableFilter<"Evaluation"> | string | null
   status?: Prisma.EnumEvaluationStatusFilter<"Evaluation"> | $Enums.EvaluationStatus
   kpiScore?: Prisma.FloatFilter<"Evaluation"> | number
   criteriaScore?: Prisma.FloatFilter<"Evaluation"> | number
   finalScore?: Prisma.FloatFilter<"Evaluation"> | number
   classification?: Prisma.StringNullableFilter<"Evaluation"> | string | null
   selfComment?: Prisma.StringNullableFilter<"Evaluation"> | string | null
-  reviewerComment?: Prisma.StringNullableFilter<"Evaluation"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Evaluation"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Evaluation"> | Date | string | null
   updatedAt?: Prisma.DateTimeFilter<"Evaluation"> | Date | string
   period?: Prisma.XOR<Prisma.EvaluationPeriodScalarRelationFilter, Prisma.EvaluationPeriodWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  reviewer?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  reviewers?: Prisma.EvaluationReviewerListRelationFilter
   criteriaResults?: Prisma.EvaluationCriteriaResultListRelationFilter
 }, "id" | "periodId_userId">
 
@@ -352,14 +332,12 @@ export type EvaluationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   periodId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  reviewerId?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   kpiScore?: Prisma.SortOrder
   criteriaScore?: Prisma.SortOrder
   finalScore?: Prisma.SortOrder
   classification?: Prisma.SortOrderInput | Prisma.SortOrder
   selfComment?: Prisma.SortOrderInput | Prisma.SortOrder
-  reviewerComment?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -377,14 +355,12 @@ export type EvaluationScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Evaluation"> | string
   periodId?: Prisma.StringWithAggregatesFilter<"Evaluation"> | string
   userId?: Prisma.StringWithAggregatesFilter<"Evaluation"> | string
-  reviewerId?: Prisma.StringNullableWithAggregatesFilter<"Evaluation"> | string | null
   status?: Prisma.EnumEvaluationStatusWithAggregatesFilter<"Evaluation"> | $Enums.EvaluationStatus
   kpiScore?: Prisma.FloatWithAggregatesFilter<"Evaluation"> | number
   criteriaScore?: Prisma.FloatWithAggregatesFilter<"Evaluation"> | number
   finalScore?: Prisma.FloatWithAggregatesFilter<"Evaluation"> | number
   classification?: Prisma.StringNullableWithAggregatesFilter<"Evaluation"> | string | null
   selfComment?: Prisma.StringNullableWithAggregatesFilter<"Evaluation"> | string | null
-  reviewerComment?: Prisma.StringNullableWithAggregatesFilter<"Evaluation"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Evaluation"> | Date | string
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Evaluation"> | Date | string | null
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Evaluation"> | Date | string
@@ -398,13 +374,12 @@ export type EvaluationCreateInput = {
   finalScore?: number
   classification?: string | null
   selfComment?: string | null
-  reviewerComment?: string | null
   createdAt?: Date | string
   deletedAt?: Date | string | null
   updatedAt?: Date | string
   period: Prisma.EvaluationPeriodCreateNestedOneWithoutEvaluationsInput
   user: Prisma.UserCreateNestedOneWithoutUserEvaluationInput
-  reviewer?: Prisma.UserCreateNestedOneWithoutReviewerEvaluationInput
+  reviewers?: Prisma.EvaluationReviewerCreateNestedManyWithoutEvaluationInput
   criteriaResults?: Prisma.EvaluationCriteriaResultCreateNestedManyWithoutEvaluationInput
 }
 
@@ -412,17 +387,16 @@ export type EvaluationUncheckedCreateInput = {
   id?: string
   periodId: string
   userId: string
-  reviewerId?: string | null
   status?: $Enums.EvaluationStatus
   kpiScore?: number
   criteriaScore?: number
   finalScore?: number
   classification?: string | null
   selfComment?: string | null
-  reviewerComment?: string | null
   createdAt?: Date | string
   deletedAt?: Date | string | null
   updatedAt?: Date | string
+  reviewers?: Prisma.EvaluationReviewerUncheckedCreateNestedManyWithoutEvaluationInput
   criteriaResults?: Prisma.EvaluationCriteriaResultUncheckedCreateNestedManyWithoutEvaluationInput
 }
 
@@ -434,13 +408,12 @@ export type EvaluationUpdateInput = {
   finalScore?: Prisma.FloatFieldUpdateOperationsInput | number
   classification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  reviewerComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   period?: Prisma.EvaluationPeriodUpdateOneRequiredWithoutEvaluationsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutUserEvaluationNestedInput
-  reviewer?: Prisma.UserUpdateOneWithoutReviewerEvaluationNestedInput
+  reviewers?: Prisma.EvaluationReviewerUpdateManyWithoutEvaluationNestedInput
   criteriaResults?: Prisma.EvaluationCriteriaResultUpdateManyWithoutEvaluationNestedInput
 }
 
@@ -448,17 +421,16 @@ export type EvaluationUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  reviewerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
   kpiScore?: Prisma.FloatFieldUpdateOperationsInput | number
   criteriaScore?: Prisma.FloatFieldUpdateOperationsInput | number
   finalScore?: Prisma.FloatFieldUpdateOperationsInput | number
   classification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  reviewerComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewers?: Prisma.EvaluationReviewerUncheckedUpdateManyWithoutEvaluationNestedInput
   criteriaResults?: Prisma.EvaluationCriteriaResultUncheckedUpdateManyWithoutEvaluationNestedInput
 }
 
@@ -466,14 +438,12 @@ export type EvaluationCreateManyInput = {
   id?: string
   periodId: string
   userId: string
-  reviewerId?: string | null
   status?: $Enums.EvaluationStatus
   kpiScore?: number
   criteriaScore?: number
   finalScore?: number
   classification?: string | null
   selfComment?: string | null
-  reviewerComment?: string | null
   createdAt?: Date | string
   deletedAt?: Date | string | null
   updatedAt?: Date | string
@@ -487,7 +457,6 @@ export type EvaluationUpdateManyMutationInput = {
   finalScore?: Prisma.FloatFieldUpdateOperationsInput | number
   classification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  reviewerComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -497,14 +466,12 @@ export type EvaluationUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  reviewerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
   kpiScore?: Prisma.FloatFieldUpdateOperationsInput | number
   criteriaScore?: Prisma.FloatFieldUpdateOperationsInput | number
   finalScore?: Prisma.FloatFieldUpdateOperationsInput | number
   classification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  reviewerComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -529,14 +496,12 @@ export type EvaluationCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   periodId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  reviewerId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   kpiScore?: Prisma.SortOrder
   criteriaScore?: Prisma.SortOrder
   finalScore?: Prisma.SortOrder
   classification?: Prisma.SortOrder
   selfComment?: Prisma.SortOrder
-  reviewerComment?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -552,14 +517,12 @@ export type EvaluationMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   periodId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  reviewerId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   kpiScore?: Prisma.SortOrder
   criteriaScore?: Prisma.SortOrder
   finalScore?: Prisma.SortOrder
   classification?: Prisma.SortOrder
   selfComment?: Prisma.SortOrder
-  reviewerComment?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -569,14 +532,12 @@ export type EvaluationMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   periodId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  reviewerId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   kpiScore?: Prisma.SortOrder
   criteriaScore?: Prisma.SortOrder
   finalScore?: Prisma.SortOrder
   classification?: Prisma.SortOrder
   selfComment?: Prisma.SortOrder
-  reviewerComment?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -600,24 +561,10 @@ export type EvaluationCreateNestedManyWithoutUserInput = {
   connect?: Prisma.EvaluationWhereUniqueInput | Prisma.EvaluationWhereUniqueInput[]
 }
 
-export type EvaluationCreateNestedManyWithoutReviewerInput = {
-  create?: Prisma.XOR<Prisma.EvaluationCreateWithoutReviewerInput, Prisma.EvaluationUncheckedCreateWithoutReviewerInput> | Prisma.EvaluationCreateWithoutReviewerInput[] | Prisma.EvaluationUncheckedCreateWithoutReviewerInput[]
-  connectOrCreate?: Prisma.EvaluationCreateOrConnectWithoutReviewerInput | Prisma.EvaluationCreateOrConnectWithoutReviewerInput[]
-  createMany?: Prisma.EvaluationCreateManyReviewerInputEnvelope
-  connect?: Prisma.EvaluationWhereUniqueInput | Prisma.EvaluationWhereUniqueInput[]
-}
-
 export type EvaluationUncheckedCreateNestedManyWithoutUserInput = {
   create?: Prisma.XOR<Prisma.EvaluationCreateWithoutUserInput, Prisma.EvaluationUncheckedCreateWithoutUserInput> | Prisma.EvaluationCreateWithoutUserInput[] | Prisma.EvaluationUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.EvaluationCreateOrConnectWithoutUserInput | Prisma.EvaluationCreateOrConnectWithoutUserInput[]
   createMany?: Prisma.EvaluationCreateManyUserInputEnvelope
-  connect?: Prisma.EvaluationWhereUniqueInput | Prisma.EvaluationWhereUniqueInput[]
-}
-
-export type EvaluationUncheckedCreateNestedManyWithoutReviewerInput = {
-  create?: Prisma.XOR<Prisma.EvaluationCreateWithoutReviewerInput, Prisma.EvaluationUncheckedCreateWithoutReviewerInput> | Prisma.EvaluationCreateWithoutReviewerInput[] | Prisma.EvaluationUncheckedCreateWithoutReviewerInput[]
-  connectOrCreate?: Prisma.EvaluationCreateOrConnectWithoutReviewerInput | Prisma.EvaluationCreateOrConnectWithoutReviewerInput[]
-  createMany?: Prisma.EvaluationCreateManyReviewerInputEnvelope
   connect?: Prisma.EvaluationWhereUniqueInput | Prisma.EvaluationWhereUniqueInput[]
 }
 
@@ -635,20 +582,6 @@ export type EvaluationUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.EvaluationScalarWhereInput | Prisma.EvaluationScalarWhereInput[]
 }
 
-export type EvaluationUpdateManyWithoutReviewerNestedInput = {
-  create?: Prisma.XOR<Prisma.EvaluationCreateWithoutReviewerInput, Prisma.EvaluationUncheckedCreateWithoutReviewerInput> | Prisma.EvaluationCreateWithoutReviewerInput[] | Prisma.EvaluationUncheckedCreateWithoutReviewerInput[]
-  connectOrCreate?: Prisma.EvaluationCreateOrConnectWithoutReviewerInput | Prisma.EvaluationCreateOrConnectWithoutReviewerInput[]
-  upsert?: Prisma.EvaluationUpsertWithWhereUniqueWithoutReviewerInput | Prisma.EvaluationUpsertWithWhereUniqueWithoutReviewerInput[]
-  createMany?: Prisma.EvaluationCreateManyReviewerInputEnvelope
-  set?: Prisma.EvaluationWhereUniqueInput | Prisma.EvaluationWhereUniqueInput[]
-  disconnect?: Prisma.EvaluationWhereUniqueInput | Prisma.EvaluationWhereUniqueInput[]
-  delete?: Prisma.EvaluationWhereUniqueInput | Prisma.EvaluationWhereUniqueInput[]
-  connect?: Prisma.EvaluationWhereUniqueInput | Prisma.EvaluationWhereUniqueInput[]
-  update?: Prisma.EvaluationUpdateWithWhereUniqueWithoutReviewerInput | Prisma.EvaluationUpdateWithWhereUniqueWithoutReviewerInput[]
-  updateMany?: Prisma.EvaluationUpdateManyWithWhereWithoutReviewerInput | Prisma.EvaluationUpdateManyWithWhereWithoutReviewerInput[]
-  deleteMany?: Prisma.EvaluationScalarWhereInput | Prisma.EvaluationScalarWhereInput[]
-}
-
 export type EvaluationUncheckedUpdateManyWithoutUserNestedInput = {
   create?: Prisma.XOR<Prisma.EvaluationCreateWithoutUserInput, Prisma.EvaluationUncheckedCreateWithoutUserInput> | Prisma.EvaluationCreateWithoutUserInput[] | Prisma.EvaluationUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.EvaluationCreateOrConnectWithoutUserInput | Prisma.EvaluationCreateOrConnectWithoutUserInput[]
@@ -660,20 +593,6 @@ export type EvaluationUncheckedUpdateManyWithoutUserNestedInput = {
   connect?: Prisma.EvaluationWhereUniqueInput | Prisma.EvaluationWhereUniqueInput[]
   update?: Prisma.EvaluationUpdateWithWhereUniqueWithoutUserInput | Prisma.EvaluationUpdateWithWhereUniqueWithoutUserInput[]
   updateMany?: Prisma.EvaluationUpdateManyWithWhereWithoutUserInput | Prisma.EvaluationUpdateManyWithWhereWithoutUserInput[]
-  deleteMany?: Prisma.EvaluationScalarWhereInput | Prisma.EvaluationScalarWhereInput[]
-}
-
-export type EvaluationUncheckedUpdateManyWithoutReviewerNestedInput = {
-  create?: Prisma.XOR<Prisma.EvaluationCreateWithoutReviewerInput, Prisma.EvaluationUncheckedCreateWithoutReviewerInput> | Prisma.EvaluationCreateWithoutReviewerInput[] | Prisma.EvaluationUncheckedCreateWithoutReviewerInput[]
-  connectOrCreate?: Prisma.EvaluationCreateOrConnectWithoutReviewerInput | Prisma.EvaluationCreateOrConnectWithoutReviewerInput[]
-  upsert?: Prisma.EvaluationUpsertWithWhereUniqueWithoutReviewerInput | Prisma.EvaluationUpsertWithWhereUniqueWithoutReviewerInput[]
-  createMany?: Prisma.EvaluationCreateManyReviewerInputEnvelope
-  set?: Prisma.EvaluationWhereUniqueInput | Prisma.EvaluationWhereUniqueInput[]
-  disconnect?: Prisma.EvaluationWhereUniqueInput | Prisma.EvaluationWhereUniqueInput[]
-  delete?: Prisma.EvaluationWhereUniqueInput | Prisma.EvaluationWhereUniqueInput[]
-  connect?: Prisma.EvaluationWhereUniqueInput | Prisma.EvaluationWhereUniqueInput[]
-  update?: Prisma.EvaluationUpdateWithWhereUniqueWithoutReviewerInput | Prisma.EvaluationUpdateWithWhereUniqueWithoutReviewerInput[]
-  updateMany?: Prisma.EvaluationUpdateManyWithWhereWithoutReviewerInput | Prisma.EvaluationUpdateManyWithWhereWithoutReviewerInput[]
   deleteMany?: Prisma.EvaluationScalarWhereInput | Prisma.EvaluationScalarWhereInput[]
 }
 
@@ -737,6 +656,20 @@ export type EvaluationUpdateOneRequiredWithoutCriteriaResultsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.EvaluationUpdateToOneWithWhereWithoutCriteriaResultsInput, Prisma.EvaluationUpdateWithoutCriteriaResultsInput>, Prisma.EvaluationUncheckedUpdateWithoutCriteriaResultsInput>
 }
 
+export type EvaluationCreateNestedOneWithoutReviewersInput = {
+  create?: Prisma.XOR<Prisma.EvaluationCreateWithoutReviewersInput, Prisma.EvaluationUncheckedCreateWithoutReviewersInput>
+  connectOrCreate?: Prisma.EvaluationCreateOrConnectWithoutReviewersInput
+  connect?: Prisma.EvaluationWhereUniqueInput
+}
+
+export type EvaluationUpdateOneRequiredWithoutReviewersNestedInput = {
+  create?: Prisma.XOR<Prisma.EvaluationCreateWithoutReviewersInput, Prisma.EvaluationUncheckedCreateWithoutReviewersInput>
+  connectOrCreate?: Prisma.EvaluationCreateOrConnectWithoutReviewersInput
+  upsert?: Prisma.EvaluationUpsertWithoutReviewersInput
+  connect?: Prisma.EvaluationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EvaluationUpdateToOneWithWhereWithoutReviewersInput, Prisma.EvaluationUpdateWithoutReviewersInput>, Prisma.EvaluationUncheckedUpdateWithoutReviewersInput>
+}
+
 export type EvaluationCreateWithoutUserInput = {
   id?: string
   status?: $Enums.EvaluationStatus
@@ -745,29 +678,27 @@ export type EvaluationCreateWithoutUserInput = {
   finalScore?: number
   classification?: string | null
   selfComment?: string | null
-  reviewerComment?: string | null
   createdAt?: Date | string
   deletedAt?: Date | string | null
   updatedAt?: Date | string
   period: Prisma.EvaluationPeriodCreateNestedOneWithoutEvaluationsInput
-  reviewer?: Prisma.UserCreateNestedOneWithoutReviewerEvaluationInput
+  reviewers?: Prisma.EvaluationReviewerCreateNestedManyWithoutEvaluationInput
   criteriaResults?: Prisma.EvaluationCriteriaResultCreateNestedManyWithoutEvaluationInput
 }
 
 export type EvaluationUncheckedCreateWithoutUserInput = {
   id?: string
   periodId: string
-  reviewerId?: string | null
   status?: $Enums.EvaluationStatus
   kpiScore?: number
   criteriaScore?: number
   finalScore?: number
   classification?: string | null
   selfComment?: string | null
-  reviewerComment?: string | null
   createdAt?: Date | string
   deletedAt?: Date | string | null
   updatedAt?: Date | string
+  reviewers?: Prisma.EvaluationReviewerUncheckedCreateNestedManyWithoutEvaluationInput
   criteriaResults?: Prisma.EvaluationCriteriaResultUncheckedCreateNestedManyWithoutEvaluationInput
 }
 
@@ -778,50 +709,6 @@ export type EvaluationCreateOrConnectWithoutUserInput = {
 
 export type EvaluationCreateManyUserInputEnvelope = {
   data: Prisma.EvaluationCreateManyUserInput | Prisma.EvaluationCreateManyUserInput[]
-  skipDuplicates?: boolean
-}
-
-export type EvaluationCreateWithoutReviewerInput = {
-  id?: string
-  status?: $Enums.EvaluationStatus
-  kpiScore?: number
-  criteriaScore?: number
-  finalScore?: number
-  classification?: string | null
-  selfComment?: string | null
-  reviewerComment?: string | null
-  createdAt?: Date | string
-  deletedAt?: Date | string | null
-  updatedAt?: Date | string
-  period: Prisma.EvaluationPeriodCreateNestedOneWithoutEvaluationsInput
-  user: Prisma.UserCreateNestedOneWithoutUserEvaluationInput
-  criteriaResults?: Prisma.EvaluationCriteriaResultCreateNestedManyWithoutEvaluationInput
-}
-
-export type EvaluationUncheckedCreateWithoutReviewerInput = {
-  id?: string
-  periodId: string
-  userId: string
-  status?: $Enums.EvaluationStatus
-  kpiScore?: number
-  criteriaScore?: number
-  finalScore?: number
-  classification?: string | null
-  selfComment?: string | null
-  reviewerComment?: string | null
-  createdAt?: Date | string
-  deletedAt?: Date | string | null
-  updatedAt?: Date | string
-  criteriaResults?: Prisma.EvaluationCriteriaResultUncheckedCreateNestedManyWithoutEvaluationInput
-}
-
-export type EvaluationCreateOrConnectWithoutReviewerInput = {
-  where: Prisma.EvaluationWhereUniqueInput
-  create: Prisma.XOR<Prisma.EvaluationCreateWithoutReviewerInput, Prisma.EvaluationUncheckedCreateWithoutReviewerInput>
-}
-
-export type EvaluationCreateManyReviewerInputEnvelope = {
-  data: Prisma.EvaluationCreateManyReviewerInput | Prisma.EvaluationCreateManyReviewerInput[]
   skipDuplicates?: boolean
 }
 
@@ -848,33 +735,15 @@ export type EvaluationScalarWhereInput = {
   id?: Prisma.StringFilter<"Evaluation"> | string
   periodId?: Prisma.StringFilter<"Evaluation"> | string
   userId?: Prisma.StringFilter<"Evaluation"> | string
-  reviewerId?: Prisma.StringNullableFilter<"Evaluation"> | string | null
   status?: Prisma.EnumEvaluationStatusFilter<"Evaluation"> | $Enums.EvaluationStatus
   kpiScore?: Prisma.FloatFilter<"Evaluation"> | number
   criteriaScore?: Prisma.FloatFilter<"Evaluation"> | number
   finalScore?: Prisma.FloatFilter<"Evaluation"> | number
   classification?: Prisma.StringNullableFilter<"Evaluation"> | string | null
   selfComment?: Prisma.StringNullableFilter<"Evaluation"> | string | null
-  reviewerComment?: Prisma.StringNullableFilter<"Evaluation"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Evaluation"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Evaluation"> | Date | string | null
   updatedAt?: Prisma.DateTimeFilter<"Evaluation"> | Date | string
-}
-
-export type EvaluationUpsertWithWhereUniqueWithoutReviewerInput = {
-  where: Prisma.EvaluationWhereUniqueInput
-  update: Prisma.XOR<Prisma.EvaluationUpdateWithoutReviewerInput, Prisma.EvaluationUncheckedUpdateWithoutReviewerInput>
-  create: Prisma.XOR<Prisma.EvaluationCreateWithoutReviewerInput, Prisma.EvaluationUncheckedCreateWithoutReviewerInput>
-}
-
-export type EvaluationUpdateWithWhereUniqueWithoutReviewerInput = {
-  where: Prisma.EvaluationWhereUniqueInput
-  data: Prisma.XOR<Prisma.EvaluationUpdateWithoutReviewerInput, Prisma.EvaluationUncheckedUpdateWithoutReviewerInput>
-}
-
-export type EvaluationUpdateManyWithWhereWithoutReviewerInput = {
-  where: Prisma.EvaluationScalarWhereInput
-  data: Prisma.XOR<Prisma.EvaluationUpdateManyMutationInput, Prisma.EvaluationUncheckedUpdateManyWithoutReviewerInput>
 }
 
 export type EvaluationCreateWithoutPeriodInput = {
@@ -885,29 +754,27 @@ export type EvaluationCreateWithoutPeriodInput = {
   finalScore?: number
   classification?: string | null
   selfComment?: string | null
-  reviewerComment?: string | null
   createdAt?: Date | string
   deletedAt?: Date | string | null
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutUserEvaluationInput
-  reviewer?: Prisma.UserCreateNestedOneWithoutReviewerEvaluationInput
+  reviewers?: Prisma.EvaluationReviewerCreateNestedManyWithoutEvaluationInput
   criteriaResults?: Prisma.EvaluationCriteriaResultCreateNestedManyWithoutEvaluationInput
 }
 
 export type EvaluationUncheckedCreateWithoutPeriodInput = {
   id?: string
   userId: string
-  reviewerId?: string | null
   status?: $Enums.EvaluationStatus
   kpiScore?: number
   criteriaScore?: number
   finalScore?: number
   classification?: string | null
   selfComment?: string | null
-  reviewerComment?: string | null
   createdAt?: Date | string
   deletedAt?: Date | string | null
   updatedAt?: Date | string
+  reviewers?: Prisma.EvaluationReviewerUncheckedCreateNestedManyWithoutEvaluationInput
   criteriaResults?: Prisma.EvaluationCriteriaResultUncheckedCreateNestedManyWithoutEvaluationInput
 }
 
@@ -945,30 +812,28 @@ export type EvaluationCreateWithoutCriteriaResultsInput = {
   finalScore?: number
   classification?: string | null
   selfComment?: string | null
-  reviewerComment?: string | null
   createdAt?: Date | string
   deletedAt?: Date | string | null
   updatedAt?: Date | string
   period: Prisma.EvaluationPeriodCreateNestedOneWithoutEvaluationsInput
   user: Prisma.UserCreateNestedOneWithoutUserEvaluationInput
-  reviewer?: Prisma.UserCreateNestedOneWithoutReviewerEvaluationInput
+  reviewers?: Prisma.EvaluationReviewerCreateNestedManyWithoutEvaluationInput
 }
 
 export type EvaluationUncheckedCreateWithoutCriteriaResultsInput = {
   id?: string
   periodId: string
   userId: string
-  reviewerId?: string | null
   status?: $Enums.EvaluationStatus
   kpiScore?: number
   criteriaScore?: number
   finalScore?: number
   classification?: string | null
   selfComment?: string | null
-  reviewerComment?: string | null
   createdAt?: Date | string
   deletedAt?: Date | string | null
   updatedAt?: Date | string
+  reviewers?: Prisma.EvaluationReviewerUncheckedCreateNestedManyWithoutEvaluationInput
 }
 
 export type EvaluationCreateOrConnectWithoutCriteriaResultsInput = {
@@ -995,49 +860,47 @@ export type EvaluationUpdateWithoutCriteriaResultsInput = {
   finalScore?: Prisma.FloatFieldUpdateOperationsInput | number
   classification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  reviewerComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   period?: Prisma.EvaluationPeriodUpdateOneRequiredWithoutEvaluationsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutUserEvaluationNestedInput
-  reviewer?: Prisma.UserUpdateOneWithoutReviewerEvaluationNestedInput
+  reviewers?: Prisma.EvaluationReviewerUpdateManyWithoutEvaluationNestedInput
 }
 
 export type EvaluationUncheckedUpdateWithoutCriteriaResultsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  reviewerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
   kpiScore?: Prisma.FloatFieldUpdateOperationsInput | number
   criteriaScore?: Prisma.FloatFieldUpdateOperationsInput | number
   finalScore?: Prisma.FloatFieldUpdateOperationsInput | number
   classification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  reviewerComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewers?: Prisma.EvaluationReviewerUncheckedUpdateManyWithoutEvaluationNestedInput
 }
 
-export type EvaluationCreateManyUserInput = {
+export type EvaluationCreateWithoutReviewersInput = {
   id?: string
-  periodId: string
-  reviewerId?: string | null
   status?: $Enums.EvaluationStatus
   kpiScore?: number
   criteriaScore?: number
   finalScore?: number
   classification?: string | null
   selfComment?: string | null
-  reviewerComment?: string | null
   createdAt?: Date | string
   deletedAt?: Date | string | null
   updatedAt?: Date | string
+  period: Prisma.EvaluationPeriodCreateNestedOneWithoutEvaluationsInput
+  user: Prisma.UserCreateNestedOneWithoutUserEvaluationInput
+  criteriaResults?: Prisma.EvaluationCriteriaResultCreateNestedManyWithoutEvaluationInput
 }
 
-export type EvaluationCreateManyReviewerInput = {
+export type EvaluationUncheckedCreateWithoutReviewersInput = {
   id?: string
   periodId: string
   userId: string
@@ -1047,7 +910,69 @@ export type EvaluationCreateManyReviewerInput = {
   finalScore?: number
   classification?: string | null
   selfComment?: string | null
-  reviewerComment?: string | null
+  createdAt?: Date | string
+  deletedAt?: Date | string | null
+  updatedAt?: Date | string
+  criteriaResults?: Prisma.EvaluationCriteriaResultUncheckedCreateNestedManyWithoutEvaluationInput
+}
+
+export type EvaluationCreateOrConnectWithoutReviewersInput = {
+  where: Prisma.EvaluationWhereUniqueInput
+  create: Prisma.XOR<Prisma.EvaluationCreateWithoutReviewersInput, Prisma.EvaluationUncheckedCreateWithoutReviewersInput>
+}
+
+export type EvaluationUpsertWithoutReviewersInput = {
+  update: Prisma.XOR<Prisma.EvaluationUpdateWithoutReviewersInput, Prisma.EvaluationUncheckedUpdateWithoutReviewersInput>
+  create: Prisma.XOR<Prisma.EvaluationCreateWithoutReviewersInput, Prisma.EvaluationUncheckedCreateWithoutReviewersInput>
+  where?: Prisma.EvaluationWhereInput
+}
+
+export type EvaluationUpdateToOneWithWhereWithoutReviewersInput = {
+  where?: Prisma.EvaluationWhereInput
+  data: Prisma.XOR<Prisma.EvaluationUpdateWithoutReviewersInput, Prisma.EvaluationUncheckedUpdateWithoutReviewersInput>
+}
+
+export type EvaluationUpdateWithoutReviewersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
+  kpiScore?: Prisma.FloatFieldUpdateOperationsInput | number
+  criteriaScore?: Prisma.FloatFieldUpdateOperationsInput | number
+  finalScore?: Prisma.FloatFieldUpdateOperationsInput | number
+  classification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  period?: Prisma.EvaluationPeriodUpdateOneRequiredWithoutEvaluationsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutUserEvaluationNestedInput
+  criteriaResults?: Prisma.EvaluationCriteriaResultUpdateManyWithoutEvaluationNestedInput
+}
+
+export type EvaluationUncheckedUpdateWithoutReviewersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  periodId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
+  kpiScore?: Prisma.FloatFieldUpdateOperationsInput | number
+  criteriaScore?: Prisma.FloatFieldUpdateOperationsInput | number
+  finalScore?: Prisma.FloatFieldUpdateOperationsInput | number
+  classification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  criteriaResults?: Prisma.EvaluationCriteriaResultUncheckedUpdateManyWithoutEvaluationNestedInput
+}
+
+export type EvaluationCreateManyUserInput = {
+  id?: string
+  periodId: string
+  status?: $Enums.EvaluationStatus
+  kpiScore?: number
+  criteriaScore?: number
+  finalScore?: number
+  classification?: string | null
+  selfComment?: string | null
   createdAt?: Date | string
   deletedAt?: Date | string | null
   updatedAt?: Date | string
@@ -1061,93 +986,39 @@ export type EvaluationUpdateWithoutUserInput = {
   finalScore?: Prisma.FloatFieldUpdateOperationsInput | number
   classification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  reviewerComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   period?: Prisma.EvaluationPeriodUpdateOneRequiredWithoutEvaluationsNestedInput
-  reviewer?: Prisma.UserUpdateOneWithoutReviewerEvaluationNestedInput
+  reviewers?: Prisma.EvaluationReviewerUpdateManyWithoutEvaluationNestedInput
   criteriaResults?: Prisma.EvaluationCriteriaResultUpdateManyWithoutEvaluationNestedInput
 }
 
 export type EvaluationUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
-  reviewerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
   kpiScore?: Prisma.FloatFieldUpdateOperationsInput | number
   criteriaScore?: Prisma.FloatFieldUpdateOperationsInput | number
   finalScore?: Prisma.FloatFieldUpdateOperationsInput | number
   classification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  reviewerComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewers?: Prisma.EvaluationReviewerUncheckedUpdateManyWithoutEvaluationNestedInput
   criteriaResults?: Prisma.EvaluationCriteriaResultUncheckedUpdateManyWithoutEvaluationNestedInput
 }
 
 export type EvaluationUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
-  reviewerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
   kpiScore?: Prisma.FloatFieldUpdateOperationsInput | number
   criteriaScore?: Prisma.FloatFieldUpdateOperationsInput | number
   finalScore?: Prisma.FloatFieldUpdateOperationsInput | number
   classification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  reviewerComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type EvaluationUpdateWithoutReviewerInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
-  kpiScore?: Prisma.FloatFieldUpdateOperationsInput | number
-  criteriaScore?: Prisma.FloatFieldUpdateOperationsInput | number
-  finalScore?: Prisma.FloatFieldUpdateOperationsInput | number
-  classification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  reviewerComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  period?: Prisma.EvaluationPeriodUpdateOneRequiredWithoutEvaluationsNestedInput
-  user?: Prisma.UserUpdateOneRequiredWithoutUserEvaluationNestedInput
-  criteriaResults?: Prisma.EvaluationCriteriaResultUpdateManyWithoutEvaluationNestedInput
-}
-
-export type EvaluationUncheckedUpdateWithoutReviewerInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  periodId?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
-  kpiScore?: Prisma.FloatFieldUpdateOperationsInput | number
-  criteriaScore?: Prisma.FloatFieldUpdateOperationsInput | number
-  finalScore?: Prisma.FloatFieldUpdateOperationsInput | number
-  classification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  reviewerComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  criteriaResults?: Prisma.EvaluationCriteriaResultUncheckedUpdateManyWithoutEvaluationNestedInput
-}
-
-export type EvaluationUncheckedUpdateManyWithoutReviewerInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  periodId?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
-  kpiScore?: Prisma.FloatFieldUpdateOperationsInput | number
-  criteriaScore?: Prisma.FloatFieldUpdateOperationsInput | number
-  finalScore?: Prisma.FloatFieldUpdateOperationsInput | number
-  classification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  reviewerComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1156,14 +1027,12 @@ export type EvaluationUncheckedUpdateManyWithoutReviewerInput = {
 export type EvaluationCreateManyPeriodInput = {
   id?: string
   userId: string
-  reviewerId?: string | null
   status?: $Enums.EvaluationStatus
   kpiScore?: number
   criteriaScore?: number
   finalScore?: number
   classification?: string | null
   selfComment?: string | null
-  reviewerComment?: string | null
   createdAt?: Date | string
   deletedAt?: Date | string | null
   updatedAt?: Date | string
@@ -1177,43 +1046,39 @@ export type EvaluationUpdateWithoutPeriodInput = {
   finalScore?: Prisma.FloatFieldUpdateOperationsInput | number
   classification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  reviewerComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutUserEvaluationNestedInput
-  reviewer?: Prisma.UserUpdateOneWithoutReviewerEvaluationNestedInput
+  reviewers?: Prisma.EvaluationReviewerUpdateManyWithoutEvaluationNestedInput
   criteriaResults?: Prisma.EvaluationCriteriaResultUpdateManyWithoutEvaluationNestedInput
 }
 
 export type EvaluationUncheckedUpdateWithoutPeriodInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  reviewerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
   kpiScore?: Prisma.FloatFieldUpdateOperationsInput | number
   criteriaScore?: Prisma.FloatFieldUpdateOperationsInput | number
   finalScore?: Prisma.FloatFieldUpdateOperationsInput | number
   classification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  reviewerComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewers?: Prisma.EvaluationReviewerUncheckedUpdateManyWithoutEvaluationNestedInput
   criteriaResults?: Prisma.EvaluationCriteriaResultUncheckedUpdateManyWithoutEvaluationNestedInput
 }
 
 export type EvaluationUncheckedUpdateManyWithoutPeriodInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  reviewerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
   kpiScore?: Prisma.FloatFieldUpdateOperationsInput | number
   criteriaScore?: Prisma.FloatFieldUpdateOperationsInput | number
   finalScore?: Prisma.FloatFieldUpdateOperationsInput | number
   classification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   selfComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  reviewerComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1225,10 +1090,12 @@ export type EvaluationUncheckedUpdateManyWithoutPeriodInput = {
  */
 
 export type EvaluationCountOutputType = {
+  reviewers: number
   criteriaResults: number
 }
 
 export type EvaluationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  reviewers?: boolean | EvaluationCountOutputTypeCountReviewersArgs
   criteriaResults?: boolean | EvaluationCountOutputTypeCountCriteriaResultsArgs
 }
 
@@ -1245,6 +1112,13 @@ export type EvaluationCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.E
 /**
  * EvaluationCountOutputType without action
  */
+export type EvaluationCountOutputTypeCountReviewersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EvaluationReviewerWhereInput
+}
+
+/**
+ * EvaluationCountOutputType without action
+ */
 export type EvaluationCountOutputTypeCountCriteriaResultsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.EvaluationCriteriaResultWhereInput
 }
@@ -1254,20 +1128,18 @@ export type EvaluationSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   id?: boolean
   periodId?: boolean
   userId?: boolean
-  reviewerId?: boolean
   status?: boolean
   kpiScore?: boolean
   criteriaScore?: boolean
   finalScore?: boolean
   classification?: boolean
   selfComment?: boolean
-  reviewerComment?: boolean
   createdAt?: boolean
   deletedAt?: boolean
   updatedAt?: boolean
   period?: boolean | Prisma.EvaluationPeriodDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  reviewer?: boolean | Prisma.Evaluation$reviewerArgs<ExtArgs>
+  reviewers?: boolean | Prisma.Evaluation$reviewersArgs<ExtArgs>
   criteriaResults?: boolean | Prisma.Evaluation$criteriaResultsArgs<ExtArgs>
   _count?: boolean | Prisma.EvaluationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["evaluation"]>
@@ -1276,76 +1148,66 @@ export type EvaluationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   id?: boolean
   periodId?: boolean
   userId?: boolean
-  reviewerId?: boolean
   status?: boolean
   kpiScore?: boolean
   criteriaScore?: boolean
   finalScore?: boolean
   classification?: boolean
   selfComment?: boolean
-  reviewerComment?: boolean
   createdAt?: boolean
   deletedAt?: boolean
   updatedAt?: boolean
   period?: boolean | Prisma.EvaluationPeriodDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  reviewer?: boolean | Prisma.Evaluation$reviewerArgs<ExtArgs>
 }, ExtArgs["result"]["evaluation"]>
 
 export type EvaluationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   periodId?: boolean
   userId?: boolean
-  reviewerId?: boolean
   status?: boolean
   kpiScore?: boolean
   criteriaScore?: boolean
   finalScore?: boolean
   classification?: boolean
   selfComment?: boolean
-  reviewerComment?: boolean
   createdAt?: boolean
   deletedAt?: boolean
   updatedAt?: boolean
   period?: boolean | Prisma.EvaluationPeriodDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  reviewer?: boolean | Prisma.Evaluation$reviewerArgs<ExtArgs>
 }, ExtArgs["result"]["evaluation"]>
 
 export type EvaluationSelectScalar = {
   id?: boolean
   periodId?: boolean
   userId?: boolean
-  reviewerId?: boolean
   status?: boolean
   kpiScore?: boolean
   criteriaScore?: boolean
   finalScore?: boolean
   classification?: boolean
   selfComment?: boolean
-  reviewerComment?: boolean
   createdAt?: boolean
   deletedAt?: boolean
   updatedAt?: boolean
 }
 
-export type EvaluationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "periodId" | "userId" | "reviewerId" | "status" | "kpiScore" | "criteriaScore" | "finalScore" | "classification" | "selfComment" | "reviewerComment" | "createdAt" | "deletedAt" | "updatedAt", ExtArgs["result"]["evaluation"]>
+export type EvaluationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "periodId" | "userId" | "status" | "kpiScore" | "criteriaScore" | "finalScore" | "classification" | "selfComment" | "createdAt" | "deletedAt" | "updatedAt", ExtArgs["result"]["evaluation"]>
 export type EvaluationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   period?: boolean | Prisma.EvaluationPeriodDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  reviewer?: boolean | Prisma.Evaluation$reviewerArgs<ExtArgs>
+  reviewers?: boolean | Prisma.Evaluation$reviewersArgs<ExtArgs>
   criteriaResults?: boolean | Prisma.Evaluation$criteriaResultsArgs<ExtArgs>
   _count?: boolean | Prisma.EvaluationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type EvaluationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   period?: boolean | Prisma.EvaluationPeriodDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  reviewer?: boolean | Prisma.Evaluation$reviewerArgs<ExtArgs>
 }
 export type EvaluationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   period?: boolean | Prisma.EvaluationPeriodDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  reviewer?: boolean | Prisma.Evaluation$reviewerArgs<ExtArgs>
 }
 
 export type $EvaluationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1353,21 +1215,19 @@ export type $EvaluationPayload<ExtArgs extends runtime.Types.Extensions.Internal
   objects: {
     period: Prisma.$EvaluationPeriodPayload<ExtArgs>
     user: Prisma.$UserPayload<ExtArgs>
-    reviewer: Prisma.$UserPayload<ExtArgs> | null
+    reviewers: Prisma.$EvaluationReviewerPayload<ExtArgs>[]
     criteriaResults: Prisma.$EvaluationCriteriaResultPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     periodId: string
     userId: string
-    reviewerId: string | null
     status: $Enums.EvaluationStatus
     kpiScore: number
     criteriaScore: number
     finalScore: number
     classification: string | null
     selfComment: string | null
-    reviewerComment: string | null
     createdAt: Date
     deletedAt: Date | null
     updatedAt: Date
@@ -1767,7 +1627,7 @@ export interface Prisma__EvaluationClient<T, Null = never, ExtArgs extends runti
   readonly [Symbol.toStringTag]: "PrismaPromise"
   period<T extends Prisma.EvaluationPeriodDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EvaluationPeriodDefaultArgs<ExtArgs>>): Prisma.Prisma__EvaluationPeriodClient<runtime.Types.Result.GetResult<Prisma.$EvaluationPeriodPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  reviewer<T extends Prisma.Evaluation$reviewerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Evaluation$reviewerArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  reviewers<T extends Prisma.Evaluation$reviewersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Evaluation$reviewersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EvaluationReviewerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   criteriaResults<T extends Prisma.Evaluation$criteriaResultsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Evaluation$criteriaResultsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EvaluationCriteriaResultPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1801,14 +1661,12 @@ export interface EvaluationFieldRefs {
   readonly id: Prisma.FieldRef<"Evaluation", 'String'>
   readonly periodId: Prisma.FieldRef<"Evaluation", 'String'>
   readonly userId: Prisma.FieldRef<"Evaluation", 'String'>
-  readonly reviewerId: Prisma.FieldRef<"Evaluation", 'String'>
   readonly status: Prisma.FieldRef<"Evaluation", 'EvaluationStatus'>
   readonly kpiScore: Prisma.FieldRef<"Evaluation", 'Float'>
   readonly criteriaScore: Prisma.FieldRef<"Evaluation", 'Float'>
   readonly finalScore: Prisma.FieldRef<"Evaluation", 'Float'>
   readonly classification: Prisma.FieldRef<"Evaluation", 'String'>
   readonly selfComment: Prisma.FieldRef<"Evaluation", 'String'>
-  readonly reviewerComment: Prisma.FieldRef<"Evaluation", 'String'>
   readonly createdAt: Prisma.FieldRef<"Evaluation", 'DateTime'>
   readonly deletedAt: Prisma.FieldRef<"Evaluation", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Evaluation", 'DateTime'>
@@ -2213,22 +2071,27 @@ export type EvaluationDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.In
 }
 
 /**
- * Evaluation.reviewer
+ * Evaluation.reviewers
  */
-export type Evaluation$reviewerArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Evaluation$reviewersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the User
+   * Select specific fields to fetch from the EvaluationReviewer
    */
-  select?: Prisma.UserSelect<ExtArgs> | null
+  select?: Prisma.EvaluationReviewerSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the User
+   * Omit specific fields from the EvaluationReviewer
    */
-  omit?: Prisma.UserOmit<ExtArgs> | null
+  omit?: Prisma.EvaluationReviewerOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.UserInclude<ExtArgs> | null
-  where?: Prisma.UserWhereInput
+  include?: Prisma.EvaluationReviewerInclude<ExtArgs> | null
+  where?: Prisma.EvaluationReviewerWhereInput
+  orderBy?: Prisma.EvaluationReviewerOrderByWithRelationInput | Prisma.EvaluationReviewerOrderByWithRelationInput[]
+  cursor?: Prisma.EvaluationReviewerWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EvaluationReviewerScalarFieldEnum | Prisma.EvaluationReviewerScalarFieldEnum[]
 }
 
 /**

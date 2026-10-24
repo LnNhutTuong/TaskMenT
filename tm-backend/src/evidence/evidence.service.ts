@@ -28,10 +28,14 @@ export class EvidenceService {
         const task = await this.taskService.findOne(taskOutput.taskId, user);
 
         //check project member
-        await this.projectService.assertProjectMember(task.project.id, user.id);
+        if(task.project){
+            await this.projectService.assertProjectMember(task.project.id, user.id);
+        }
+        
+        await this.taskService.assertTaskPermission(task.id, user.id);
 
         //check permission
-        await this.permissionService.assertPermission(task.project.workspaceId, user.id, PERMISSION_KEYS.EVIDENCE_SUBMIT)
+        await this.permissionService.assertPermission(task.workspaceId, user.id, PERMISSION_KEYS.EVIDENCE_SUBMIT, task.project?.id)
 
         const submitted = await this.prisma.evidence.create({
             data:{
@@ -83,10 +87,11 @@ export class EvidenceService {
                         task:{
                             select:{
                                 createdById: true, // thang giao task
+                                workspaceId: true,
+                                projectId: true,
                                 project:{
                                     select:{
                                         createdById: true, // thang owner project,
-                                        workspaceId: true
                                     }
                                 }
                             }
@@ -107,14 +112,15 @@ export class EvidenceService {
         }
 
         const isSuperAdmin = await this.permissionService.isSuperAdmin(user.id);
-        const isReviewer = (user.id === task.project.createdById) || (user.id === task.createdById); 
+
         const hasReviewPerm = await this.permissionService.hasPermission(
-            evidence.taskOutput.task.project.workspaceId,
+            task.workspaceId,
             user.id,
             PERMISSION_KEYS.EVIDENCE_REVIEW,
+            task.projectId ?? undefined,
         );
 
-        if (!isSuperAdmin && !isReviewer && !hasReviewPerm) {
+        if (!isSuperAdmin && !hasReviewPerm) {
             throw new ForbiddenException('You dont have permission to review this evidence');
         }
 
@@ -222,11 +228,8 @@ export class EvidenceService {
                     select:{
                         task:{
                             select:{
-                                project:{
-                                    select:{
-                                        workspaceId: true
-                                    }
-                                }
+                                workspaceId: true,
+                                projectId: true,
                             }
                         }
                     }
@@ -245,9 +248,10 @@ export class EvidenceService {
         const isOwner = evidence.uploadedById === user.id;
         const isSuperAdmin = await this.permissionService.isSuperAdmin(user.id);
         const hasDeletePerm = await this.permissionService.hasPermission(
-            evidence.taskOutput.task.project.workspaceId,
+            evidence.taskOutput.task.workspaceId,
             user.id,
             PERMISSION_KEYS.EVIDENCE_DELETE,
+            evidence.taskOutput.task.projectId ?? undefined,
         );
 
         if (!isOwner && !isSuperAdmin && !hasDeletePerm) {

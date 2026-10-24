@@ -422,6 +422,8 @@ export const ModelName = {
   EvaluationCriteria: 'EvaluationCriteria',
   Evaluation: 'Evaluation',
   EvaluationCriteriaResult: 'EvaluationCriteriaResult',
+  EvaluationReviewer: 'EvaluationReviewer',
+  EvaluationReviewerScore: 'EvaluationReviewerScore',
   ClassificationRule: 'ClassificationRule',
   Workflow: 'Workflow',
   WorkflowStep: 'WorkflowStep',
@@ -441,7 +443,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "permission" | "role" | "rolePermission" | "userRole" | "workspace" | "workspaceMember" | "workspaceRole" | "project" | "projectMember" | "task" | "taskAssignee" | "objective" | "keyResult" | "taskKeyResult" | "taskOutput" | "evidence" | "metric" | "formula" | "taskMetricValue" | "kPISnapshot" | "evaluationPeriod" | "evaluationCriteria" | "evaluation" | "evaluationCriteriaResult" | "classificationRule" | "workflow" | "workflowStep" | "workflowTransition"
+    modelProps: "user" | "permission" | "role" | "rolePermission" | "userRole" | "workspace" | "workspaceMember" | "workspaceRole" | "project" | "projectMember" | "task" | "taskAssignee" | "objective" | "keyResult" | "taskKeyResult" | "taskOutput" | "evidence" | "metric" | "formula" | "taskMetricValue" | "kPISnapshot" | "evaluationPeriod" | "evaluationCriteria" | "evaluation" | "evaluationCriteriaResult" | "evaluationReviewer" | "evaluationReviewerScore" | "classificationRule" | "workflow" | "workflowStep" | "workflowTransition"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2295,6 +2297,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    EvaluationReviewer: {
+      payload: Prisma.$EvaluationReviewerPayload<ExtArgs>
+      fields: Prisma.EvaluationReviewerFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EvaluationReviewerFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationReviewerPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EvaluationReviewerFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationReviewerPayload>
+        }
+        findFirst: {
+          args: Prisma.EvaluationReviewerFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationReviewerPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EvaluationReviewerFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationReviewerPayload>
+        }
+        findMany: {
+          args: Prisma.EvaluationReviewerFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationReviewerPayload>[]
+        }
+        create: {
+          args: Prisma.EvaluationReviewerCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationReviewerPayload>
+        }
+        createMany: {
+          args: Prisma.EvaluationReviewerCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EvaluationReviewerCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationReviewerPayload>[]
+        }
+        delete: {
+          args: Prisma.EvaluationReviewerDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationReviewerPayload>
+        }
+        update: {
+          args: Prisma.EvaluationReviewerUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationReviewerPayload>
+        }
+        deleteMany: {
+          args: Prisma.EvaluationReviewerDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EvaluationReviewerUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EvaluationReviewerUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationReviewerPayload>[]
+        }
+        upsert: {
+          args: Prisma.EvaluationReviewerUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationReviewerPayload>
+        }
+        aggregate: {
+          args: Prisma.EvaluationReviewerAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEvaluationReviewer>
+        }
+        groupBy: {
+          args: Prisma.EvaluationReviewerGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EvaluationReviewerGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EvaluationReviewerCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EvaluationReviewerCountAggregateOutputType> | number
+        }
+      }
+    }
+    EvaluationReviewerScore: {
+      payload: Prisma.$EvaluationReviewerScorePayload<ExtArgs>
+      fields: Prisma.EvaluationReviewerScoreFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EvaluationReviewerScoreFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationReviewerScorePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EvaluationReviewerScoreFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationReviewerScorePayload>
+        }
+        findFirst: {
+          args: Prisma.EvaluationReviewerScoreFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationReviewerScorePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EvaluationReviewerScoreFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationReviewerScorePayload>
+        }
+        findMany: {
+          args: Prisma.EvaluationReviewerScoreFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationReviewerScorePayload>[]
+        }
+        create: {
+          args: Prisma.EvaluationReviewerScoreCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationReviewerScorePayload>
+        }
+        createMany: {
+          args: Prisma.EvaluationReviewerScoreCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EvaluationReviewerScoreCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationReviewerScorePayload>[]
+        }
+        delete: {
+          args: Prisma.EvaluationReviewerScoreDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationReviewerScorePayload>
+        }
+        update: {
+          args: Prisma.EvaluationReviewerScoreUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationReviewerScorePayload>
+        }
+        deleteMany: {
+          args: Prisma.EvaluationReviewerScoreDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EvaluationReviewerScoreUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EvaluationReviewerScoreUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationReviewerScorePayload>[]
+        }
+        upsert: {
+          args: Prisma.EvaluationReviewerScoreUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationReviewerScorePayload>
+        }
+        aggregate: {
+          args: Prisma.EvaluationReviewerScoreAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEvaluationReviewerScore>
+        }
+        groupBy: {
+          args: Prisma.EvaluationReviewerScoreGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EvaluationReviewerScoreGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EvaluationReviewerScoreCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EvaluationReviewerScoreCountAggregateOutputType> | number
+        }
+      }
+    }
     ClassificationRule: {
       payload: Prisma.$ClassificationRulePayload<ExtArgs>
       fields: Prisma.ClassificationRuleFieldRefs
@@ -2732,6 +2882,7 @@ export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeo
 export const ProjectMemberScalarFieldEnum = {
   projectId: 'projectId',
   userId: 'userId',
+  roleId: 'roleId',
   joinedAt: 'joinedAt',
   deletedAt: 'deletedAt'
 } as const
@@ -2747,6 +2898,7 @@ export const TaskScalarFieldEnum = {
   status: 'status',
   dueDate: 'dueDate',
   customFields: 'customFields',
+  workspaceId: 'workspaceId',
   projectId: 'projectId',
   createdById: 'createdById',
   parentId: 'parentId',
@@ -2921,14 +3073,12 @@ export const EvaluationScalarFieldEnum = {
   id: 'id',
   periodId: 'periodId',
   userId: 'userId',
-  reviewerId: 'reviewerId',
   status: 'status',
   kpiScore: 'kpiScore',
   criteriaScore: 'criteriaScore',
   finalScore: 'finalScore',
   classification: 'classification',
   selfComment: 'selfComment',
-  reviewerComment: 'reviewerComment',
   createdAt: 'createdAt',
   deletedAt: 'deletedAt',
   updatedAt: 'updatedAt'
@@ -2942,11 +3092,32 @@ export const EvaluationCriteriaResultScalarFieldEnum = {
   evaluationId: 'evaluationId',
   evaluationCriteriaId: 'evaluationCriteriaId',
   selfScore: 'selfScore',
-  reviewerScore: 'reviewerScore',
   comment: 'comment'
 } as const
 
 export type EvaluationCriteriaResultScalarFieldEnum = (typeof EvaluationCriteriaResultScalarFieldEnum)[keyof typeof EvaluationCriteriaResultScalarFieldEnum]
+
+
+export const EvaluationReviewerScalarFieldEnum = {
+  evaluationId: 'evaluationId',
+  reviewerId: 'reviewerId',
+  comment: 'comment',
+  reviewedAt: 'reviewedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type EvaluationReviewerScalarFieldEnum = (typeof EvaluationReviewerScalarFieldEnum)[keyof typeof EvaluationReviewerScalarFieldEnum]
+
+
+export const EvaluationReviewerScoreScalarFieldEnum = {
+  evaluationId: 'evaluationId',
+  reviewerId: 'reviewerId',
+  evaluationCriteriaId: 'evaluationCriteriaId',
+  score: 'score',
+  comment: 'comment'
+} as const
+
+export type EvaluationReviewerScoreScalarFieldEnum = (typeof EvaluationReviewerScoreScalarFieldEnum)[keyof typeof EvaluationReviewerScoreScalarFieldEnum]
 
 
 export const ClassificationRuleScalarFieldEnum = {
@@ -2970,6 +3141,7 @@ export const WorkflowScalarFieldEnum = {
   description: 'description',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  workspaceId: 'workspaceId',
   projectId: 'projectId'
 } as const
 
@@ -3377,6 +3549,8 @@ export type GlobalOmitConfig = {
   evaluationCriteria?: Prisma.EvaluationCriteriaOmit
   evaluation?: Prisma.EvaluationOmit
   evaluationCriteriaResult?: Prisma.EvaluationCriteriaResultOmit
+  evaluationReviewer?: Prisma.EvaluationReviewerOmit
+  evaluationReviewerScore?: Prisma.EvaluationReviewerScoreOmit
   classificationRule?: Prisma.ClassificationRuleOmit
   workflow?: Prisma.WorkflowOmit
   workflowStep?: Prisma.WorkflowStepOmit

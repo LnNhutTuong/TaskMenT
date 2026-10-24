@@ -85,9 +85,28 @@ export class WorkspaceController {
   
   // invite member
   @RequirePermission(PERMISSION_KEYS.WORKSPACE_INVITE)
-  async inviteMember(){}
+  @Post(':workspaceId/invite/:userId')
+  async inviteMember(
+    @Param('workspaceId') workspaceId: string,
+    @Param('userId') userId: string,
+  ){
+    const result = await this.workspaceService.inviteMember(workspaceId, userId);
+    return {
+      message: 'Invite member successfully',
+      data: result,
+    };
+  }
 
   // remove member
   @RequirePermission(PERMISSION_KEYS.WORKSPACE_REMOVE_MEMBER)
-  async removeMember(){}
+  @Post(':workspaceId/remove/:userId')
+  async removeMember(
+    @Param('workspaceId') workspaceId: string,
+    @Param('userId') userId: string,
+  ){
+    await this.workspaceService.removeMember(workspaceId, userId);
+    return {
+      message: 'Remove member successfully',
+    };  
+  }
 }
