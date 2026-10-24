@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -13,17 +12,8 @@ import { AuthUser } from '../auth/types/jwt-payload.type.js';
 import { Prisma } from '../generated/prisma/client.js';
 import { RoleScope } from '../generated/prisma/enums.js'
 import { 
-  ROLE_NAME_DEFAULT, 
-  ROLE_KEY_DEFAULT, // 👈 Thêm cái này
-  PERMISSION_KEYS 
+  ROLE_KEY_DEFAULT, 
 } from '../permission/constants/pemission.constants.js';
-
-
-const P = PERMISSION_KEYS;
-
-
-// Chi owner workspace moi xoa duoc -> check them ownerId trong service
-const OWNER_ONLY = [P.WORKSPACE_DELETE];
 
 @Injectable()
 export class WorkspaceService {
@@ -35,8 +25,8 @@ export class WorkspaceService {
   /**
    * Tạo Workspace mới:
    * 1. Tạo bản ghi Workspace.
-   * 2. Khởi tạo các Role mặc định cho Workspace (Workspace Manager, Project Lead, Member, Viewer).
-   * 3. Gán Role 'Workspace Manager' cho user tạo workspace.
+   * 2. Khởi tạo các Role mặc định cho Workspace.
+   * 3. Gán role OWNER cho user tạo workspace.
    */
   
   async create(createWorkspaceDto: CreateWorkspaceDto, user: AuthUser) {

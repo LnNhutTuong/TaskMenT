@@ -148,10 +148,12 @@ export class ProjectService {
       throw new BadRequestException('Cannot find this project');
     }
 
-    const isOwner = project.createdById === user.id
-    if(!isOwner){
-      throw new ForbiddenException('You are not owner project')
-    }
+    await this.permissionService.assertPermission(
+      project.workspaceId,
+      user.id,
+      PERMISSION_KEYS.PROJECT_UPDATE,
+      project.id,
+    );
 
     const data: Prisma.ProjectUpdateInput = {
       updatedAt: new Date()
@@ -163,39 +165,6 @@ export class ProjectService {
 
     if(dto.description){
       data.description = dto.description
-    }
-
-    const member = await this.prisma.workspaceMember.findUnique({
-      where:{
-        userId_workspaceId: {userId: user.id, workspaceId: project.workspaceId,  }
-      },
-      include:{
-        role:{
-          include:{
-            permissions:{
-              include:{
-                permission:{
-                  select:{
-                    key: true
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    })
-
-    if(!member){
-      throw new NotFoundException('You are not a workspace member')
-    }
-
-    const hasPermission = member.role.permissions.some(p => p.permission.key === PERMISSION_KEYS.PROJECT_UPDATE)
-    const isProjectCreator = project.createdById === user.id 
-    const isSuperAdmin = await this.permissionService.isSuperAdmin(user.id);
-    if(!isProjectCreator && !isSuperAdmin && !hasPermission ){
-      throw new ForbiddenException(
-'You do not have permission to update this project',);
     }
 
     return this.prisma.project.update({
@@ -224,6 +193,7 @@ export class ProjectService {
       project.workspaceId,
       user.id,
       PERMISSION_KEYS.PROJECT_DELETE,
+      project.id,
     );
 
     if (!isProjectCreator && !isSuperAdmin && !hasPermission) {

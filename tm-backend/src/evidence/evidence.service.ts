@@ -32,9 +32,10 @@ export class EvidenceService {
             await this.projectService.assertProjectMember(task.project.id, user.id);
         }
         
+        await this.taskService.assertTaskPermission(task.id, user.id);
 
         //check permission
-        await this.permissionService.assertPermission(task.workspaceId, user.id, PERMISSION_KEYS.EVIDENCE_SUBMIT)
+        await this.permissionService.assertPermission(task.workspaceId, user.id, PERMISSION_KEYS.EVIDENCE_SUBMIT, task.project?.id)
 
         const submitted = await this.prisma.evidence.create({
             data:{
@@ -87,6 +88,7 @@ export class EvidenceService {
                             select:{
                                 createdById: true, // thang giao task
                                 workspaceId: true,
+                                projectId: true,
                                 project:{
                                     select:{
                                         createdById: true, // thang owner project,
@@ -110,17 +112,15 @@ export class EvidenceService {
         }
 
         const isSuperAdmin = await this.permissionService.isSuperAdmin(user.id);
-         
-        const isReviewer = (task.project && user.id  === task.project.createdById) ||
-                           (user.id === task.createdById); 
 
         const hasReviewPerm = await this.permissionService.hasPermission(
             task.workspaceId,
             user.id,
             PERMISSION_KEYS.EVIDENCE_REVIEW,
+            task.projectId ?? undefined,
         );
 
-        if (!isSuperAdmin && !isReviewer && !hasReviewPerm) {
+        if (!isSuperAdmin && !hasReviewPerm) {
             throw new ForbiddenException('You dont have permission to review this evidence');
         }
 
@@ -229,11 +229,7 @@ export class EvidenceService {
                         task:{
                             select:{
                                 workspaceId: true,
-                                project:{
-                                    select:{
-                                        workspaceId: true
-                                    }
-                                }
+                                projectId: true,
                             }
                         }
                     }
@@ -255,6 +251,7 @@ export class EvidenceService {
             evidence.taskOutput.task.workspaceId,
             user.id,
             PERMISSION_KEYS.EVIDENCE_DELETE,
+            evidence.taskOutput.task.projectId ?? undefined,
         );
 
         if (!isOwner && !isSuperAdmin && !hasDeletePerm) {

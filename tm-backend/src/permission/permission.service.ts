@@ -35,54 +35,76 @@ export class PermissionService {
     }
 
 
-    // ───  WORKSPACE LEVEL ───────────────────────────────────────────────────────────
+    // ───  WORKSPACE & PROJECT LEVEL ───────────────────────────────────────────────────────────
     /** Trả về boolean, không ném lỗi. Không phải member thì cũng là false */
-    async hasPermission(workspaceId: string, userId: string, permissionKey: string): Promise<boolean> {
-    const member = await this.prisma.workspaceMember.findUnique({
-      where: { 
-        userId_workspaceId: { userId, workspaceId },
-        AND: [
-        {user:{
-          deletedAt: null
-        }},
-        {workspace:{
-          deletedAt: null
-        }}
-      ] },
-      select: {
-        role: {
-          select: {
-            name: true,
-            // chỉ lấy đúng quyền cần kiểm tra, không load cả list
-            permissions: {
-              where: { permission: { key: permissionKey } },
-              select: { permissionId: true }, // đổi theo tên field thật trong schema
-              take: 1,
+    async hasPermission(workspaceId: string, userId: string, permissionKey: string, projectId?: string): Promise<boolean> {
+      if (await this.isSuperAdmin(userId)) return true;
+
+      const member = await this.prisma.workspaceMember.findUnique({
+        where: { 
+          userId_workspaceId: { userId, workspaceId },
+          AND: [
+            { deletedAt: null },
+            { user: { deletedAt: null } },
+            { workspace: { deletedAt: null } }
+          ]
+        },
+        select: {
+          role: {
+            select: {
+              name: true,
+              // chỉ lấy đúng quyền cần kiểm tra, không load cả list
+              permissions: {
+                where: { permission: { key: permissionKey } },
+                select: { permissionId: true },
+                take: 1,
+              },
             },
           },
         },
-      },
-    });
+      });
 
-    if (await this.isSuperAdmin(userId)) return true;
+      if (!member) return false;
+      if (member.role.permissions.length > 0) return true;
+      if (!projectId) return false;
 
-    if (!member) return false;
-    // return member.role.name === 'Workspace Manager' || member.role.permissions.length > 0;
-    return  member.role.permissions.length > 0;
+      const projectMember = await this.prisma.projectMember.findFirst({
+        where: {
+          projectId,
+          userId,
+          deletedAt: null,
+          project: {
+            workspaceId,
+            deletedAt: null,
+          },
+        },
+        select: {
+          role: {
+            select: {
+              permissions: {
+                where: { permission: { key: permissionKey } },
+                select: { permissionId: true },
+                take: 1,
+              },
+            },
+          },
+        },
+      });
 
+      return (projectMember?.role?.permissions.length ?? 0) > 0;
     }
     
     /** Ném lỗi nếu không có quyền */
-    async assertPermission(workspaceId: string, userId: string, permissionKey: string): Promise<void> {
-        const ok = await this.hasPermission(workspaceId, userId, permissionKey);
+    async assertPermission(workspaceId: string, userId: string, permissionKey: string, projectId?: string): Promise<void> {
+        const ok = await this.hasPermission(workspaceId, userId, permissionKey, projectId);
         if (!ok) {
-        throw new ForbiddenException(`You do not has permission`);
+          throw new ForbiddenException(`You do not have permission`);
         }
     }
 
     /** Ném lỗi nếu không có ít nhất 1 trong các quyền đó */
-    async assertSomePermission( workspaceId: string, userId: string, permissionKeys: string[]): Promise<void> {
-      const ok  = await Promise.all(permissionKeys.map(key => this.hasPermission(workspaceId, userId, key)));
+    async assertSomePermission(workspaceId: string, userId: string, permissionKeys: string[], projectId?: string): Promise<void> {
+      const ok  = await Promise.all(permissionKeys.map(key => this.hasPermission(workspaceId, userId, key, projectId)));
       if (!ok.some(Boolean)) {
         throw new ForbiddenException('You do not have permission');
       }

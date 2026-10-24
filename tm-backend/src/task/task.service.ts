@@ -135,7 +135,7 @@ export class TaskService {
         id,
         deletedAt: null,
       },
-      omit:{formulaId:true, projectId: true, createdById: true, parentId:true },
+      omit:{formulaId:true, parentId:true },
       include: {
             formula:{
               select:{
@@ -152,6 +152,7 @@ export class TaskService {
             },
             taskAssignees:{
               select:{
+                userId: true,
                 user:{
                   select:{
                     id: true, email: true, name:true
@@ -181,7 +182,8 @@ export class TaskService {
     }
 
     //check permission to view
-    await this.permissionService.assertPermission(task.workspaceId, user.id, PERMISSION_KEYS.TASK_VIEW )
+    await this.permissionService.assertPermission(task.workspaceId, user.id, PERMISSION_KEYS.TASK_VIEW, task.project?.id ?? undefined)
+    await this.assertCanViewTask(task, user.id)
     
     return task
   }
@@ -210,7 +212,7 @@ export class TaskService {
     }
 
     //check permission to create task
-    await this.permissionService.assertPermission(project.workspaceId, user.id, PERMISSION_KEYS.TASK_CREATE )
+    await this.permissionService.assertPermission(project.workspaceId, user.id, PERMISSION_KEYS.TASK_CREATE, project.id)
 
     if(dto.parentId){
       const parentTask = await this.prisma.task.findFirst({
@@ -273,6 +275,7 @@ export class TaskService {
         project:{
           select:{
             id: true, createdById: true, workspaceId: true, members:{
+              where: { deletedAt: null },
               select:{
                 user:{select:{
                   id: true, email: true, name: true
@@ -290,7 +293,23 @@ export class TaskService {
       throw new NotFoundException('Task not found');
     }
 
-    await this.permissionService.assertPermission(task.workspaceId, user.id, PERMISSION_KEYS.TASK_UPDATE )
+    await this.permissionService.assertPermission(task.workspaceId, user.id, PERMISSION_KEYS.TASK_UPDATE, task.projectId ?? undefined)
+
+    const isAssignee = task.taskAssignees.some(a => a.userId === user.id);
+    const hasAssignPerm = await this.permissionService.hasPermission(
+      task.workspaceId,
+      user.id,
+      PERMISSION_KEYS.TASK_ASSIGN,
+      task.projectId ?? undefined,
+    );
+
+    if (!isAssignee && !hasAssignPerm) {
+      throw new ForbiddenException('You do not have permission to update this task');
+    }
+
+    if (dto.assigneeIds !== undefined && !hasAssignPerm) {
+      throw new ForbiddenException('You do not have permission to change task assignees');
+    }
 
     if(dto.parentId !== task.parentId){
       if(dto.parentId){
@@ -317,17 +336,29 @@ export class TaskService {
 
     //check workflow
     if(dto.status && dto.status !== task.status){
-      if(task.projectId){
-        await this.workflowService.assertValidTransition(
-          task.projectId, 
-          task.status, //status hien tai
-          dto.status! //status cap nhat
-        )
+      await this.workflowService.assertValidTransition(
+        task.workspaceId,
+        task.projectId, 
+        task.status, //status hien tai
+        dto.status! //status cap nhat
+      )
+    }
+
+    // Kiểm tra dto.assigneeIds hợp lệ trước transaction
+    if(dto.assigneeIds){
+      const allowedUserIds = task.project ?
+        [task.project.createdById, ...task.project.members.map(m => m.user.id)] : 
+        [task.createdById];
+
+      const isValid = dto.assigneeIds.every(id => allowedUserIds.includes(id))
+
+      if(!isValid){
+        throw new BadRequestException('One or more assignees are not members of this project')
       }
     }
 
     await this.prisma.$transaction(async (tx) => {
-      await this.prisma.task.update({
+      await tx.task.update({
         where: { id: task.id },
         data: {
           title: dto.title,
@@ -342,33 +373,22 @@ export class TaskService {
         },
       });
 
-      // Nếu có dto.assigneeIds:
       if(dto.assigneeIds){
-      const allowedUserIds = task.project ?
-              [task.project.createdById, ...task.project.members.map(m => m.user.id)] : 
-              [task.createdById];
-
-      const isValid = dto.assigneeIds.every(id => allowedUserIds.includes(id))
-
-      if(!isValid){
-        throw new BadRequestException('One or more assignees are not members of this project')
-      }
-
-      await tx.taskAssignee.deleteMany({
-        where:{
-          taskId: task.id
-        }
-      })
-
-      if(dto.assigneeIds.length > 0){
-        await tx.taskAssignee.createMany({
-          data: dto.assigneeIds.map(userId => ({
-            taskId: task.id, 
-            userId
-          }))
+        await tx.taskAssignee.deleteMany({
+          where:{
+            taskId: task.id
+          }
         })
+
+        if(dto.assigneeIds.length > 0){
+          await tx.taskAssignee.createMany({
+            data: dto.assigneeIds.map(userId => ({
+              taskId: task.id, 
+              userId
+            }))
+          })
+        }
       }
-    }
     });
 
    
@@ -381,20 +401,13 @@ export class TaskService {
       where:{
         id, deletedAt: null,
       },
-      include:{
-        project:{
-          select:{
-            createdById: true, workspaceId: true
-          }
-        }
-      }
     })
 
     if(!task){
       throw new NotFoundException('Task not found')
     }
 
-    await this.permissionService.assertPermission(task.workspaceId, user.id, PERMISSION_KEYS.TASK_DELETE )
+    await this.permissionService.assertPermission(task.workspaceId, user.id, PERMISSION_KEYS.TASK_DELETE, task.projectId ?? undefined)
 
    await this.prisma.$transaction(async tx => {
       await tx.task.update({ 
@@ -422,19 +435,7 @@ export class TaskService {
       title: true,
       status: true,
       workspaceId: true,
-      project: {
-        select: {
-          name:true,
-          createdById: true,
-          workspaceId: true,
-           members: {
-            select: {
-              userId: true,
-            },
-          },
-        },
-      },
-
+      projectId: true,
       taskKeyResults: {
         select: {
            keyResult: {
@@ -455,7 +456,7 @@ export class TaskService {
       throw new NotFoundException('Task not found');
     }
 
-    await this.permissionService.assertPermission(task.workspaceId, user.id, PERMISSION_KEYS.TASK_VIEW_KEYRESULT ) 
+    await this.permissionService.assertPermission(task.workspaceId, user.id, PERMISSION_KEYS.TASK_VIEW_KEYRESULT, task.projectId ?? undefined) 
 
     const keyResultsLinkedToTask = await this.prisma.task.findUnique({
       where:{
@@ -476,19 +477,6 @@ export class TaskService {
         where:{
           id: taskId, deletedAt: null,
         },
-        include:{
-          project:{
-            select:{
-              createdById: true, 
-              members:{
-                select:{
-                  userId: true
-                }
-              },
-              workspaceId: true
-            }
-          }
-        }
       })
 
       if(!task){
@@ -496,7 +484,7 @@ export class TaskService {
       }
 
       //check permission to link task to key result
-      await this.permissionService.assertPermission(task.workspaceId, user.id, PERMISSION_KEYS.TASK_LINK_KEYRESULT )
+      await this.permissionService.assertPermission(task.workspaceId, user.id, PERMISSION_KEYS.TASK_LINK_KEYRESULT, task.projectId ?? undefined)
       
       const keyResult = await this.prisma.keyResult.findUnique({
         where:{
@@ -533,26 +521,13 @@ export class TaskService {
         where: {
           id: taskId, deletedAt: null,
         },
-        include:{
-          project:{
-            select:{
-              createdById: true, 
-              members:{
-                select:{
-                  userId: true
-                }
-              },
-              workspaceId: true
-            }
-          }
-        }
       })
 
       if(!task){
         throw new NotFoundException('Task not found')
       }
 
-      await this.permissionService.assertPermission(task.workspaceId, user.id, PERMISSION_KEYS.TASK_UNLINK_KEYRESULT )
+      await this.permissionService.assertPermission(task.workspaceId, user.id, PERMISSION_KEYS.TASK_UNLINK_KEYRESULT, task.projectId ?? undefined)
 
       const keyResult = await this.prisma.keyResult.findUnique({
         where:{
@@ -610,5 +585,33 @@ export class TaskService {
 
   return task;
 }
+
+  async assertCanViewTask(task: any, userId: string) {
+    if (await this.permissionService.isSuperAdmin(userId)) return;
+
+    const createdById = task.createdById ?? task.createdBy?.id;
+    if (createdById === userId) return;
+
+    const isAssignee = task.taskAssignees?.some(
+      (a: any) => a.userId === userId || a.user?.id === userId
+    );
+    if (isAssignee) return;
+
+    const isProjectMember = task.project?.members?.some(
+      (m: any) => m.userId === userId && m.deletedAt === null
+    );
+    if (isProjectMember) return;
+
+    const projectId = task.projectId ?? task.project?.id ?? undefined;
+    const hasAssignPerm = await this.permissionService.hasPermission(
+      task.workspaceId,
+      userId,
+      PERMISSION_KEYS.TASK_ASSIGN,
+      projectId
+    );
+    if (hasAssignPerm) return;
+
+    throw new ForbiddenException('You do not have permission to view this task');
+  }
 
 }

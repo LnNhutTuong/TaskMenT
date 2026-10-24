@@ -226,13 +226,13 @@ export class EvaluationPeriodService {
       throw new NotFoundException('Evaluation period not found');
     }
 
+    await this.permissionService.assertPermission(period.workspaceId, user.id, PERMISSION_KEYS.EVALUATION_PERIOD_DELETE)
+
     const isSubmited = period.evaluations.some(evaluation => evaluation.status !== 'DRAFT');
 
     if(isSubmited){
       throw new BadRequestException('Evaluation period cannot be deleted because it has been submitted');
     } 
-
-    await this.permissionService.assertPermission(period.workspaceId, user.id, PERMISSION_KEYS.EVALUATION_PERIOD_DELETE)
 
     return this.prisma.evaluationPeriod.delete({
       where:{

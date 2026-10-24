@@ -185,8 +185,6 @@ export class FormulaService {
             throw new NotFoundException('Formula not found');
         }
 
-        await this.permissionService.assertPermission(formula.workspaceId, user.id, PERMISSION_KEYS.FORMULA_ASSIGN_TASK)
-
         const task = await this.taskService.findOne(taskId, user)
 
         const isSameWorkspace = formula.workspaceId === task.workspaceId
@@ -194,6 +192,8 @@ export class FormulaService {
         if(!isSameWorkspace){
             throw new BadRequestException('Formula and task must be in the same workspace');
         }
+
+        await this.permissionService.assertPermission(formula.workspaceId, user.id, PERMISSION_KEYS.FORMULA_ASSIGN_TASK, task.project?.id)
 
         const isHasFomula = task.formula;
 
