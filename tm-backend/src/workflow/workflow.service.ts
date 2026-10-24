@@ -91,6 +91,7 @@ export class WorkflowService {
       const workflow = await tx.workflow.create({
         data:{
           projectId: project.id,
+          workspaceId: project.workspaceId,
           name: dto.name
         }
       })

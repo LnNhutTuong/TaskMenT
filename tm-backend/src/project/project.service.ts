@@ -242,6 +242,89 @@ export class ProjectService {
     });
   }
 
+  async inviteMember(projectId: string, userId: string){
+    const project = await this.prisma.project.findUnique({
+      where: { id: projectId, deletedAt: null },
+    });
+    if (!project) {
+      throw new NotFoundException('Project not found');
+    }
+
+    const workspace = await this.prisma.workspace.findUnique({
+      where: { id: project.workspaceId, deletedAt: null },
+      include:{
+        members: true
+      }
+    });
+
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId, deletedAt: null },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (!workspace) {
+      throw new NotFoundException('Workspace not found');
+    }
+
+    if(workspace.members.some(member => member.userId === userId)){
+      throw new ForbiddenException('This member is already a member in this workspace');
+    }
+
+    return this.prisma.workspace.findUnique({
+      where: { id: workspace.id },
+      include: {
+        members: {
+          omit:{
+            userId: true,
+            workspaceId: true,
+            roleId: true,
+          },
+          include: {
+            user: {
+              select: { id: true, name: true, email: true },
+            },
+            role: {
+              select: { id: true, name: true },
+            },
+          },
+        },
+      },
+    });
+  }
+
+  async removeMember(workspaceId: string, userId: string){
+    const workspace = await this.prisma.workspace.findUnique({
+      where: { id: workspaceId, deletedAt: null },
+      include:{
+        members: true
+      }
+    });
+
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId, deletedAt: null },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (!workspace) {
+      throw new NotFoundException('Workspace not found');
+    }
+
+    if(!workspace.members.some(member => member.userId === userId)){
+      throw new ForbiddenException('This member is not a member in this workspace');
+    }
+
+    await this.prisma.workspaceMember.delete({
+      where: { userId_workspaceId: { userId, workspaceId } },
+    });
+        
+  }
+
   async assertProjectMember(projectId: string, userId: string) {
     const isSuperAdmin = await this.permissionService.isSuperAdmin(userId);
     if (isSuperAdmin) return;

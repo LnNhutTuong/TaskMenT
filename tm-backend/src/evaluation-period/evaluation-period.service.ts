@@ -226,7 +226,8 @@ export class EvaluationPeriodService {
       throw new NotFoundException('Evaluation period not found');
     }
 
-    const isSubmited = period.evaluations.some(e => e.status === 'SUBMITTED' || e.status === 'APPROVED')
+    const isSubmited = period.evaluations.some(evaluation => evaluation.status !== 'DRAFT');
+
     if(isSubmited){
       throw new BadRequestException('Evaluation period cannot be deleted because it has been submitted');
     } 

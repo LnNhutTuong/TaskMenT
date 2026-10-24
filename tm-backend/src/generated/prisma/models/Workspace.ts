@@ -193,6 +193,8 @@ export type WorkspaceWhereInput = {
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   members?: Prisma.WorkspaceMemberListRelationFilter
   projects?: Prisma.ProjectListRelationFilter
+  tasks?: Prisma.TaskListRelationFilter
+  workflows?: Prisma.WorkflowListRelationFilter
   roles?: Prisma.RoleListRelationFilter
   enabledRoles?: Prisma.WorkspaceRoleListRelationFilter
   objectives?: Prisma.ObjectiveListRelationFilter
@@ -212,6 +214,8 @@ export type WorkspaceOrderByWithRelationInput = {
   owner?: Prisma.UserOrderByWithRelationInput
   members?: Prisma.WorkspaceMemberOrderByRelationAggregateInput
   projects?: Prisma.ProjectOrderByRelationAggregateInput
+  tasks?: Prisma.TaskOrderByRelationAggregateInput
+  workflows?: Prisma.WorkflowOrderByRelationAggregateInput
   roles?: Prisma.RoleOrderByRelationAggregateInput
   enabledRoles?: Prisma.WorkspaceRoleOrderByRelationAggregateInput
   objectives?: Prisma.ObjectiveOrderByRelationAggregateInput
@@ -234,6 +238,8 @@ export type WorkspaceWhereUniqueInput = Prisma.AtLeast<{
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   members?: Prisma.WorkspaceMemberListRelationFilter
   projects?: Prisma.ProjectListRelationFilter
+  tasks?: Prisma.TaskListRelationFilter
+  workflows?: Prisma.WorkflowListRelationFilter
   roles?: Prisma.RoleListRelationFilter
   enabledRoles?: Prisma.WorkspaceRoleListRelationFilter
   objectives?: Prisma.ObjectiveListRelationFilter
@@ -276,6 +282,8 @@ export type WorkspaceCreateInput = {
   owner: Prisma.UserCreateNestedOneWithoutOwnedWorkspacesInput
   members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
   projects?: Prisma.ProjectCreateNestedManyWithoutWorkspaceInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutWorkspaceInput
+  workflows?: Prisma.WorkflowCreateNestedManyWithoutWorkspaceInput
   roles?: Prisma.RoleCreateNestedManyWithoutWorkspaceInput
   enabledRoles?: Prisma.WorkspaceRoleCreateNestedManyWithoutWorkspaceInput
   objectives?: Prisma.ObjectiveCreateNestedManyWithoutWorkspaceInput
@@ -294,6 +302,8 @@ export type WorkspaceUncheckedCreateInput = {
   updatedAt?: Date | string
   members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutWorkspaceInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutWorkspaceInput
+  workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutWorkspaceInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutWorkspaceInput
   enabledRoles?: Prisma.WorkspaceRoleUncheckedCreateNestedManyWithoutWorkspaceInput
   objectives?: Prisma.ObjectiveUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -312,6 +322,8 @@ export type WorkspaceUpdateInput = {
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedWorkspacesNestedInput
   members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutWorkspaceNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutWorkspaceNestedInput
+  workflows?: Prisma.WorkflowUpdateManyWithoutWorkspaceNestedInput
   roles?: Prisma.RoleUpdateManyWithoutWorkspaceNestedInput
   enabledRoles?: Prisma.WorkspaceRoleUpdateManyWithoutWorkspaceNestedInput
   objectives?: Prisma.ObjectiveUpdateManyWithoutWorkspaceNestedInput
@@ -330,6 +342,8 @@ export type WorkspaceUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutWorkspaceNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutWorkspaceNestedInput
+  workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutWorkspaceNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutWorkspaceNestedInput
   enabledRoles?: Prisma.WorkspaceRoleUncheckedUpdateManyWithoutWorkspaceNestedInput
   objectives?: Prisma.ObjectiveUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -512,6 +526,20 @@ export type WorkspaceUpdateOneRequiredWithoutProjectsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.WorkspaceUpdateToOneWithWhereWithoutProjectsInput, Prisma.WorkspaceUpdateWithoutProjectsInput>, Prisma.WorkspaceUncheckedUpdateWithoutProjectsInput>
 }
 
+export type WorkspaceCreateNestedOneWithoutTasksInput = {
+  create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutTasksInput, Prisma.WorkspaceUncheckedCreateWithoutTasksInput>
+  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutTasksInput
+  connect?: Prisma.WorkspaceWhereUniqueInput
+}
+
+export type WorkspaceUpdateOneRequiredWithoutTasksNestedInput = {
+  create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutTasksInput, Prisma.WorkspaceUncheckedCreateWithoutTasksInput>
+  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutTasksInput
+  upsert?: Prisma.WorkspaceUpsertWithoutTasksInput
+  connect?: Prisma.WorkspaceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.WorkspaceUpdateToOneWithWhereWithoutTasksInput, Prisma.WorkspaceUpdateWithoutTasksInput>, Prisma.WorkspaceUncheckedUpdateWithoutTasksInput>
+}
+
 export type WorkspaceCreateNestedOneWithoutObjectivesInput = {
   create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutObjectivesInput, Prisma.WorkspaceUncheckedCreateWithoutObjectivesInput>
   connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutObjectivesInput
@@ -582,6 +610,20 @@ export type WorkspaceUpdateOneRequiredWithoutClassificationRuleNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.WorkspaceUpdateToOneWithWhereWithoutClassificationRuleInput, Prisma.WorkspaceUpdateWithoutClassificationRuleInput>, Prisma.WorkspaceUncheckedUpdateWithoutClassificationRuleInput>
 }
 
+export type WorkspaceCreateNestedOneWithoutWorkflowsInput = {
+  create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutWorkflowsInput, Prisma.WorkspaceUncheckedCreateWithoutWorkflowsInput>
+  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutWorkflowsInput
+  connect?: Prisma.WorkspaceWhereUniqueInput
+}
+
+export type WorkspaceUpdateOneRequiredWithoutWorkflowsNestedInput = {
+  create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutWorkflowsInput, Prisma.WorkspaceUncheckedCreateWithoutWorkflowsInput>
+  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutWorkflowsInput
+  upsert?: Prisma.WorkspaceUpsertWithoutWorkflowsInput
+  connect?: Prisma.WorkspaceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.WorkspaceUpdateToOneWithWhereWithoutWorkflowsInput, Prisma.WorkspaceUpdateWithoutWorkflowsInput>, Prisma.WorkspaceUncheckedUpdateWithoutWorkflowsInput>
+}
+
 export type WorkspaceCreateWithoutOwnerInput = {
   id?: string
   name: string
@@ -590,6 +632,8 @@ export type WorkspaceCreateWithoutOwnerInput = {
   updatedAt?: Date | string
   members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
   projects?: Prisma.ProjectCreateNestedManyWithoutWorkspaceInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutWorkspaceInput
+  workflows?: Prisma.WorkflowCreateNestedManyWithoutWorkspaceInput
   roles?: Prisma.RoleCreateNestedManyWithoutWorkspaceInput
   enabledRoles?: Prisma.WorkspaceRoleCreateNestedManyWithoutWorkspaceInput
   objectives?: Prisma.ObjectiveCreateNestedManyWithoutWorkspaceInput
@@ -607,6 +651,8 @@ export type WorkspaceUncheckedCreateWithoutOwnerInput = {
   updatedAt?: Date | string
   members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutWorkspaceInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutWorkspaceInput
+  workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutWorkspaceInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutWorkspaceInput
   enabledRoles?: Prisma.WorkspaceRoleUncheckedCreateNestedManyWithoutWorkspaceInput
   objectives?: Prisma.ObjectiveUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -663,6 +709,8 @@ export type WorkspaceCreateWithoutRolesInput = {
   owner: Prisma.UserCreateNestedOneWithoutOwnedWorkspacesInput
   members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
   projects?: Prisma.ProjectCreateNestedManyWithoutWorkspaceInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutWorkspaceInput
+  workflows?: Prisma.WorkflowCreateNestedManyWithoutWorkspaceInput
   enabledRoles?: Prisma.WorkspaceRoleCreateNestedManyWithoutWorkspaceInput
   objectives?: Prisma.ObjectiveCreateNestedManyWithoutWorkspaceInput
   metrics?: Prisma.MetricCreateNestedManyWithoutWorkspaceInput
@@ -680,6 +728,8 @@ export type WorkspaceUncheckedCreateWithoutRolesInput = {
   updatedAt?: Date | string
   members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutWorkspaceInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutWorkspaceInput
+  workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutWorkspaceInput
   enabledRoles?: Prisma.WorkspaceRoleUncheckedCreateNestedManyWithoutWorkspaceInput
   objectives?: Prisma.ObjectiveUncheckedCreateNestedManyWithoutWorkspaceInput
   metrics?: Prisma.MetricUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -713,6 +763,8 @@ export type WorkspaceUpdateWithoutRolesInput = {
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedWorkspacesNestedInput
   members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutWorkspaceNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutWorkspaceNestedInput
+  workflows?: Prisma.WorkflowUpdateManyWithoutWorkspaceNestedInput
   enabledRoles?: Prisma.WorkspaceRoleUpdateManyWithoutWorkspaceNestedInput
   objectives?: Prisma.ObjectiveUpdateManyWithoutWorkspaceNestedInput
   metrics?: Prisma.MetricUpdateManyWithoutWorkspaceNestedInput
@@ -730,6 +782,8 @@ export type WorkspaceUncheckedUpdateWithoutRolesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutWorkspaceNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutWorkspaceNestedInput
+  workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutWorkspaceNestedInput
   enabledRoles?: Prisma.WorkspaceRoleUncheckedUpdateManyWithoutWorkspaceNestedInput
   objectives?: Prisma.ObjectiveUncheckedUpdateManyWithoutWorkspaceNestedInput
   metrics?: Prisma.MetricUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -746,6 +800,8 @@ export type WorkspaceCreateWithoutMembersInput = {
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutOwnedWorkspacesInput
   projects?: Prisma.ProjectCreateNestedManyWithoutWorkspaceInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutWorkspaceInput
+  workflows?: Prisma.WorkflowCreateNestedManyWithoutWorkspaceInput
   roles?: Prisma.RoleCreateNestedManyWithoutWorkspaceInput
   enabledRoles?: Prisma.WorkspaceRoleCreateNestedManyWithoutWorkspaceInput
   objectives?: Prisma.ObjectiveCreateNestedManyWithoutWorkspaceInput
@@ -763,6 +819,8 @@ export type WorkspaceUncheckedCreateWithoutMembersInput = {
   deletedAt?: Date | string | null
   updatedAt?: Date | string
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutWorkspaceInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutWorkspaceInput
+  workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutWorkspaceInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutWorkspaceInput
   enabledRoles?: Prisma.WorkspaceRoleUncheckedCreateNestedManyWithoutWorkspaceInput
   objectives?: Prisma.ObjectiveUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -796,6 +854,8 @@ export type WorkspaceUpdateWithoutMembersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedWorkspacesNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutWorkspaceNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutWorkspaceNestedInput
+  workflows?: Prisma.WorkflowUpdateManyWithoutWorkspaceNestedInput
   roles?: Prisma.RoleUpdateManyWithoutWorkspaceNestedInput
   enabledRoles?: Prisma.WorkspaceRoleUpdateManyWithoutWorkspaceNestedInput
   objectives?: Prisma.ObjectiveUpdateManyWithoutWorkspaceNestedInput
@@ -813,6 +873,8 @@ export type WorkspaceUncheckedUpdateWithoutMembersInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutWorkspaceNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutWorkspaceNestedInput
+  workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutWorkspaceNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutWorkspaceNestedInput
   enabledRoles?: Prisma.WorkspaceRoleUncheckedUpdateManyWithoutWorkspaceNestedInput
   objectives?: Prisma.ObjectiveUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -831,6 +893,8 @@ export type WorkspaceCreateWithoutEnabledRolesInput = {
   owner: Prisma.UserCreateNestedOneWithoutOwnedWorkspacesInput
   members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
   projects?: Prisma.ProjectCreateNestedManyWithoutWorkspaceInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutWorkspaceInput
+  workflows?: Prisma.WorkflowCreateNestedManyWithoutWorkspaceInput
   roles?: Prisma.RoleCreateNestedManyWithoutWorkspaceInput
   objectives?: Prisma.ObjectiveCreateNestedManyWithoutWorkspaceInput
   metrics?: Prisma.MetricCreateNestedManyWithoutWorkspaceInput
@@ -848,6 +912,8 @@ export type WorkspaceUncheckedCreateWithoutEnabledRolesInput = {
   updatedAt?: Date | string
   members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutWorkspaceInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutWorkspaceInput
+  workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutWorkspaceInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutWorkspaceInput
   objectives?: Prisma.ObjectiveUncheckedCreateNestedManyWithoutWorkspaceInput
   metrics?: Prisma.MetricUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -881,6 +947,8 @@ export type WorkspaceUpdateWithoutEnabledRolesInput = {
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedWorkspacesNestedInput
   members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutWorkspaceNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutWorkspaceNestedInput
+  workflows?: Prisma.WorkflowUpdateManyWithoutWorkspaceNestedInput
   roles?: Prisma.RoleUpdateManyWithoutWorkspaceNestedInput
   objectives?: Prisma.ObjectiveUpdateManyWithoutWorkspaceNestedInput
   metrics?: Prisma.MetricUpdateManyWithoutWorkspaceNestedInput
@@ -898,6 +966,8 @@ export type WorkspaceUncheckedUpdateWithoutEnabledRolesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutWorkspaceNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutWorkspaceNestedInput
+  workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutWorkspaceNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutWorkspaceNestedInput
   objectives?: Prisma.ObjectiveUncheckedUpdateManyWithoutWorkspaceNestedInput
   metrics?: Prisma.MetricUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -914,6 +984,8 @@ export type WorkspaceCreateWithoutProjectsInput = {
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutOwnedWorkspacesInput
   members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutWorkspaceInput
+  workflows?: Prisma.WorkflowCreateNestedManyWithoutWorkspaceInput
   roles?: Prisma.RoleCreateNestedManyWithoutWorkspaceInput
   enabledRoles?: Prisma.WorkspaceRoleCreateNestedManyWithoutWorkspaceInput
   objectives?: Prisma.ObjectiveCreateNestedManyWithoutWorkspaceInput
@@ -931,6 +1003,8 @@ export type WorkspaceUncheckedCreateWithoutProjectsInput = {
   deletedAt?: Date | string | null
   updatedAt?: Date | string
   members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutWorkspaceInput
+  workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutWorkspaceInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutWorkspaceInput
   enabledRoles?: Prisma.WorkspaceRoleUncheckedCreateNestedManyWithoutWorkspaceInput
   objectives?: Prisma.ObjectiveUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -964,6 +1038,8 @@ export type WorkspaceUpdateWithoutProjectsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedWorkspacesNestedInput
   members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutWorkspaceNestedInput
+  workflows?: Prisma.WorkflowUpdateManyWithoutWorkspaceNestedInput
   roles?: Prisma.RoleUpdateManyWithoutWorkspaceNestedInput
   enabledRoles?: Prisma.WorkspaceRoleUpdateManyWithoutWorkspaceNestedInput
   objectives?: Prisma.ObjectiveUpdateManyWithoutWorkspaceNestedInput
@@ -981,6 +1057,100 @@ export type WorkspaceUncheckedUpdateWithoutProjectsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutWorkspaceNestedInput
+  workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutWorkspaceNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutWorkspaceNestedInput
+  enabledRoles?: Prisma.WorkspaceRoleUncheckedUpdateManyWithoutWorkspaceNestedInput
+  objectives?: Prisma.ObjectiveUncheckedUpdateManyWithoutWorkspaceNestedInput
+  metrics?: Prisma.MetricUncheckedUpdateManyWithoutWorkspaceNestedInput
+  formulas?: Prisma.FormulaUncheckedUpdateManyWithoutWorkspaceNestedInput
+  evaluationPeriods?: Prisma.EvaluationPeriodUncheckedUpdateManyWithoutWorkspaceNestedInput
+  classificationRule?: Prisma.ClassificationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
+}
+
+export type WorkspaceCreateWithoutTasksInput = {
+  id?: string
+  name: string
+  createdAt?: Date | string
+  deletedAt?: Date | string | null
+  updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedWorkspacesInput
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutWorkspaceInput
+  workflows?: Prisma.WorkflowCreateNestedManyWithoutWorkspaceInput
+  roles?: Prisma.RoleCreateNestedManyWithoutWorkspaceInput
+  enabledRoles?: Prisma.WorkspaceRoleCreateNestedManyWithoutWorkspaceInput
+  objectives?: Prisma.ObjectiveCreateNestedManyWithoutWorkspaceInput
+  metrics?: Prisma.MetricCreateNestedManyWithoutWorkspaceInput
+  formulas?: Prisma.FormulaCreateNestedManyWithoutWorkspaceInput
+  evaluationPeriods?: Prisma.EvaluationPeriodCreateNestedManyWithoutWorkspaceInput
+  classificationRule?: Prisma.ClassificationRuleCreateNestedManyWithoutWorkspaceInput
+}
+
+export type WorkspaceUncheckedCreateWithoutTasksInput = {
+  id?: string
+  name: string
+  ownerId: string
+  createdAt?: Date | string
+  deletedAt?: Date | string | null
+  updatedAt?: Date | string
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutWorkspaceInput
+  workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutWorkspaceInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutWorkspaceInput
+  enabledRoles?: Prisma.WorkspaceRoleUncheckedCreateNestedManyWithoutWorkspaceInput
+  objectives?: Prisma.ObjectiveUncheckedCreateNestedManyWithoutWorkspaceInput
+  metrics?: Prisma.MetricUncheckedCreateNestedManyWithoutWorkspaceInput
+  formulas?: Prisma.FormulaUncheckedCreateNestedManyWithoutWorkspaceInput
+  evaluationPeriods?: Prisma.EvaluationPeriodUncheckedCreateNestedManyWithoutWorkspaceInput
+  classificationRule?: Prisma.ClassificationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
+}
+
+export type WorkspaceCreateOrConnectWithoutTasksInput = {
+  where: Prisma.WorkspaceWhereUniqueInput
+  create: Prisma.XOR<Prisma.WorkspaceCreateWithoutTasksInput, Prisma.WorkspaceUncheckedCreateWithoutTasksInput>
+}
+
+export type WorkspaceUpsertWithoutTasksInput = {
+  update: Prisma.XOR<Prisma.WorkspaceUpdateWithoutTasksInput, Prisma.WorkspaceUncheckedUpdateWithoutTasksInput>
+  create: Prisma.XOR<Prisma.WorkspaceCreateWithoutTasksInput, Prisma.WorkspaceUncheckedCreateWithoutTasksInput>
+  where?: Prisma.WorkspaceWhereInput
+}
+
+export type WorkspaceUpdateToOneWithWhereWithoutTasksInput = {
+  where?: Prisma.WorkspaceWhereInput
+  data: Prisma.XOR<Prisma.WorkspaceUpdateWithoutTasksInput, Prisma.WorkspaceUncheckedUpdateWithoutTasksInput>
+}
+
+export type WorkspaceUpdateWithoutTasksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedWorkspacesNestedInput
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutWorkspaceNestedInput
+  workflows?: Prisma.WorkflowUpdateManyWithoutWorkspaceNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutWorkspaceNestedInput
+  enabledRoles?: Prisma.WorkspaceRoleUpdateManyWithoutWorkspaceNestedInput
+  objectives?: Prisma.ObjectiveUpdateManyWithoutWorkspaceNestedInput
+  metrics?: Prisma.MetricUpdateManyWithoutWorkspaceNestedInput
+  formulas?: Prisma.FormulaUpdateManyWithoutWorkspaceNestedInput
+  evaluationPeriods?: Prisma.EvaluationPeriodUpdateManyWithoutWorkspaceNestedInput
+  classificationRule?: Prisma.ClassificationRuleUpdateManyWithoutWorkspaceNestedInput
+}
+
+export type WorkspaceUncheckedUpdateWithoutTasksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutWorkspaceNestedInput
+  workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutWorkspaceNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutWorkspaceNestedInput
   enabledRoles?: Prisma.WorkspaceRoleUncheckedUpdateManyWithoutWorkspaceNestedInput
   objectives?: Prisma.ObjectiveUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -999,6 +1169,8 @@ export type WorkspaceCreateWithoutObjectivesInput = {
   owner: Prisma.UserCreateNestedOneWithoutOwnedWorkspacesInput
   members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
   projects?: Prisma.ProjectCreateNestedManyWithoutWorkspaceInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutWorkspaceInput
+  workflows?: Prisma.WorkflowCreateNestedManyWithoutWorkspaceInput
   roles?: Prisma.RoleCreateNestedManyWithoutWorkspaceInput
   enabledRoles?: Prisma.WorkspaceRoleCreateNestedManyWithoutWorkspaceInput
   metrics?: Prisma.MetricCreateNestedManyWithoutWorkspaceInput
@@ -1016,6 +1188,8 @@ export type WorkspaceUncheckedCreateWithoutObjectivesInput = {
   updatedAt?: Date | string
   members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutWorkspaceInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutWorkspaceInput
+  workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutWorkspaceInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutWorkspaceInput
   enabledRoles?: Prisma.WorkspaceRoleUncheckedCreateNestedManyWithoutWorkspaceInput
   metrics?: Prisma.MetricUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -1049,6 +1223,8 @@ export type WorkspaceUpdateWithoutObjectivesInput = {
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedWorkspacesNestedInput
   members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutWorkspaceNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutWorkspaceNestedInput
+  workflows?: Prisma.WorkflowUpdateManyWithoutWorkspaceNestedInput
   roles?: Prisma.RoleUpdateManyWithoutWorkspaceNestedInput
   enabledRoles?: Prisma.WorkspaceRoleUpdateManyWithoutWorkspaceNestedInput
   metrics?: Prisma.MetricUpdateManyWithoutWorkspaceNestedInput
@@ -1066,6 +1242,8 @@ export type WorkspaceUncheckedUpdateWithoutObjectivesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutWorkspaceNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutWorkspaceNestedInput
+  workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutWorkspaceNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutWorkspaceNestedInput
   enabledRoles?: Prisma.WorkspaceRoleUncheckedUpdateManyWithoutWorkspaceNestedInput
   metrics?: Prisma.MetricUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -1083,6 +1261,8 @@ export type WorkspaceCreateWithoutMetricsInput = {
   owner: Prisma.UserCreateNestedOneWithoutOwnedWorkspacesInput
   members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
   projects?: Prisma.ProjectCreateNestedManyWithoutWorkspaceInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutWorkspaceInput
+  workflows?: Prisma.WorkflowCreateNestedManyWithoutWorkspaceInput
   roles?: Prisma.RoleCreateNestedManyWithoutWorkspaceInput
   enabledRoles?: Prisma.WorkspaceRoleCreateNestedManyWithoutWorkspaceInput
   objectives?: Prisma.ObjectiveCreateNestedManyWithoutWorkspaceInput
@@ -1100,6 +1280,8 @@ export type WorkspaceUncheckedCreateWithoutMetricsInput = {
   updatedAt?: Date | string
   members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutWorkspaceInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutWorkspaceInput
+  workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutWorkspaceInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutWorkspaceInput
   enabledRoles?: Prisma.WorkspaceRoleUncheckedCreateNestedManyWithoutWorkspaceInput
   objectives?: Prisma.ObjectiveUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -1133,6 +1315,8 @@ export type WorkspaceUpdateWithoutMetricsInput = {
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedWorkspacesNestedInput
   members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutWorkspaceNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutWorkspaceNestedInput
+  workflows?: Prisma.WorkflowUpdateManyWithoutWorkspaceNestedInput
   roles?: Prisma.RoleUpdateManyWithoutWorkspaceNestedInput
   enabledRoles?: Prisma.WorkspaceRoleUpdateManyWithoutWorkspaceNestedInput
   objectives?: Prisma.ObjectiveUpdateManyWithoutWorkspaceNestedInput
@@ -1150,6 +1334,8 @@ export type WorkspaceUncheckedUpdateWithoutMetricsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutWorkspaceNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutWorkspaceNestedInput
+  workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutWorkspaceNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutWorkspaceNestedInput
   enabledRoles?: Prisma.WorkspaceRoleUncheckedUpdateManyWithoutWorkspaceNestedInput
   objectives?: Prisma.ObjectiveUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -1167,6 +1353,8 @@ export type WorkspaceCreateWithoutFormulasInput = {
   owner: Prisma.UserCreateNestedOneWithoutOwnedWorkspacesInput
   members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
   projects?: Prisma.ProjectCreateNestedManyWithoutWorkspaceInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutWorkspaceInput
+  workflows?: Prisma.WorkflowCreateNestedManyWithoutWorkspaceInput
   roles?: Prisma.RoleCreateNestedManyWithoutWorkspaceInput
   enabledRoles?: Prisma.WorkspaceRoleCreateNestedManyWithoutWorkspaceInput
   objectives?: Prisma.ObjectiveCreateNestedManyWithoutWorkspaceInput
@@ -1184,6 +1372,8 @@ export type WorkspaceUncheckedCreateWithoutFormulasInput = {
   updatedAt?: Date | string
   members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutWorkspaceInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutWorkspaceInput
+  workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutWorkspaceInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutWorkspaceInput
   enabledRoles?: Prisma.WorkspaceRoleUncheckedCreateNestedManyWithoutWorkspaceInput
   objectives?: Prisma.ObjectiveUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -1217,6 +1407,8 @@ export type WorkspaceUpdateWithoutFormulasInput = {
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedWorkspacesNestedInput
   members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutWorkspaceNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutWorkspaceNestedInput
+  workflows?: Prisma.WorkflowUpdateManyWithoutWorkspaceNestedInput
   roles?: Prisma.RoleUpdateManyWithoutWorkspaceNestedInput
   enabledRoles?: Prisma.WorkspaceRoleUpdateManyWithoutWorkspaceNestedInput
   objectives?: Prisma.ObjectiveUpdateManyWithoutWorkspaceNestedInput
@@ -1234,6 +1426,8 @@ export type WorkspaceUncheckedUpdateWithoutFormulasInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutWorkspaceNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutWorkspaceNestedInput
+  workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutWorkspaceNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutWorkspaceNestedInput
   enabledRoles?: Prisma.WorkspaceRoleUncheckedUpdateManyWithoutWorkspaceNestedInput
   objectives?: Prisma.ObjectiveUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -1251,6 +1445,8 @@ export type WorkspaceCreateWithoutEvaluationPeriodsInput = {
   owner: Prisma.UserCreateNestedOneWithoutOwnedWorkspacesInput
   members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
   projects?: Prisma.ProjectCreateNestedManyWithoutWorkspaceInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutWorkspaceInput
+  workflows?: Prisma.WorkflowCreateNestedManyWithoutWorkspaceInput
   roles?: Prisma.RoleCreateNestedManyWithoutWorkspaceInput
   enabledRoles?: Prisma.WorkspaceRoleCreateNestedManyWithoutWorkspaceInput
   objectives?: Prisma.ObjectiveCreateNestedManyWithoutWorkspaceInput
@@ -1268,6 +1464,8 @@ export type WorkspaceUncheckedCreateWithoutEvaluationPeriodsInput = {
   updatedAt?: Date | string
   members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutWorkspaceInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutWorkspaceInput
+  workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutWorkspaceInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutWorkspaceInput
   enabledRoles?: Prisma.WorkspaceRoleUncheckedCreateNestedManyWithoutWorkspaceInput
   objectives?: Prisma.ObjectiveUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -1301,6 +1499,8 @@ export type WorkspaceUpdateWithoutEvaluationPeriodsInput = {
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedWorkspacesNestedInput
   members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutWorkspaceNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutWorkspaceNestedInput
+  workflows?: Prisma.WorkflowUpdateManyWithoutWorkspaceNestedInput
   roles?: Prisma.RoleUpdateManyWithoutWorkspaceNestedInput
   enabledRoles?: Prisma.WorkspaceRoleUpdateManyWithoutWorkspaceNestedInput
   objectives?: Prisma.ObjectiveUpdateManyWithoutWorkspaceNestedInput
@@ -1318,6 +1518,8 @@ export type WorkspaceUncheckedUpdateWithoutEvaluationPeriodsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutWorkspaceNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutWorkspaceNestedInput
+  workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutWorkspaceNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutWorkspaceNestedInput
   enabledRoles?: Prisma.WorkspaceRoleUncheckedUpdateManyWithoutWorkspaceNestedInput
   objectives?: Prisma.ObjectiveUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -1335,6 +1537,8 @@ export type WorkspaceCreateWithoutClassificationRuleInput = {
   owner: Prisma.UserCreateNestedOneWithoutOwnedWorkspacesInput
   members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
   projects?: Prisma.ProjectCreateNestedManyWithoutWorkspaceInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutWorkspaceInput
+  workflows?: Prisma.WorkflowCreateNestedManyWithoutWorkspaceInput
   roles?: Prisma.RoleCreateNestedManyWithoutWorkspaceInput
   enabledRoles?: Prisma.WorkspaceRoleCreateNestedManyWithoutWorkspaceInput
   objectives?: Prisma.ObjectiveCreateNestedManyWithoutWorkspaceInput
@@ -1352,6 +1556,8 @@ export type WorkspaceUncheckedCreateWithoutClassificationRuleInput = {
   updatedAt?: Date | string
   members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutWorkspaceInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutWorkspaceInput
+  workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutWorkspaceInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutWorkspaceInput
   enabledRoles?: Prisma.WorkspaceRoleUncheckedCreateNestedManyWithoutWorkspaceInput
   objectives?: Prisma.ObjectiveUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -1385,6 +1591,8 @@ export type WorkspaceUpdateWithoutClassificationRuleInput = {
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedWorkspacesNestedInput
   members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutWorkspaceNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutWorkspaceNestedInput
+  workflows?: Prisma.WorkflowUpdateManyWithoutWorkspaceNestedInput
   roles?: Prisma.RoleUpdateManyWithoutWorkspaceNestedInput
   enabledRoles?: Prisma.WorkspaceRoleUpdateManyWithoutWorkspaceNestedInput
   objectives?: Prisma.ObjectiveUpdateManyWithoutWorkspaceNestedInput
@@ -1402,12 +1610,106 @@ export type WorkspaceUncheckedUpdateWithoutClassificationRuleInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutWorkspaceNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutWorkspaceNestedInput
+  workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutWorkspaceNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutWorkspaceNestedInput
   enabledRoles?: Prisma.WorkspaceRoleUncheckedUpdateManyWithoutWorkspaceNestedInput
   objectives?: Prisma.ObjectiveUncheckedUpdateManyWithoutWorkspaceNestedInput
   metrics?: Prisma.MetricUncheckedUpdateManyWithoutWorkspaceNestedInput
   formulas?: Prisma.FormulaUncheckedUpdateManyWithoutWorkspaceNestedInput
   evaluationPeriods?: Prisma.EvaluationPeriodUncheckedUpdateManyWithoutWorkspaceNestedInput
+}
+
+export type WorkspaceCreateWithoutWorkflowsInput = {
+  id?: string
+  name: string
+  createdAt?: Date | string
+  deletedAt?: Date | string | null
+  updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedWorkspacesInput
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutWorkspaceInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutWorkspaceInput
+  roles?: Prisma.RoleCreateNestedManyWithoutWorkspaceInput
+  enabledRoles?: Prisma.WorkspaceRoleCreateNestedManyWithoutWorkspaceInput
+  objectives?: Prisma.ObjectiveCreateNestedManyWithoutWorkspaceInput
+  metrics?: Prisma.MetricCreateNestedManyWithoutWorkspaceInput
+  formulas?: Prisma.FormulaCreateNestedManyWithoutWorkspaceInput
+  evaluationPeriods?: Prisma.EvaluationPeriodCreateNestedManyWithoutWorkspaceInput
+  classificationRule?: Prisma.ClassificationRuleCreateNestedManyWithoutWorkspaceInput
+}
+
+export type WorkspaceUncheckedCreateWithoutWorkflowsInput = {
+  id?: string
+  name: string
+  ownerId: string
+  createdAt?: Date | string
+  deletedAt?: Date | string | null
+  updatedAt?: Date | string
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutWorkspaceInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutWorkspaceInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutWorkspaceInput
+  enabledRoles?: Prisma.WorkspaceRoleUncheckedCreateNestedManyWithoutWorkspaceInput
+  objectives?: Prisma.ObjectiveUncheckedCreateNestedManyWithoutWorkspaceInput
+  metrics?: Prisma.MetricUncheckedCreateNestedManyWithoutWorkspaceInput
+  formulas?: Prisma.FormulaUncheckedCreateNestedManyWithoutWorkspaceInput
+  evaluationPeriods?: Prisma.EvaluationPeriodUncheckedCreateNestedManyWithoutWorkspaceInput
+  classificationRule?: Prisma.ClassificationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
+}
+
+export type WorkspaceCreateOrConnectWithoutWorkflowsInput = {
+  where: Prisma.WorkspaceWhereUniqueInput
+  create: Prisma.XOR<Prisma.WorkspaceCreateWithoutWorkflowsInput, Prisma.WorkspaceUncheckedCreateWithoutWorkflowsInput>
+}
+
+export type WorkspaceUpsertWithoutWorkflowsInput = {
+  update: Prisma.XOR<Prisma.WorkspaceUpdateWithoutWorkflowsInput, Prisma.WorkspaceUncheckedUpdateWithoutWorkflowsInput>
+  create: Prisma.XOR<Prisma.WorkspaceCreateWithoutWorkflowsInput, Prisma.WorkspaceUncheckedCreateWithoutWorkflowsInput>
+  where?: Prisma.WorkspaceWhereInput
+}
+
+export type WorkspaceUpdateToOneWithWhereWithoutWorkflowsInput = {
+  where?: Prisma.WorkspaceWhereInput
+  data: Prisma.XOR<Prisma.WorkspaceUpdateWithoutWorkflowsInput, Prisma.WorkspaceUncheckedUpdateWithoutWorkflowsInput>
+}
+
+export type WorkspaceUpdateWithoutWorkflowsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedWorkspacesNestedInput
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutWorkspaceNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutWorkspaceNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutWorkspaceNestedInput
+  enabledRoles?: Prisma.WorkspaceRoleUpdateManyWithoutWorkspaceNestedInput
+  objectives?: Prisma.ObjectiveUpdateManyWithoutWorkspaceNestedInput
+  metrics?: Prisma.MetricUpdateManyWithoutWorkspaceNestedInput
+  formulas?: Prisma.FormulaUpdateManyWithoutWorkspaceNestedInput
+  evaluationPeriods?: Prisma.EvaluationPeriodUpdateManyWithoutWorkspaceNestedInput
+  classificationRule?: Prisma.ClassificationRuleUpdateManyWithoutWorkspaceNestedInput
+}
+
+export type WorkspaceUncheckedUpdateWithoutWorkflowsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutWorkspaceNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutWorkspaceNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutWorkspaceNestedInput
+  enabledRoles?: Prisma.WorkspaceRoleUncheckedUpdateManyWithoutWorkspaceNestedInput
+  objectives?: Prisma.ObjectiveUncheckedUpdateManyWithoutWorkspaceNestedInput
+  metrics?: Prisma.MetricUncheckedUpdateManyWithoutWorkspaceNestedInput
+  formulas?: Prisma.FormulaUncheckedUpdateManyWithoutWorkspaceNestedInput
+  evaluationPeriods?: Prisma.EvaluationPeriodUncheckedUpdateManyWithoutWorkspaceNestedInput
+  classificationRule?: Prisma.ClassificationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
 }
 
 export type WorkspaceCreateManyOwnerInput = {
@@ -1426,6 +1728,8 @@ export type WorkspaceUpdateWithoutOwnerInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutWorkspaceNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutWorkspaceNestedInput
+  workflows?: Prisma.WorkflowUpdateManyWithoutWorkspaceNestedInput
   roles?: Prisma.RoleUpdateManyWithoutWorkspaceNestedInput
   enabledRoles?: Prisma.WorkspaceRoleUpdateManyWithoutWorkspaceNestedInput
   objectives?: Prisma.ObjectiveUpdateManyWithoutWorkspaceNestedInput
@@ -1443,6 +1747,8 @@ export type WorkspaceUncheckedUpdateWithoutOwnerInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutWorkspaceNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutWorkspaceNestedInput
+  workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutWorkspaceNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutWorkspaceNestedInput
   enabledRoles?: Prisma.WorkspaceRoleUncheckedUpdateManyWithoutWorkspaceNestedInput
   objectives?: Prisma.ObjectiveUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -1468,6 +1774,8 @@ export type WorkspaceUncheckedUpdateManyWithoutOwnerInput = {
 export type WorkspaceCountOutputType = {
   members: number
   projects: number
+  tasks: number
+  workflows: number
   roles: number
   enabledRoles: number
   objectives: number
@@ -1480,6 +1788,8 @@ export type WorkspaceCountOutputType = {
 export type WorkspaceCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   members?: boolean | WorkspaceCountOutputTypeCountMembersArgs
   projects?: boolean | WorkspaceCountOutputTypeCountProjectsArgs
+  tasks?: boolean | WorkspaceCountOutputTypeCountTasksArgs
+  workflows?: boolean | WorkspaceCountOutputTypeCountWorkflowsArgs
   roles?: boolean | WorkspaceCountOutputTypeCountRolesArgs
   enabledRoles?: boolean | WorkspaceCountOutputTypeCountEnabledRolesArgs
   objectives?: boolean | WorkspaceCountOutputTypeCountObjectivesArgs
@@ -1511,6 +1821,20 @@ export type WorkspaceCountOutputTypeCountMembersArgs<ExtArgs extends runtime.Typ
  */
 export type WorkspaceCountOutputTypeCountProjectsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ProjectWhereInput
+}
+
+/**
+ * WorkspaceCountOutputType without action
+ */
+export type WorkspaceCountOutputTypeCountTasksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TaskWhereInput
+}
+
+/**
+ * WorkspaceCountOutputType without action
+ */
+export type WorkspaceCountOutputTypeCountWorkflowsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WorkflowWhereInput
 }
 
 /**
@@ -1573,6 +1897,8 @@ export type WorkspaceSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   members?: boolean | Prisma.Workspace$membersArgs<ExtArgs>
   projects?: boolean | Prisma.Workspace$projectsArgs<ExtArgs>
+  tasks?: boolean | Prisma.Workspace$tasksArgs<ExtArgs>
+  workflows?: boolean | Prisma.Workspace$workflowsArgs<ExtArgs>
   roles?: boolean | Prisma.Workspace$rolesArgs<ExtArgs>
   enabledRoles?: boolean | Prisma.Workspace$enabledRolesArgs<ExtArgs>
   objectives?: boolean | Prisma.Workspace$objectivesArgs<ExtArgs>
@@ -1617,6 +1943,8 @@ export type WorkspaceInclude<ExtArgs extends runtime.Types.Extensions.InternalAr
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   members?: boolean | Prisma.Workspace$membersArgs<ExtArgs>
   projects?: boolean | Prisma.Workspace$projectsArgs<ExtArgs>
+  tasks?: boolean | Prisma.Workspace$tasksArgs<ExtArgs>
+  workflows?: boolean | Prisma.Workspace$workflowsArgs<ExtArgs>
   roles?: boolean | Prisma.Workspace$rolesArgs<ExtArgs>
   enabledRoles?: boolean | Prisma.Workspace$enabledRolesArgs<ExtArgs>
   objectives?: boolean | Prisma.Workspace$objectivesArgs<ExtArgs>
@@ -1639,6 +1967,8 @@ export type $WorkspacePayload<ExtArgs extends runtime.Types.Extensions.InternalA
     owner: Prisma.$UserPayload<ExtArgs>
     members: Prisma.$WorkspaceMemberPayload<ExtArgs>[]
     projects: Prisma.$ProjectPayload<ExtArgs>[]
+    tasks: Prisma.$TaskPayload<ExtArgs>[]
+    workflows: Prisma.$WorkflowPayload<ExtArgs>[]
     roles: Prisma.$RolePayload<ExtArgs>[]
     enabledRoles: Prisma.$WorkspaceRolePayload<ExtArgs>[]
     objectives: Prisma.$ObjectivePayload<ExtArgs>[]
@@ -2051,6 +2381,8 @@ export interface Prisma__WorkspaceClient<T, Null = never, ExtArgs extends runtim
   owner<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   members<T extends Prisma.Workspace$membersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Workspace$membersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkspaceMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   projects<T extends Prisma.Workspace$projectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Workspace$projectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  tasks<T extends Prisma.Workspace$tasksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Workspace$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  workflows<T extends Prisma.Workspace$workflowsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Workspace$workflowsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkflowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   roles<T extends Prisma.Workspace$rolesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Workspace$rolesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   enabledRoles<T extends Prisma.Workspace$enabledRolesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Workspace$enabledRolesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkspaceRolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   objectives<T extends Prisma.Workspace$objectivesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Workspace$objectivesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ObjectivePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2539,6 +2871,54 @@ export type Workspace$projectsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.ProjectScalarFieldEnum | Prisma.ProjectScalarFieldEnum[]
+}
+
+/**
+ * Workspace.tasks
+ */
+export type Workspace$tasksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Task
+   */
+  select?: Prisma.TaskSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Task
+   */
+  omit?: Prisma.TaskOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TaskInclude<ExtArgs> | null
+  where?: Prisma.TaskWhereInput
+  orderBy?: Prisma.TaskOrderByWithRelationInput | Prisma.TaskOrderByWithRelationInput[]
+  cursor?: Prisma.TaskWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TaskScalarFieldEnum | Prisma.TaskScalarFieldEnum[]
+}
+
+/**
+ * Workspace.workflows
+ */
+export type Workspace$workflowsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Workflow
+   */
+  select?: Prisma.WorkflowSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Workflow
+   */
+  omit?: Prisma.WorkflowOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkflowInclude<ExtArgs> | null
+  where?: Prisma.WorkflowWhereInput
+  orderBy?: Prisma.WorkflowOrderByWithRelationInput | Prisma.WorkflowOrderByWithRelationInput[]
+  cursor?: Prisma.WorkflowWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WorkflowScalarFieldEnum | Prisma.WorkflowScalarFieldEnum[]
 }
 
 /**

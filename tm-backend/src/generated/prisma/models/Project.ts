@@ -527,10 +527,12 @@ export type ProjectCreateNestedOneWithoutTasksInput = {
   connect?: Prisma.ProjectWhereUniqueInput
 }
 
-export type ProjectUpdateOneRequiredWithoutTasksNestedInput = {
+export type ProjectUpdateOneWithoutTasksNestedInput = {
   create?: Prisma.XOR<Prisma.ProjectCreateWithoutTasksInput, Prisma.ProjectUncheckedCreateWithoutTasksInput>
   connectOrCreate?: Prisma.ProjectCreateOrConnectWithoutTasksInput
   upsert?: Prisma.ProjectUpsertWithoutTasksInput
+  disconnect?: Prisma.ProjectWhereInput | boolean
+  delete?: Prisma.ProjectWhereInput | boolean
   connect?: Prisma.ProjectWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProjectUpdateToOneWithWhereWithoutTasksInput, Prisma.ProjectUpdateWithoutTasksInput>, Prisma.ProjectUncheckedUpdateWithoutTasksInput>
 }
@@ -557,10 +559,12 @@ export type ProjectCreateNestedOneWithoutWorkflowInput = {
   connect?: Prisma.ProjectWhereUniqueInput
 }
 
-export type ProjectUpdateOneRequiredWithoutWorkflowNestedInput = {
+export type ProjectUpdateOneWithoutWorkflowNestedInput = {
   create?: Prisma.XOR<Prisma.ProjectCreateWithoutWorkflowInput, Prisma.ProjectUncheckedCreateWithoutWorkflowInput>
   connectOrCreate?: Prisma.ProjectCreateOrConnectWithoutWorkflowInput
   upsert?: Prisma.ProjectUpsertWithoutWorkflowInput
+  disconnect?: Prisma.ProjectWhereInput | boolean
+  delete?: Prisma.ProjectWhereInput | boolean
   connect?: Prisma.ProjectWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProjectUpdateToOneWithWhereWithoutWorkflowInput, Prisma.ProjectUpdateWithoutWorkflowInput>, Prisma.ProjectUncheckedUpdateWithoutWorkflowInput>
 }

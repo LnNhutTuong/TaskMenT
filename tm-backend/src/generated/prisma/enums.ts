@@ -11,7 +11,8 @@
 
 export const RoleScope = {
   SYSTEM: 'SYSTEM',
-  WORKSPACE: 'WORKSPACE'
+  WORKSPACE: 'WORKSPACE',
+  PROJECT: 'PROJECT'
 } as const
 
 export type RoleScope = (typeof RoleScope)[keyof typeof RoleScope]
@@ -48,8 +49,8 @@ export type EvidenceStatus = (typeof EvidenceStatus)[keyof typeof EvidenceStatus
 export const EvaluationStatus = {
   DRAFT: 'DRAFT',
   SUBMITTED: 'SUBMITTED',
-  APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED'
+  REVIEWING: 'REVIEWING',
+  COMPLETED: 'COMPLETED'
 } as const
 
 export type EvaluationStatus = (typeof EvaluationStatus)[keyof typeof EvaluationStatus]

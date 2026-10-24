@@ -18,8 +18,10 @@ export class TaskOutputService {
     async create(dto: CreateTaskOutputDto, user: AuthUser){
       const task = await this.taskService.findOne(dto.taskId, user);
 
-      await this.projectService.assertProjectMember(task.project.id, user.id);
-      await this.permissionService.assertPermission(task.project.workspaceId, user.id, PERMISSION_KEYS.OUTPUT_CREATE)
+      if(task.project){
+        await this.projectService.assertProjectMember(task.project.id, user.id);
+      }
+      await this.permissionService.assertPermission(task.workspaceId, user.id, PERMISSION_KEYS.OUTPUT_CREATE)
 
       return this.prisma.taskOutput.create({
         data:{
@@ -84,11 +86,7 @@ export class TaskOutputService {
           task:{
             select:{
               id: true,
-              project:{
-                select:{
-                  workspaceId: true
-                }
-              }
+              workspaceId: true
             },
           }
         }
@@ -99,7 +97,7 @@ export class TaskOutputService {
       }
 
       await this.taskService.assertTaskPermission(taskOutput.task.id, user.id)
-      await this.permissionService.assertPermission(taskOutput.task.project.workspaceId, user.id, PERMISSION_KEYS.OUTPUT_UPDATE)
+      await this.permissionService.assertPermission(taskOutput.task.workspaceId, user.id, PERMISSION_KEYS.OUTPUT_UPDATE)
 
       const taskOutputAfterUpdate = await this.prisma.taskOutput.update({
         where:{
@@ -130,11 +128,7 @@ export class TaskOutputService {
           task:{
             select:{
               id: true,
-              project:{
-                select:{
-                  workspaceId: true
-                }
-              }
+              workspaceId: true              
             },
           }
         }
@@ -146,7 +140,7 @@ export class TaskOutputService {
       }
 
       await this.taskService.assertTaskPermission(taskOutput.task.id, user.id)
-      await this.permissionService.assertPermission(taskOutput.task.project.workspaceId, user.id, PERMISSION_KEYS.OUTPUT_DELETE)
+      await this.permissionService.assertPermission(taskOutput.task.workspaceId, user.id, PERMISSION_KEYS.OUTPUT_DELETE)
 
       return this.prisma.taskOutput.delete({
         where:{

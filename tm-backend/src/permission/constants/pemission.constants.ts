@@ -1,10 +1,22 @@
+// Ten hien thi cua Role (dung cho UI)
 export const ROLE_NAME_DEFAULT = {
     SUPER_ADMIN: 'Super Admin',
+    OWNER: 'Owner',
     WORKSPACE_MANAGER: 'Workspace Manager',
-    PROJECT_LEAD: 'Project Lead',
     MEMBER: 'Member',
-    VIEWER: 'Viewer',
+    PROJECT_LEAD: 'Project Lead',
+    PROJECT_MEMBER: 'Project Member',
 }
+
+// Key co dinh cua Role (dung trong code, seed, service)
+export const ROLE_KEY_DEFAULT = {
+  SUPER_ADMIN: 'SUPER_ADMIN',
+  OWNER: 'OWNER',
+  WORKSPACE_MANAGER: 'WORKSPACE_MANAGER',
+  MEMBER: 'MEMBER',
+  PROJECT_LEAD: 'PROJECT_LEAD',
+  PROJECT_MEMBER: 'PROJECT_MEMBER',
+} as const;
 
 export const PERMISSION_KEYS = {
     // ─── USER ─────────────────────────────────────
@@ -14,6 +26,7 @@ export const PERMISSION_KEYS = {
     USER_DELETE: 'user:delete',
     
     // ─── ROLE ─────────────────────────────────────
+    // Chi Super Admin tao/sua/xoa Role. Owner/Manager chi duoc xem.
     ROLE_VIEW: 'role:view',
     ROLE_CREATE: 'role:create',
     ROLE_UPDATE: 'role:update',
@@ -22,7 +35,8 @@ export const PERMISSION_KEYS = {
     // ─── WORKSPACE ─────────────────────────────────────
     WORKSPACE_VIEW: 'workspace:view',
     WORKSPACE_UPDATE: 'workspace:update',
-    WORKSPACE_DELETE: 'workspace:delete',
+    WORKSPACE_DELETE: 'workspace:delete',                           // chi Owner
+    WORKSPACE_TRANSFER_OWNERSHIP: 'workspace:transfer-ownership',   // chi Owner
     WORKSPACE_INVITE: 'workspace:invite',
     WORKSPACE_REMOVE_MEMBER: 'workspace:remove-member',
     WORKSPACE_MANAGE_MEMBERS: 'workspace:manage-members',
@@ -100,10 +114,10 @@ export const PERMISSION_KEYS = {
     EVALUATION_PERIOD_DELETE: 'evaluation-period:delete',
 
     // ─── EVALUATION ──────────────────────────────────
-    EVALUATION_VIEW: 'evaluation:view',
-    EVALUATION_VIEW_ALL: 'evaluation:view-all',
-    EVALUATION_SUBMIT: 'evaluation:submit',
-    EVALUATION_REVIEW: 'evaluation:review',
+    EVALUATION_VIEW: 'evaluation:view',          // xem phieu cua chinh minh (va xem review cua reviewer ve minh)
+    EVALUATION_VIEW_ALL: 'evaluation:view-all',  // xem phieu cua nguoi khac trong workspace
+    EVALUATION_SUBMIT: 'evaluation:submit',      // TU danh gia + nop phieu cua chinh minh
+    EVALUATION_REVIEW: 'evaluation:review',      // cham diem phieu cua nguoi khac (chi phieu minh duoc gan lam reviewer)
 
     // ─── CLASSIFICATION RULE ─────────────────────────
     CLASSIFICATION_VIEW: 'classification:view',

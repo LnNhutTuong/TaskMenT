@@ -4,7 +4,7 @@ import { UpdateFormulaDto } from './dto/update-formula.dto.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { AuthUser } from '../auth/types/jwt-payload.type.js';
 import { WorkspaceService } from '../workspace/workspace.service.js';
-import {extractVariables, validateExpressionSyntax} from "./utils/formula.utils.js"
+import { FormulaEngineService } from '../formula-engine/formula-engine.service.js';
 import { TaskService } from '../task/task.service.js';
 import { PermissionService } from '../permission/permission.service.js';
 import { PERMISSION_KEYS } from '../permission/constants/pemission.constants.js';
@@ -14,28 +14,26 @@ export class FormulaService {
     constructor(private readonly prisma: PrismaService, 
         private readonly workspaceService: WorkspaceService, 
         private readonly taskService: TaskService,
-        private readonly permissionService: PermissionService
+        private readonly permissionService: PermissionService,
+        private readonly formulaEngineService: FormulaEngineService
     ){}
 
     async create(dto: CreateFormulaDto, user: AuthUser){
         await this.workspaceService.assertWorkspaceMember(dto.workspaceId, user.id)
         
-        //lay cong thuc ra -> lay nhung key metric -> bien cac key do thanh mang
-        const variables =  extractVariables(dto.expression);
+        const variables = this.formulaEngineService.extractVariables(dto.expression);
 
         if(variables.length === 0 ){
             throw new BadRequestException('Expression must contain at least one metric variable')
         }
 
-        //test cong thuc -> thay cac key metric thanh 1
-        validateExpressionSyntax(dto.expression, variables);
+        this.formulaEngineService.validate(dto.expression);
 
-        //lay cac key metric da ton tai trong workspace
         const existingMetrics = await this.prisma.metric.findMany({
             where:{
                 workspaceId: dto.workspaceId,
                 key:{
-                    in: variables //chi lay cac key co xuat hien trong expression truyen vao
+                    in: variables
                 }        
             },
             select:{
@@ -43,11 +41,8 @@ export class FormulaService {
             }
         })
 
-        //tao danh sach key metric hop le
         const validKeys = new Set(existingMetrics.map(m=>m.key));
             
-        //filter cai mang key metric, tung thang trong do 
-        // neu khong co trong danh sach-> throw error
         const invalidKeys = variables.filter(variable => !validKeys.has(variable))
 
         if(invalidKeys.length > 0){
@@ -58,7 +53,7 @@ export class FormulaService {
             data:{
                 workspaceId: dto.workspaceId,
                 name: dto.name,
-                expression: dto.expression, //luu cai chuoi cong thuc, khong phai luu mang cac key metric
+                expression: dto.expression,
                 description: dto.description
             }
         })
@@ -91,22 +86,19 @@ export class FormulaService {
         await this.workspaceService.assertWorkspaceMember(formula.workspaceId, user.id);
         await this.permissionService.assertPermission(formula.workspaceId, user.id, PERMISSION_KEYS.FORMULA_UPDATE)
         if(dto.expression){
-            //lay cong thuc ra -> lay nhung key metric -> bien cac key do thanh mang
-            const variables =  extractVariables(dto.expression);
+            const variables = this.formulaEngineService.extractVariables(dto.expression);
 
             if(variables.length === 0 ){
                 throw new BadRequestException('Expression must contain at least one metric variable')
             }
 
-            //test cong thuc -> thay cac key metric thanh 1
-            validateExpressionSyntax(dto.expression, variables);
+            this.formulaEngineService.validate(dto.expression);
 
-            //lay cac key metric da ton tai trong workspace
             const existingMetrics = await this.prisma.metric.findMany({
                 where:{
                     workspaceId: formula.workspaceId,
                     key:{
-                        in: variables //chi lay cac key co xuat hien trong expression truyen vao
+                        in: variables
                     }            
                 },
                 select:{
@@ -116,11 +108,8 @@ export class FormulaService {
         
             console.log(">>>>check key: ", existingMetrics);
 
-            //tao danh sach key metric hop le
             const validKeys = new Set(existingMetrics.map(m=>m.key));
 
-            //filter cai mang key metric, tung thang trong do 
-            // neu khong co trong danh sach-> throw error
             const invalidKeys = variables.filter(variable => !validKeys.has(variable))
 
             if(invalidKeys.length > 0){
@@ -200,7 +189,7 @@ export class FormulaService {
 
         const task = await this.taskService.findOne(taskId, user)
 
-        const isSameWorkspace = formula.workspaceId === task.project.workspaceId
+        const isSameWorkspace = formula.workspaceId === task.workspaceId
 
         if(!isSameWorkspace){
             throw new BadRequestException('Formula and task must be in the same workspace');

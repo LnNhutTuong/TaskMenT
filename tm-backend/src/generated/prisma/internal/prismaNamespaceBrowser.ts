@@ -76,6 +76,8 @@ export const ModelName = {
   EvaluationCriteria: 'EvaluationCriteria',
   Evaluation: 'Evaluation',
   EvaluationCriteriaResult: 'EvaluationCriteriaResult',
+  EvaluationReviewer: 'EvaluationReviewer',
+  EvaluationReviewerScore: 'EvaluationReviewerScore',
   ClassificationRule: 'ClassificationRule',
   Workflow: 'Workflow',
   WorkflowStep: 'WorkflowStep',
@@ -200,6 +202,7 @@ export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeo
 export const ProjectMemberScalarFieldEnum = {
   projectId: 'projectId',
   userId: 'userId',
+  roleId: 'roleId',
   joinedAt: 'joinedAt',
   deletedAt: 'deletedAt'
 } as const
@@ -215,6 +218,7 @@ export const TaskScalarFieldEnum = {
   status: 'status',
   dueDate: 'dueDate',
   customFields: 'customFields',
+  workspaceId: 'workspaceId',
   projectId: 'projectId',
   createdById: 'createdById',
   parentId: 'parentId',
@@ -389,14 +393,12 @@ export const EvaluationScalarFieldEnum = {
   id: 'id',
   periodId: 'periodId',
   userId: 'userId',
-  reviewerId: 'reviewerId',
   status: 'status',
   kpiScore: 'kpiScore',
   criteriaScore: 'criteriaScore',
   finalScore: 'finalScore',
   classification: 'classification',
   selfComment: 'selfComment',
-  reviewerComment: 'reviewerComment',
   createdAt: 'createdAt',
   deletedAt: 'deletedAt',
   updatedAt: 'updatedAt'
@@ -410,11 +412,32 @@ export const EvaluationCriteriaResultScalarFieldEnum = {
   evaluationId: 'evaluationId',
   evaluationCriteriaId: 'evaluationCriteriaId',
   selfScore: 'selfScore',
-  reviewerScore: 'reviewerScore',
   comment: 'comment'
 } as const
 
 export type EvaluationCriteriaResultScalarFieldEnum = (typeof EvaluationCriteriaResultScalarFieldEnum)[keyof typeof EvaluationCriteriaResultScalarFieldEnum]
+
+
+export const EvaluationReviewerScalarFieldEnum = {
+  evaluationId: 'evaluationId',
+  reviewerId: 'reviewerId',
+  comment: 'comment',
+  reviewedAt: 'reviewedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type EvaluationReviewerScalarFieldEnum = (typeof EvaluationReviewerScalarFieldEnum)[keyof typeof EvaluationReviewerScalarFieldEnum]
+
+
+export const EvaluationReviewerScoreScalarFieldEnum = {
+  evaluationId: 'evaluationId',
+  reviewerId: 'reviewerId',
+  evaluationCriteriaId: 'evaluationCriteriaId',
+  score: 'score',
+  comment: 'comment'
+} as const
+
+export type EvaluationReviewerScoreScalarFieldEnum = (typeof EvaluationReviewerScoreScalarFieldEnum)[keyof typeof EvaluationReviewerScoreScalarFieldEnum]
 
 
 export const ClassificationRuleScalarFieldEnum = {
@@ -438,6 +461,7 @@ export const WorkflowScalarFieldEnum = {
   description: 'description',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  workspaceId: 'workspaceId',
   projectId: 'projectId'
 } as const
 

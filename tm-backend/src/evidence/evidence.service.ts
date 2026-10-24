@@ -28,10 +28,13 @@ export class EvidenceService {
         const task = await this.taskService.findOne(taskOutput.taskId, user);
 
         //check project member
-        await this.projectService.assertProjectMember(task.project.id, user.id);
+        if(task.project){
+            await this.projectService.assertProjectMember(task.project.id, user.id);
+        }
+        
 
         //check permission
-        await this.permissionService.assertPermission(task.project.workspaceId, user.id, PERMISSION_KEYS.EVIDENCE_SUBMIT)
+        await this.permissionService.assertPermission(task.workspaceId, user.id, PERMISSION_KEYS.EVIDENCE_SUBMIT)
 
         const submitted = await this.prisma.evidence.create({
             data:{
@@ -83,10 +86,10 @@ export class EvidenceService {
                         task:{
                             select:{
                                 createdById: true, // thang giao task
+                                workspaceId: true,
                                 project:{
                                     select:{
                                         createdById: true, // thang owner project,
-                                        workspaceId: true
                                     }
                                 }
                             }
@@ -107,9 +110,12 @@ export class EvidenceService {
         }
 
         const isSuperAdmin = await this.permissionService.isSuperAdmin(user.id);
-        const isReviewer = (user.id === task.project.createdById) || (user.id === task.createdById); 
+         
+        const isReviewer = (task.project && user.id  === task.project.createdById) ||
+                           (user.id === task.createdById); 
+
         const hasReviewPerm = await this.permissionService.hasPermission(
-            evidence.taskOutput.task.project.workspaceId,
+            task.workspaceId,
             user.id,
             PERMISSION_KEYS.EVIDENCE_REVIEW,
         );
@@ -222,6 +228,7 @@ export class EvidenceService {
                     select:{
                         task:{
                             select:{
+                                workspaceId: true,
                                 project:{
                                     select:{
                                         workspaceId: true
@@ -245,7 +252,7 @@ export class EvidenceService {
         const isOwner = evidence.uploadedById === user.id;
         const isSuperAdmin = await this.permissionService.isSuperAdmin(user.id);
         const hasDeletePerm = await this.permissionService.hasPermission(
-            evidence.taskOutput.task.project.workspaceId,
+            evidence.taskOutput.task.workspaceId,
             user.id,
             PERMISSION_KEYS.EVIDENCE_DELETE,
         );

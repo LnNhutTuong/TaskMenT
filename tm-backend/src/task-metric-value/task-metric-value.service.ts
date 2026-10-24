@@ -21,7 +21,7 @@ export class TaskMetricValueService {
 
     const metric = await this.metricService.findOne(dto.metricId, user);
 
-    const isSameWorkspace = task.project.workspaceId  === metric.workspaceId
+    const isSameWorkspace = task.workspaceId  === metric.workspaceId
     
     if(!isSameWorkspace){
       throw new BadRequestException('Task and metric are not in the same Workspace')

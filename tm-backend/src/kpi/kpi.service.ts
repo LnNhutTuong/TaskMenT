@@ -36,7 +36,7 @@ export class KpiService {
       throw new NotFoundException('Task not found')
     }
 
-    await this.permissionService.assertPermission(task.project.workspaceId, user.id, PERMISSION_KEYS.KPI_VIEW)
+    await this.permissionService.assertPermission(task.workspaceId, user.id, PERMISSION_KEYS.KPI_VIEW)
 
     return this.prisma.task.findUnique({
       where:{

@@ -12,72 +12,18 @@ import { PermissionService } from '../permission/permission.service.js';
 import { AuthUser } from '../auth/types/jwt-payload.type.js';
 import { Prisma } from '../generated/prisma/client.js';
 import { RoleScope } from '../generated/prisma/enums.js'
-import { ROLE_NAME_DEFAULT } from '../permission/constants/pemission.constants.js';
-import { PERMISSION_KEYS } from '../permission/constants/pemission.constants.js';
+import { 
+  ROLE_NAME_DEFAULT, 
+  ROLE_KEY_DEFAULT, // 👈 Thêm cái này
+  PERMISSION_KEYS 
+} from '../permission/constants/pemission.constants.js';
 
-const ALL_PERMISSION_KEYS = Object.values(PERMISSION_KEYS);
+
 const P = PERMISSION_KEYS;
 
-// Quyen cap he thong: chi Super Admin dung (Super Admin bypass qua isSuperAdmin)
-const SYSTEM_ONLY = [P.USER_VIEW, P.USER_CREATE, P.USER_UPDATE, P.USER_DELETE];
 
 // Chi owner workspace moi xoa duoc -> check them ownerId trong service
 const OWNER_ONLY = [P.WORKSPACE_DELETE];
-
-const ROLE_DEFINITIONS: { name: string; permissions: string[] }[] = [
-  {
-    name: ROLE_NAME_DEFAULT.WORKSPACE_MANAGER,
-    permissions: ALL_PERMISSION_KEYS.filter(
-      (k) => !SYSTEM_ONLY.includes(k) && !OWNER_ONLY.includes(k),
-    ),
-  },
-  {
-    name: ROLE_NAME_DEFAULT.PROJECT_LEAD,
-    permissions: [
-      P.WORKSPACE_VIEW,
-      // Project
-      P.PROJECT_VIEW, P.PROJECT_UPDATE, P.PROJECT_MANAGE_MEMBERS,
-      // Task
-      P.TASK_VIEW, P.TASK_CREATE, P.TASK_UPDATE, P.TASK_DELETE, P.TASK_ASSIGN,
-      P.TASK_VIEW_KEYRESULT, P.TASK_LINK_KEYRESULT, P.TASK_UNLINK_KEYRESULT,
-      // Output / Evidence
-      P.OUTPUT_VIEW, P.OUTPUT_CREATE, P.OUTPUT_UPDATE, P.OUTPUT_DELETE,
-      P.EVIDENCE_VIEW, P.EVIDENCE_SUBMIT, P.EVIDENCE_REVIEW,
-      // OKR
-      P.OBJECTIVE_VIEW, P.OBJECTIVE_CREATE, P.OBJECTIVE_UPDATE,
-      P.KEY_RESULT_VIEW, P.KEY_RESULT_CREATE, P.KEY_RESULT_UPDATE,
-      // KPI
-      P.METRIC_VIEW, P.FORMULA_VIEW, P.FORMULA_ASSIGN_TASK,
-      P.KPI_VIEW, P.KPI_CALCULATE,
-      // Workflow
-      P.WORKFLOW_VIEW, P.WORKFLOW_CREATE, P.WORKFLOW_UPDATE,
-    ],
-  },
-  {
-    name: ROLE_NAME_DEFAULT.MEMBER,
-    permissions: [
-      P.WORKSPACE_VIEW,
-      P.PROJECT_VIEW,
-      P.TASK_VIEW, P.TASK_UPDATE, P.TASK_VIEW_KEYRESULT,
-      P.OUTPUT_VIEW, P.OUTPUT_CREATE, P.OUTPUT_UPDATE,
-      P.EVIDENCE_VIEW, P.EVIDENCE_SUBMIT, P.EVIDENCE_UPDATE,
-      P.OBJECTIVE_VIEW, P.KEY_RESULT_VIEW,
-      P.METRIC_VIEW, P.FORMULA_VIEW, P.KPI_VIEW,
-      P.WORKFLOW_VIEW,
-    ],
-  },
-  {
-    name: ROLE_NAME_DEFAULT.VIEWER,
-    permissions: [
-      P.WORKSPACE_VIEW, P.PROJECT_VIEW,
-      P.TASK_VIEW, P.TASK_VIEW_KEYRESULT,
-      P.OUTPUT_VIEW, P.EVIDENCE_VIEW,
-      P.OBJECTIVE_VIEW, P.KEY_RESULT_VIEW,
-      P.METRIC_VIEW, P.FORMULA_VIEW, P.KPI_VIEW,
-      P.WORKFLOW_VIEW,
-    ],
-  },
-];
 
 @Injectable()
 export class WorkspaceService {
@@ -105,65 +51,41 @@ export class WorkspaceService {
         },
       });
 
-      // 2. Lấy toàn bộ permission có trong hệ thống
-      const allPermissions = await tx.permission.findMany();
-      const permMap = new Map(allPermissions.map((p) => [p.key, p.id]));
+      // 2. Lấy tất cả các Role hệ thống áp dụng cho Workspace và Project
+      const systemRoles = await tx.role.findMany({
+        where: {
+          scope: { in: [RoleScope.WORKSPACE, RoleScope.PROJECT] },
+        },
+      });
 
-      let managerRoleId: string | null = null;
+      // 3. Kích hoạt (bật) các Role này trong Workspace mới
+      await tx.workspaceRole.createMany({
+        data: systemRoles.map((role) => ({
+          workspaceId: workspace.id,
+          roleId: role.id,
+        })),
+      });
 
-      // 3. Khởi tạo roles cho workspace
-      for (const roleDef of ROLE_DEFINITIONS) {
-        const role = await tx.role.create({
-          data: {
-            workspaceId: workspace.id,
-            name: roleDef.name,
-            scope: RoleScope.WORKSPACE,
-          },
-        });
-
-        if (roleDef.name === ROLE_NAME_DEFAULT.WORKSPACE_MANAGER) {
-          managerRoleId = role.id;
-        }
-
-        // Bật role này trong workspace
-        await tx.workspaceRole.create({
-          data: {
-            workspaceId: workspace.id,
-            roleId: role.id,
-          },
-        });
-
-        // Gán các permission cho role
-        const rolePermIds = roleDef.permissions
-          .map((k) => permMap.get(k))
-          .filter((id): id is string => Boolean(id));
-
-        if (rolePermIds.length > 0) {
-          await tx.rolePermission.createMany({
-            data: rolePermIds.map((permissionId) => ({
-              roleId: role.id,
-              permissionId,
-            })),
-          });
-        }
+      // 4. Tìm Role OWNER và gán User tạo làm Owner của Workspace
+      const ownerRole = systemRoles.find((role) => role.key === ROLE_KEY_DEFAULT.OWNER);
+      if (!ownerRole) {
+        throw new NotFoundException('Role OWNER not found in system. Please run database seed.');
       }
 
-      // 4. Gán user làm thành viên với role 'Workspace Manager'
-      if (managerRoleId) {
-        await tx.workspaceMember.create({
-          data: {
-            userId: user.id,
-            workspaceId: workspace.id,
-            roleId: managerRoleId,
-          },
-        });
-      }
+      await tx.workspaceMember.create({
+        data: {
+          userId: user.id,
+          workspaceId: workspace.id,
+          roleId: ownerRole.id,
+        },
+      });
 
+      // 5. Trả về thông tin Workspace cùng các thành viên
       return tx.workspace.findUnique({
         where: { id: workspace.id },
         include: {
           members: {
-            omit:{
+            omit: {
               userId: true,
               workspaceId: true,
               roleId: true,
@@ -361,6 +283,82 @@ export class WorkspaceService {
       name: workspace.name,
       deleted: true,
     };
+  }
+
+  async inviteMember(workspaceId: string, userId: string){
+    const workspace = await this.prisma.workspace.findUnique({
+      where: { id: workspaceId, deletedAt: null },
+      include:{
+        members: true
+      }
+    });
+
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId, deletedAt: null },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (!workspace) {
+      throw new NotFoundException('Workspace not found');
+    }
+
+    if(workspace.members.some(member => member.userId === userId)){
+      throw new ForbiddenException('This member is already a member in this workspace');
+    }
+
+    const role = await this.prisma.role.findFirst({
+      where: {
+        workspaceId: workspaceId,
+        name: {
+          in: ['Member']
+        }
+      }
+    })
+
+    console.log(">>Check role: ", role);
+
+    // if(role){
+    //   return this.prisma.workspaceMember.create({
+    //     data: {
+    //       workspaceId: workspaceId,
+    //       userId: userId,
+    //       roleId: role.id,
+    //     }
+    //   })
+    // }
+  }
+
+  async removeMember(workspaceId: string, userId: string){
+    const workspace = await this.prisma.workspace.findUnique({
+      where: { id: workspaceId, deletedAt: null },
+      include:{
+        members: true
+      }
+    });
+
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId, deletedAt: null },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (!workspace) {
+      throw new NotFoundException('Workspace not found');
+    }
+
+    if(!workspace.members.some(member => member.userId === userId)){
+      throw new ForbiddenException('This member is not a member in this workspace');
+    }
+
+    await this.prisma.workspaceMember.delete({
+      where: { userId_workspaceId: { userId, workspaceId } },
+    });
+        
   }
 
   /** Chỉ kiểm tra user có thuộc workspace hoặc là super admin không */

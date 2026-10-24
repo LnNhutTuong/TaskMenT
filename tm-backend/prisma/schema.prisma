@@ -22,6 +22,7 @@ generator client {
 enum RoleScope {
   SYSTEM
   WORKSPACE
+  PROJECT
 }
 
 enum PriorityLevel {
@@ -43,11 +44,15 @@ enum EvidenceStatus {
   REJECTED
 }
 
+// DRAFT     : tu danh gia ban than minh
+// SUBMITTED : nop ban tu danh gia, cho reviewer cham
+// REVIEWING : tat ca reviewer da cham, chua duyet
+// COMPLETED : tat ca reviewer da cham xong (khong co buoc duyet cuoi)
 enum EvaluationStatus {
   DRAFT
   SUBMITTED
-  APPROVED
-  REJECTED
+  REVIEWING
+  COMPLETED
 }
 
 model User {
@@ -60,17 +65,17 @@ model User {
   deletedAt DateTime?
   updatedAt DateTime  @updatedAt
 
-  ownedWorkspaces      Workspace[]       @relation("WorkspaceOwner")
+  ownedWorkspaces      Workspace[]          @relation("WorkspaceOwner")
   systemRoles          UserRole[]
   workspaceMemberships WorkspaceMember[]
-  createdProjects      Project[]         @relation("ProjectCreator")
+  createdProjects      Project[]            @relation("ProjectCreator")
   projectMemberships   ProjectMember[]
-  createdTasks         Task[]            @relation("TaskCreator")
+  createdTasks         Task[]               @relation("TaskCreator")
   taskAssignees        TaskAssignee[]
-  submittedEvidence    Evidence[]        @relation("EvidenceSubmitter")
-  reviewedEvidence     Evidence[]        @relation("EvidenceReviewer")
-  userEvaluation       Evaluation[]      @relation("EvaluatedUser")
-  reviewerEvaluation   Evaluation[]      @relation("EvaluationReviewer")
+  submittedEvidence    Evidence[]           @relation("EvidenceSubmitter")
+  reviewedEvidence     Evidence[]           @relation("EvidenceReviewer")
+  userEvaluation       Evaluation[]         @relation("EvaluatedUser")
+  evaluationReviews    EvaluationReviewer[]
 }
 
 // Permission la quyen nho nhat trong he thong.
@@ -84,12 +89,14 @@ model Permission {
   roles RolePermission[]
 }
 
-// SUPER_ADMIN quan ly dinh nghia Role va Permission tren toan he thong.
-// Workspace Owner chi duoc gan cac Workspace Role da duoc phep su dung
-// cho thanh vien trong Workspace cua minh.
+// Role CHI do SUPER_ADMIN tao, dung chung toan he thong (workspaceId = null):
+// SUPER_ADMIN (SYSTEM), OWNER / WORKSPACE_MANAGER / MEMBER (WORKSPACE),
+// PROJECT_LEAD / PROJECT_MEMBER (PROJECT).
+// Workspace chi "bat" cac Role nay qua WorkspaceRole, khong tu tao Role rieng.
+// Quyen cua mot User trong Project = quyen Role workspace HOP quyen Role project.
 model Role {
   id          String    @id @default(uuid())
-  key         String?   @unique // System role dung key (USER, SUPER_ADMIN) de upsert luc seed va tra role luc register. Workspace role de null.
+  key         String    @unique // Key co dinh (SUPER_ADMIN, OWNER, WORKSPACE_MANAGER, MEMBER, PROJECT_LEAD, PROJECT_MEMBER) de upsert luc seed va tra role trong code.
   name        String
   scope       RoleScope
   workspaceId String?
@@ -101,6 +108,7 @@ model Role {
   permissions    RolePermission[]
   systemUsers    UserRole[]
   workspaceUsers WorkspaceMember[]
+  projectUsers   ProjectMember[]
   enabledIn      WorkspaceRole[]
 
   @@unique([workspaceId, name])
@@ -141,6 +149,8 @@ model Workspace {
   owner              User                 @relation("WorkspaceOwner", fields: [ownerId], references: [id])
   members            WorkspaceMember[]
   projects           Project[]
+  tasks              Task[]
+  workflows          Workflow[]
   roles              Role[]
   enabledRoles       WorkspaceRole[]
   objectives         Objective[]
@@ -169,8 +179,9 @@ model WorkspaceMember {
   @@id([userId, workspaceId])
 }
 
-// Role phai duoc bat trong Workspace truoc khi Owner co the gan Role do
-// cho thanh vien.
+// Role phai duoc bat trong Workspace truoc khi gan Role do cho thanh vien
+// (Role scope WORKSPACE -> WorkspaceMember, scope PROJECT -> ProjectMember).
+// Role OWNER chi duoc gan qua chuc nang chuyen nhuong owner, khong gan thu cong.
 // Viec kiem tra Role co dung scope va dung Workspace phai xu ly o service.
 model WorkspaceRole {
   workspaceId String
@@ -205,14 +216,18 @@ model Project {
 // Workspace Owner khong bat buoc phai xuat hien trong bang nay.
 // Workspace Member khong phai ProjectMember van co the xem Project,
 // nhung khong duoc thao tac neu khong co Permission va pham vi phu hop.
+// roleId phai tro den Role co pham vi PROJECT (PROJECT_LEAD hoac PROJECT_MEMBER).
+// Viec kiem tra scope cua Role phai xu ly o service.
 model ProjectMember {
   projectId String
   userId    String
+  roleId    String
   joinedAt  DateTime  @default(now())
   deletedAt DateTime?
 
   project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role    Role    @relation(fields: [roleId], references: [id], onDelete: NoAction)
 
   @@id([projectId, userId])
 }
@@ -228,7 +243,9 @@ model Task {
   //Mo ta them ve ban than nhiem vu do 
   customFields Json?
 
-  projectId   String
+  // Task luon thuoc 1 Workspace. projectId = null: task ngoai project (viec ca nhan / viec chung).
+  workspaceId String
+  projectId   String?
   createdById String
 
   // De co the tao SubTask -> Task
@@ -238,8 +255,9 @@ model Task {
   deletedAt DateTime?
   updatedAt DateTime  @updatedAt
 
-  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  createdBy User    @relation("TaskCreator", fields: [createdById], references: [id])
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  project   Project?  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdBy User      @relation("TaskCreator", fields: [createdById], references: [id])
 
   // De co the quan he cha con voi subtask
   parentTask Task?  @relation("TaskHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
@@ -252,6 +270,8 @@ model Task {
   formulaId        String?
   taskMetricValues TaskMetricValue[]
   kpiSnapshot      KPISnapshot?
+
+  @@index([workspaceId, projectId])
 }
 
 model TaskAssignee {
@@ -459,7 +479,8 @@ model EvaluationCriteria {
   periodId String
   period   EvaluationPeriod @relation(fields: [periodId], references: [id], onDelete: Cascade)
 
-  results EvaluationCriteriaResult[]
+  results        EvaluationCriteriaResult[]
+  reviewerScores EvaluationReviewerScore[]
 }
 
 //Bang danh gia
@@ -471,9 +492,6 @@ model Evaluation {
 
   userId String
   user   User   @relation("EvaluatedUser", fields: [userId], references: [id], onDelete: Cascade)
-
-  reviewerId String?
-  reviewer   User?   @relation("EvaluationReviewer", fields: [reviewerId], references: [id], onDelete: SetNull)
 
   status EvaluationStatus @default(DRAFT)
 
@@ -488,9 +506,9 @@ model Evaluation {
   //tu danh gia ban than
   selfComment String?
 
-  //danh gai tu reviewer
-  reviewerComment String?
-
+  // Nhieu reviewer cho moi phieu: Lead cham thanh vien, Manager cham Lead,
+  // Hoi dong (workspace cap truong) cham Manager. Diem reviewer = trung binh cac reviewer.
+  reviewers       EvaluationReviewer[]
   criteriaResults EvaluationCriteriaResult[]
 
   createdAt DateTime  @default(now())
@@ -511,11 +529,44 @@ model EvaluationCriteriaResult {
   evaluationCriteriaId String
   evaluationCriteria   EvaluationCriteria @relation(fields: [evaluationCriteriaId], references: [id], onDelete: Cascade)
 
-  selfScore     Float   @default(0) // Điểm tự chấm
-  reviewerScore Float   @default(0) // Điểm quản lý chấm
-  comment       String? // Nhận xét chi tiết cho tiêu chí này
+  selfScore Float   @default(0) // Điểm tự chấm
+  comment   String? // Nhận xét tự đánh giá cho tiêu chí này
 
   @@unique([evaluationId, evaluationCriteriaId])
+}
+
+// Danh sach reviewer cua 1 phieu danh gia (moi reviewer 1 dong).
+// Reviewer co the thuoc workspace khac (vd Hoi dong cap truong cham Manager cua Khoa),
+// nen quyen cham dua tren viec duoc gan o day, khong dua tren role trong workspace cua phieu.
+model EvaluationReviewer {
+  evaluationId String
+  reviewerId   String
+
+  comment    String? // Nhan xet chung cua reviewer nay
+  reviewedAt DateTime? // null = chua cham xong
+  createdAt  DateTime  @default(now())
+
+  evaluation Evaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
+  reviewer   User       @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+
+  scores EvaluationReviewerScore[]
+
+  @@id([evaluationId, reviewerId])
+}
+
+// Diem tung tieu chi do tung reviewer cham
+model EvaluationReviewerScore {
+  evaluationId         String
+  reviewerId           String
+  evaluationCriteriaId String
+
+  score   Float   @default(0)
+  comment String?
+
+  reviewer           EvaluationReviewer @relation(fields: [evaluationId, reviewerId], references: [evaluationId, reviewerId], onDelete: Cascade)
+  evaluationCriteria EvaluationCriteria @relation(fields: [evaluationCriteriaId], references: [id], onDelete: Cascade)
+
+  @@id([evaluationId, reviewerId, evaluationCriteriaId])
 }
 
 //Rule cua thang danh gia
@@ -538,7 +589,11 @@ model ClassificationRule {
   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
 }
 
-//Custom Workflow 
+// Custom Workflow
+// projectId != null : workflow rieng cua Project
+// projectId  = null : workflow mac dinh cho task ngoai project cua Workspace
+//                     (moi Workspace toi da 1 workflow mac dinh -> kiem tra o service,
+//                      Prisma khong co partial unique index)
 model Workflow {
   id          String   @id @default(uuid())
   name        String
@@ -546,8 +601,11 @@ model Workflow {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  projectId String  @unique
-  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  projectId String?  @unique
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   steps       WorkflowStep[]
   transitions WorkflowTransition[]

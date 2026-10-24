@@ -167,6 +167,16 @@ export type Evaluation = Prisma.EvaluationModel
  */
 export type EvaluationCriteriaResult = Prisma.EvaluationCriteriaResultModel
 /**
+ * Model EvaluationReviewer
+ * 
+ */
+export type EvaluationReviewer = Prisma.EvaluationReviewerModel
+/**
+ * Model EvaluationReviewerScore
+ * 
+ */
+export type EvaluationReviewerScore = Prisma.EvaluationReviewerScoreModel
+/**
  * Model ClassificationRule
  * 
  */
