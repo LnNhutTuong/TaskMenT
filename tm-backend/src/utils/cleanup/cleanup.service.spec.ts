@@ -150,11 +150,7 @@ describe('CleanupService', () => {
           createdProjects: { none: {} },
           createdTasks: { none: {} },
           reviewedEvidence: { none: { status: 'ACCEPTED' } },
-          reviewerEvaluation: {
-            none: {
-              status: { in: ['SUBMITTED', 'REVIEWING', 'COMPLETED'] },
-            },
-          },
+          evaluationReviews: { none: {} },
           submittedEvidence: { none: { status: 'ACCEPTED' } },
           userEvaluation: {
             none: {
